@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "Se usi questo software nella didattica o in una pubblicazione, citalo così. / If you use this software in teaching or in a publication, please cite it as below."
+title: "ZYpsilon · Laboratorio di proiezioni (Projection lab)"
+type: software
+authors:
+  - family-names: Raffaelli
+    given-names: Baires
+version: 1.0.0
+date-released: 2026-11-20
+license: PolyForm-Noncommercial-1.0.0
+url: "https://www.zypsilon.com"
+repository-code: "https://github.com/zypsilon-lab/zypsilon"
+abstract: >-
+  Free interactive 3D laboratory for studying orthogonal projections (Monge),
+  axonometry, perspective, shadows and sections with a cutting plane.
+  Laboratorio 3D interattivo e gratuito per studiare proiezioni ortogonali
+  (Monge), assonometrie, prospettiva, ombre e sezioni con piano di taglio.
+  Italiano, English, 中文.
+keywords:
+  - descriptive geometry
+  - geometria descrittiva
+  - orthogonal projections
+  - axonometry
+  - perspective
+  - education

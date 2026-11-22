@@ -433,6 +433,8 @@ body.lab-on #colbtn[aria-pressed="true"] .cdot{background:linear-gradient(90deg,
 /* revisione linguistica: titolo senza parole o segni di punteggiatura orfani */
 #panel .tagline{text-wrap:balance}
 #panel .tagline:lang(zh){word-break:keep-all}
+
+body.lab-on .lbl{font-size:10px}
 </style>
 </head>
 <body>
@@ -2589,6 +2591,16 @@ function updateLabels(){
     const box=()=>({x0:o.x-o.w/2,x1:o.x+o.w/2,y0:o.y-o.h*1.1,y1:o.y-o.h*0.1});
     while(guard++<8&&(hit=placed.find(q=>{const a=box(),b=q.b;return a.x0<b.x1&&a.x1>b.x0&&a.y0<b.y1&&a.y1>b.y0;}))){o.y=hit.b.y1+o.h*1.1+1;}
     o.y=Math.max(o.h*1.2,Math.min(H-4,o.y));placed.push({o,b:box()});});
+  /*LAB*/if(state.lab){const sh_=vis.filter(o=>o.w<=46&&o.l.el.textContent);sh_.forEach(o=>{o.x0=o.x;o.y0=o.y;});
+    const PAD=1.5,MAXD=30;
+    for(let it=0;it<40;it++){let moved=false;
+      for(let i=0;i<sh_.length;i++)for(let j=i+1;j<sh_.length;j++){const a=sh_[i],b=sh_[j];
+        const ox=(a.w+b.w)/2+PAD-Math.abs(a.x-b.x),oy=(a.h+b.h)/2*0.9+PAD-Math.abs(a.y-b.y);
+        if(ox<=0||oy<=0)continue;moved=true;
+        if(oy<=ox){const d=oy/2+0.01,sg=a.y===b.y?(i%2?1:-1):Math.sign(a.y-b.y);a.y+=sg*d;b.y-=sg*d;}
+        else{const d=ox/2+0.01,sg=a.x===b.x?(i%2?1:-1):Math.sign(a.x-b.x);a.x+=sg*d;b.x-=sg*d;}}
+      sh_.forEach(o=>{const dx=o.x-o.x0,dy=o.y-o.y0,r=Math.hypot(dx,dy);if(r>MAXD){o.x=o.x0+dx*MAXD/r;o.y=o.y0+dy*MAXD/r;}});
+      if(!moved)break;}}
   vis.forEach(o=>{o.l.el.style.transform='translate('+o.x+'px,'+o.y+'px) translate(-50%,-110%)';});
 }
 

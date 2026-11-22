@@ -13,6 +13,7 @@ All notable changes to ZYpsilon. Dates are release dates. · [Italiano](#italian
 ### Changed
 - Shadow construction shows only the light rays through the vertices that bound the shadow outline, not every edge.
 - Language review of English, Italian and Chinese: terminology, spelling and punctuation, and per-language notation of letters (points, planes, traces).
+- In the Intersection Lab, letters that touch are moved apart automatically (a small, bounded shift) and drawn slightly smaller, so every point stays readable.
 - `index.html` falls back to `vendor/three.min.js` when cdnjs cannot be reached, so the page also works offline.
 - README rewritten in English first, with Italian and Chinese versions; Zenodo and GitHub metadata in English.
 
@@ -22,7 +23,7 @@ First public release: Monge projections, orthogonal and oblique axonometry, pers
 ---
 
 ## Italiano
-**1.2.0** — Nuovo *Laboratorio di compenetrazione* (due solidi, piano secante scorrevole e animabile, punti della curva in Monge e assonometria); *retta di fuga dei raggi luminosi* tratteggiata; nelle ombre si disegnano solo i raggi dei vertici che delimitano il contorno; revisione linguistica in italiano, inglese e cinese; funzionamento offline di `index.html`; README in inglese, italiano e cinese.
+**1.2.0** — Nuovo *Laboratorio di compenetrazione* (due solidi, piano secante scorrevole e animabile, punti della curva in Monge e assonometria); *retta di fuga dei raggi luminosi* tratteggiata; nelle ombre si disegnano solo i raggi dei vertici che delimitano il contorno; lettere del lab che si toccano si spostano da sole e sono un po' più piccole; revisione linguistica in italiano, inglese e cinese; funzionamento offline di `index.html`; README in inglese, italiano e cinese.
 
 ## 中文
-**1.2.0** — 新增**相贯实验室**（两个立体、可滑动并可动画的截平面、在正投影和轴测图中逐点生成相贯线）；虚线的**光线灭线**；阴影作图只绘出构成阴影轮廓的顶点所引的光线；对英、意、中三种语言做了语言审校；`index.html` 可离线运行；提供英、意、中三种 README。
+**1.2.0** — 新增**相贯实验室**（两个立体、可滑动并可动画的截平面、在正投影和轴测图中逐点生成相贯线）；虚线的**光线灭线**；阴影作图只绘出构成阴影轮廓的顶点所引的光线；相贯实验室中相互重叠的字母会自动错开并略微缩小；对英、意、中三种语言做了语言审校；`index.html` 可离线运行；提供英、意、中三种 README。

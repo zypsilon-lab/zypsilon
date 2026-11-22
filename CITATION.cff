@@ -1,25 +1,28 @@
 cff-version: 1.2.0
-message: "Se usi questo software nella didattica o in una pubblicazione, citalo così. / If you use this software in teaching or in a publication, please cite it as below."
-title: "ZYpsilon · Laboratorio di proiezioni (Projection lab)"
+message: "If you use this software in teaching, research or a publication, please cite it as below. / Se usi questo software nella didattica o in una pubblicazione, citalo così."
+title: "ZYpsilon · Projection lab"
 type: software
 authors:
   - family-names: Raffaelli
     given-names: Baires
-version: 1.0.0
-date-released: 2026-11-20
+version: 1.2.0
+date-released: 2026-11-22
+doi: 10.5281/zenodo.24405119
 license: PolyForm-Noncommercial-1.0.0
 url: "https://www.zypsilon.com"
 repository-code: "https://github.com/zypsilon-lab/zypsilon"
 abstract: >-
-  Free interactive 3D laboratory for studying orthogonal projections (Monge),
-  axonometry, perspective, shadows and sections with a cutting plane.
-  Laboratorio 3D interattivo e gratuito per studiare proiezioni ortogonali
-  (Monge), assonometrie, prospettiva, ombre e sezioni con piano di taglio.
-  Italiano, English, 中文.
+  Free interactive 3D laboratory for studying descriptive geometry: orthogonal
+  projections (Monge), axonometry, perspective, shadows and sections with a
+  cutting plane, plus an Intersection Lab for the interpenetration of two
+  solids by the cutting-plane method. Interface in English, Italian and Chinese.
 keywords:
   - descriptive geometry
-  - geometria descrittiva
   - orthogonal projections
+  - Monge
   - axonometry
   - perspective
-  - education
+  - shadows
+  - interpenetration of solids
+  - geometry education
+  - three.js

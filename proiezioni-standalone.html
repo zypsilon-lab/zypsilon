@@ -499,7 +499,7 @@ body.lab-on .lbl{font-size:10px}
       <h2 id="h-show" data-i18n="hShow">Mostra</h2>
       <div class="checks" id="checks"></div>
     </section>
-    <footer id="foot"><a class="resetbtn" id="donate" href="#" target="_blank" rel="noopener" hidden data-i18n="donate">♥ Sostieni il progetto</a><div class="frow"><a class="site" href="https://www.zypsilon.com" target="_blank" rel="noopener">www.zypsilon.com</a></div><div class="frow"><a class="site" href="https://github.com/zypsilon-lab/zypsilon" target="_blank" rel="noopener">github.com/zypsilon-lab/zypsilon</a></div><div class="frow"><a class="site" href="mailto:info@zypsilon.com">info@zypsilon.com</a></div><div class="frow"><button type="button" class="site" id="pol-link" data-i18n="polLink">Informazioni d'uso e privacy</button></div><div class="frow"><button type="button" class="site" id="ck-link" data-i18n="ckLink">Cookie e consenso</button></div><div id="legal"><span id="ver">ZYpsilon v1.2.0</span><span>© 2026 ZYpsilon</span><a class="site" href="https://polyformproject.org/licenses/noncommercial/1.0.0" target="_blank" rel="noopener">PolyForm Noncommercial 1.0.0</a></div></footer>
+    <footer id="foot"><a class="resetbtn" id="donate" href="#" target="_blank" rel="noopener" hidden data-i18n="donate">♥ Sostieni il progetto</a><div class="frow"><a class="site" href="https://www.zypsilon.com" target="_blank" rel="noopener">www.zypsilon.com</a></div><div class="frow"><a class="site" href="https://github.com/zypsilon-lab/zypsilon" target="_blank" rel="noopener">github.com/zypsilon-lab/zypsilon</a></div><div class="frow"><a class="site" href="mailto:info@zypsilon.com">info@zypsilon.com</a></div><div class="frow"><button type="button" class="site" id="pol-link" data-i18n="polLink">Informazioni d'uso e privacy</button></div><div class="frow"><button type="button" class="site" id="ck-link" data-i18n="ckLink">Cookie e consenso</button></div><div id="legal"><span id="ver">ZYpsilon v1.2.1</span><span>© 2026 ZYpsilon</span><a class="site" href="https://polyformproject.org/licenses/noncommercial/1.0.0" target="_blank" rel="noopener">PolyForm Noncommercial 1.0.0</a></div></footer>
   </aside>
   <div id="policy" role="dialog" aria-modal="true" aria-labelledby="pol-title" hidden>
   <div class="pol-bar"><button type="button" class="resetbtn" id="pol-back">← <span data-i18n="polBack">Torna al software</span></button><div id="pol-langs" role="group"></div></div>
@@ -611,9 +611,7 @@ let lang='it';
 (function(){
   let l=null;
   try{const m=/[?&]lang=(it|en|zh)/.exec(location.search);if(m)l=m[1];}catch(e){}
-  try{if(!l){const s=localStorage.getItem('zypsilon-lang');if(LANGS.indexOf(s)>=0)l=s;}}catch(e){}
-  if(!l){const n=String((navigator.languages&&navigator.languages[0])||navigator.language||'it').toLowerCase();
-    l=n.indexOf('it')===0?'it':n.indexOf('zh')===0?'zh':'en';}
+  if(!l)l='en';   // si apre sempre in inglese; ?lang=it|zh o il selettore cambiano lingua
   lang=l;
 })();
 const it=(x,n=2)=>x.toLocaleString(LOC[lang],{minimumFractionDigits:n,maximumFractionDigits:n});
@@ -889,15 +887,15 @@ zh:{
  lead:`选择投影类型并旋转视角：实时查看投射线如何生成正投影、轴测图、透视图和阴影。你还可以剖切立体、测量、下载图片，并保存或分享场景。`,
  aPanel:`控制面板`,aGl:`投影面、立体和投射线的三维模型`,aImgCv:`投影在投影面上的图像`,aViews:`视图`,aLayouts:`视图布局`,aImgSec:`投影面上的图像`,
  hint:`拖动旋转；Shift + 拖动或右键平移；滚轮或双指缩放。`,
- hType:`投影类型`,hRes:`当前状态`,hMon:`投影面展开`,monT:`投影面展开 · H面-W面`,hSol:`立体`,hObl:`投影面与投射线方向`,hPer:`视点`,hShow:`显示`,
+ hType:`投影类型`,hRes:`当前状态`,hMon:`投影面展开`,monT:`投影面展开 · 水平面-侧立面`,hSol:`立体`,hObl:`投影面与投射线方向`,hPer:`视点`,hShow:`显示`,
  rUnit:`度量单位：长度以单位表示，其中 1 = 比例为1时立方体的边长，是所有立体共用的参照。地面网格的一格为 1。`,
- monNote:`H面和W面绕各自与正立面V的交线旋转，直到与V面共面。到90°时，正面视图就是图纸：主视图在左上，俯视图在下方，左视图在右侧。`,
+ monNote:`水平面和侧立面绕各自与正立面的交线旋转，直到与正立面共面。到90°时，正面视图就是图纸：主视图在左上，俯视图在下方，左视图在右侧。`,
  shT:`阴影`,'sel.ray':`投射线`,'sel.rayP':`从视点 O 出发，经过落影点：与画面相交于该点的图像 Q′`,'sel.rayA':`沿投射方向（所有投射线相同）：与投影面相交于落影点的图像 Q′`,'sel.hintA':`在 3D 视图中点选一条投射线即可高亮显示。`,'sel.par':`过视点 O 作该直线的平行线（空间中的浅色线）`,'sel.hor':`水平线：灭点在视平线上`,'sel.shl':`阴影的边是水平面上的直线：迹点与灭点的定义与任何直线相同`,'sel.te':`棱`,'sel.ts':`阴影的边`,'sel.fam':`平行的棱`,'sel.famP':`相同的灭点 F`,'sel.famA':`在图像中保持平行`,'sel.tq':`迹点 Tπ：实际直线与画面的交点`,'sel.tp':`在水平面上的迹点`,'sel.f':`灭点 F：过视点 O 作该直线的平行线（空间中的浅色线）与画面的交点`,'sel.fo':`无限长直线的图像 = 线段 Tπ–F`,'sel.pq':`平行于画面：没有迹点和灭点，图像保持平行`,'sel.ph':`平行于水平面：没有迹点`,'sel.gen':`由此棱投下`,'sel.meet':`棱与其落影相交于水平面上的迹点 T`,'sel.eq':`棱平行于水平面：落影与它相等且平行`,'sel.none':`无`,'sel.x':`取消选择`,'sel.solo':`仅显示该直线`,'sel.all':`显示全部`,'sel.rib':`翻折`,'sel.meas':`量点`,'sel.m1':`量点 M：在视平线上，FM = FO₁（以 F 为圆心、过 O₁ 的圆弧把它转到视平线上）`,'sel.m2':`要在直线上截取实长 ℓ：从 Tπ 起在过 Tπ 的水平线上量取 ℓ，沿 M 指向 F 的方向（标尺按单位分度）`,'sel.m3':`将该段端点与 M 相连：连线与 Tπ–F 的交点即该端点的像（此处 a、b 即 A、B 的像）`,'lb.ell':n=>`ℓ = ${n}`,'sel.rh1':`平面图绕基线旋转：直线的水平投影 r′ 落到基线下方`,'sel.rh2':`投影中心绕视平线旋转，成为 O₁，距视平线 D：过 O₁ 作 r′ 的平行线交视平线于灭点 F`,'sel.rh3':`Tπ 的高度用尺量取，从基线向上沿过 Tπ′ 的竖线量取；Tπ–F 即其像`,'lb.hq':n=>`高度 h = ${n}`,'sel.rb1':`O 随视平面绕 Tπ–F 旋转到画面上，成为 O₁`,'sel.rb2':`翻折后的直线 r₁ 过 Tπ，且平行于 O₁F`,'sel.rb3':`O₁A₁ 与 O₁B₁ 交 Tπ–F 于 a、b：即 A、B 的像`,'sel.hint':`点选一条棱（立体、其图像或阴影的边），可查看其直线、迹点和灭点。`,'rule.mg':`点的落影 = 光线与承影面的交点（迹点）：在图纸上它位于该承影面的视图中，在其他视图中落在投影轴上。`,'rule.axoP':`点的落影 = 两条直线的交点：过顶点的光线（方向 l）与过垂足的光线水平投影（方向 l′）。`,'rule.persP':`点的落影 = 两条直线的交点：顶点–FL（光线）与垂足–FL′（光线在平面上的投影）；FL′ 位于视平线上。`,'rule.pt':`点的落影 = 两条直线的交点：顶点–L（光线）与垂足–L′（其投影）；L′ 是光源在平面上的垂足。`,'sc.one':`单个顶点`,'sc.all':`全部顶点`,'sc.next':`下一个顶点 ▸`,'sc.t':`阴影作图`,'lg.s':`明暗交界线（其落影即为阴影轮廓）`,'lg.r':`光线：顶点到其落影（其图像）`,'lg.f':`光线在水平面上的投影`,'lg.v':`铅垂线：顶点到其在水平面上的垂足`,'lb.shP':`阴影的投射线`,'lb.shF':`水平面上的落影`,'lb.shQ':`投影面上的落影（图像）`,shOut:`在当前立体位置下，没有任何光源位置能在投影面上产生阴影：请移动或旋转立体。`,shS:`显示立体的本影和落影，光源位置可调：平行光或点光源。`,'lm.par':`太阳光（平行光线）`,'lm.pt':`灯（点光源）`,
  'sl.laz':`光线在平面上的方向（方位角）`,'sl.lel':`光线与水平面的夹角`,'sl.lx':`光源 · X`,'sl.ly':`光源 · Y`,'sl.lz':`光源 · Z，高度`,
- 'ck.traces':`剖切面的迹线`,'ck.srays':`光线`,'tr.pv':`V面迹线`,'tr.po':`H面迹线`,'tr.pl':`W面迹线`,'tr.q':`投影面上的迹线`,'tr.fl':`水平面上的迹线`,'lb.lgtS':`光源`,'lb.lgtP':`光源（平行光）`,
+ 'ck.traces':`剖切面的迹线`,'ck.srays':`光线`,'tr.pv':`正立面迹线`,'tr.po':`水平面迹线`,'tr.pl':`侧立面迹线`,'tr.q':`投影面上的迹线`,'tr.fl':`水平面上的迹线`,'lb.lgtS':`光源`,'lb.lgtP':`光源（平行光）`,
  swAria:`高级模式与剖切面`,rdMore:`详细信息与说明`,
  cutAria:`剖切面`,cutT:`剖切面`,cutS:`用一个平面剖切立体，可调节位置、倾角和旋转。被切掉的部分只用淡线示意，截面用颜色标出。`,
- 'sl.cutH':`剖切面位置`,'sl.cutHm':`剖切面位置（高度）`,'sl.cutT.po':`H面上迹线的倾角（0° = 平行于投影轴）`,'sl.cutT.pv':`V面上迹线的倾角（0° = 平行于投影轴）`,'sl.cutT.pl':`W面上迹线的倾角（0° = 水平）`,'co.t':`剖切面垂直于`,'co.lock':`剖切面绕其与所垂直投影面的交线展开到该投影面上，真形显示在该面。`,'co.free':`任意位置平面`,'co.freeS':`解除垂直限制：平面可向任意方向移动，相对三个投影面都倾斜。使用任意位置平面时不显示截面实形的展开，三维视图中只显示被剖切的立体。`,'co.keep':`保留立体的部分`,'co.kf':`前`,'co.kb':`后`,'sl.cutI':`剖切面倾角（0° = 水平）`,'sl.cutR':`剖切面绕铅垂轴旋转`,
+ 'sl.cutH':`剖切面位置`,'sl.cutHm':`剖切面位置（高度）`,'sl.cutT.po':`水平面上迹线的倾角（0° = 平行于投影轴）`,'sl.cutT.pv':`正立面上迹线的倾角（0° = 平行于投影轴）`,'sl.cutT.pl':`侧立面上迹线的倾角（0° = 水平）`,'co.t':`剖切面垂直于`,'co.lock':`剖切面绕其与所垂直投影面的交线展开到该投影面上，真形显示在该面。`,'co.free':`任意位置平面`,'co.freeS':`解除垂直限制：平面可向任意方向移动，相对三个投影面都倾斜。使用任意位置平面时不显示截面实形的展开，三维视图中只显示被剖切的立体。`,'co.keep':`保留立体的部分`,'co.kf':`前`,'co.kb':`后`,'sl.cutI':`剖切面倾角（0° = 水平）`,'sl.cutR':`剖切面绕铅垂轴旋转`,
  advAria:`高级模式`,advT:`高级模式`,
  advS:`解锁姿态、比例、投射线方向和视点，并增加正三轴测、缩短骑士投影、缩短平面投影和军事投影。关闭开关时，仅保留经典轴测图。`,
  resetTitle:`将投射线、姿态、比例、视点和取景恢复为所选预设的数值`,resetLbl:`恢复初始状态`,
@@ -913,8 +911,8 @@ zh:{
  'pn.iso':`正等测`,'pn.dim':`正二测`,'pn.tri':`正三测`,
  'pn.cav':`骑士投影（斜等测）`,'pn.cavr':`缩短骑士投影（斜二测）`,'pn.mono':`单测投影`,'pn.pl':`平面投影`,'pn.plr':`缩短平面投影`,'pn.mil':`军事投影`,
  'pn.pf':`平行透视（一点）`,'pn.pa':`成角透视（两点）`,'pn.p3':`三点透视`,
- 'pd.mg1':`蒙日双面正投影。立体位于第一分角：在正立面V之前、水平面H之上；侧立面W位于其右侧。每条投射线都垂直于其所投影的平面。立体的各面平行于投影面，因此每个视图中都有一个面反映实形。用滑块旋转H面和W面：到90°时它们与V面共面，即得到图纸。`,
- 'pd.mg2':`立体绕铅垂轴旋转30°：其铅垂面与V面和W面倾斜，因此在主视图和左视图中发生变形；俯视图中底面仍反映实形，因为它们仍平行于H面。`,
+ 'pd.mg1':`蒙日双面正投影。立体位于第一分角：在正立面之前、水平面H之上；侧立面W位于其右侧。每条投射线都垂直于其所投影的平面。立体的各面平行于投影面，因此每个视图中都有一个面反映实形。用滑块旋转水平面和侧立面：到90°时它们与正立面共面，即得到图纸。`,
+ 'pd.mg2':`立体绕铅垂轴旋转30°：其铅垂面与正立面和侧立面倾斜，因此在主视图和左视图中发生变形；俯视图中底面仍反映实形，因为它们仍平行于水平面。`,
  'pd.mg3':`立体既旋转又倾斜：没有任何一个面平行于投影面，任何视图都不反映实形。要得到实形，需要更换投影面。`,
  'pd.iso':`投射线相互平行并垂直于投影面：投影中心位于无穷远处。坐标轴的方向使三根轴与投影面所成的角相同，三个轴向变形系数相等（0.816），X轴和Y轴与水平线成30°，Z轴铅垂。`,
  'pd.dim':`投射线垂直于投影面。两根轴的轴向变形系数相同（0.943），第三根为其一半（0.471）。在图中，X轴相对于水平线向下约7°10′，Y轴向上约41°25′。`,
@@ -931,28 +929,28 @@ zh:{
  'gen.ortho':`投射线垂直于投影面：正轴测投影。通过调节两个角度可得到正等测、正二测或正三测。`,
  'gen.obl':`投射线相互平行且与投影面倾斜：斜轴测投影。投影面竖直时得到骑士投影和单测，投影面水平时得到平面投影和军事投影。α和q决定垂直于投影面的轴的方向和比例。`,
  'gen.persp':`投射线从有限距离处的一点出发：透视。立体旋转或倾斜得越多，出现的灭点就越多。`,
- 'gen.monge':`三个投影面：正立面V、水平面H和侧立面W。立体分别正投影到各面上。将H面和W面旋转至与V面共面，即可在同一张图纸上得到主视图、俯视图和左视图。`,
+ 'gen.monge':`三个投影面：正立面、水平面和侧立面。立体分别正投影到各面上。将水平面和侧立面旋转至与正立面共面，即可在同一张图纸上得到主视图、俯视图和左视图。`,
  'fam.ortho':`正轴测投影`,'fam.obl':`斜轴测投影`,'fam.persp':`透视`,'fam.monge':`正投影（蒙日法）`,
  's.cubo':`立方体`,'s.prisma':`长方体`,'s.logo':`ZYpsilon`,'s.triangolare':`三棱柱`,'s.pentagonale':`五棱柱`,'s.esagonale':`六棱柱`,'s.cilindro':`圆柱`,
  's.pir_quadrata':`四棱锥`,'s.pir_triangolare':`三棱锥`,'s.pir_pentagonale':`五棱锥`,'s.pir_esagonale':`六棱锥`,'s.ottagonale':`八棱柱`,'s.pir_ottagonale':`八棱锥`,'s.cono':`圆锥`,'s.sfera':`球`,'sn.pr':`棱柱`,'sn.pi':`棱锥`,'b.quad':`四边形底面`,'b.tri':`三角形底面`,'b.pent':`五边形底面`,'b.esa':`六边形底面`,'b.ott':`八边形底面`,'b.circ':`圆形底面与球`,'b.logo':`标志`,
  'sl.psiQ':`投影面绕 Z 轴（铅垂轴）旋转`,'sl.psiS':`绕 Z 轴（立体自身轴线）旋转 ψ`,'sl.phiQ':`投影面绕 X 轴倾斜 φ`,'sl.phiS':`绕 X 轴倾斜 φ（0° = 直立）`,'sl.thQ':`投影面绕 Y 轴（纵深轴）旋转 θ`,'sl.thS':`绕 Y 轴（纵深轴）旋转 θ`,
  'ms.cube':`边长`,'ms.box':`长`,'ms.wid':`宽`,'ms.poly':`底边边长`,'ms.round':`直径`,'ms.sph':`直径`,'ms.h':`高度`,msT:`尺寸`,'ms.rng':`允许范围：`,'ms.rd':`尺寸`,
- 'sl.scale':`立体比例`,'sl.h':`立体到水平面的距离`,'sl.dH':`立体到水平面（即投影面）的距离`,'ck.cons':`辅助线`,'ck.hd':`水平面`,'ck.letters':`顶点字母`,'lb.hd':n=>`距离 = ${n}`,'sl.dM':`立体到V面的距离`,'sl.dL':`立体到W面的距离`,'sl.dQ':`立体到投影面的距离`,'sl.mh':`立体到H面的高度`,
+ 'sl.scale':`立体比例`,'sl.h':`立体到水平面的距离`,'sl.dH':`立体到水平面（即投影面）的距离`,'ck.cons':`辅助线`,'ck.hd':`水平面`,'ck.letters':`顶点字母`,'lb.hd':n=>`距离 = ${n}`,'sl.dM':`立体到正立面的距离`,'sl.dL':`立体到侧立面的距离`,'sl.dQ':`立体到投影面的距离`,'sl.mh':`立体到水平面的高度`,
  'sl.alpha':`α · 深度轴在图中的角度`,'sl.q':`q · 深度变形系数`,
- 'sl.D':`视距 D · 视点O到画面的距离`,'sl.Ez':`视高 H · 视点O的高度，即视平线`,'sl.Ex':`视点O的横向位移`,'sl.ang':`H面和W面的旋转`,
+ 'sl.D':`视距 D · 视点O到画面的距离`,'sl.Ez':`视高 H · 视点O的高度，即视平线`,'sl.Ex':`视点O的横向位移`,'sl.ang':`水平面和侧立面的旋转`,
  'ck.rays':`投射线`,'ck.rays.mg':`投射线与投影连线`,'ck.image':`投影面上的图像`,'ck.image.mg':`各投影面上的图像`,
  'ck.hidden':`不可见棱线画虚线`,'ck.axes':`X Y Z 坐标轴`,'ck.vp':`灭点与视平线`,'ck.solid':`立体`,'ck.labels':`标注`,
  'ck.inset':`图像绘制`,'ck.inset.mg':`图纸绘制`,
- v3d:`3D`,vCol:`颜色`,rbOut:`展开后的剖切面（截面实形）完全位于投影面空间之外：请让剖切面靠近H面，或改变其倾角。`,rpOn:`展开到`,cpHide:`隐藏剖切面`,cpShow:`显示剖切面`,rsHide:`隐藏截面展开`,rsShow:`显示截面展开`,vTop:`俯视`,vSide:`侧视`,'vEye.persp':`从视点观察`,'vEye.mg':`图纸视图`,'vEye.ray':`沿投射线`,
+ v3d:`3D`,vCol:`颜色`,rbOut:`展开后的剖切面（截面实形）完全位于投影面空间之外：请让剖切面靠近水平面，或改变其倾角。`,rpOn:`展开到`,cpHide:`隐藏剖切面`,cpShow:`显示剖切面`,rsHide:`隐藏截面展开`,rsShow:`显示截面展开`,vTop:`俯视`,vSide:`侧视`,'vEye.persp':`从视点观察`,'vEye.mg':`图纸视图`,'vEye.ray':`沿投射线`,
  'ttl.img':`投影面上的图像`,'ttl.sheet':`图纸`,
  'lay.inset':`全屏三维视图，附带小尺寸投影图`,'lay.left':`三维视图在左，投影图在右`,'lay.image':`仅显示放大的投影图`,
- 'sh.pv':`V面 · 正立投影面`,'sh.po':`H面 · 水平投影面`,'sh.pl':`W面 · 侧立投影面`,'mv.pv':`主视图`,'mv.po':`俯视图`,'mv.pl':`左视图`,
+ 'sh.pv':`正立投影面`,'sh.po':`水平投影面`,'sh.pl':`侧立投影面`,'mv.pv':`主视图`,'mv.po':`俯视图`,'mv.pl':`左视图`,
  'lb.mod':`1`,'lb.perp':`⟂ 投影面`,'lb.quadro':`投影面 π`,'lb.imm':`投影面上的图像`,'lb.O':`O · 视点（投影中心）`,'lb.LT':`基线`,'lb.LO':`视平线`,'lb.PP':`主点`,'lb.ray':`投射线`,
- 'lb.PV':`V面 · 主视图`,'lb.PO':`H面 · 俯视图`,'lb.PL':`W面 · 左视图`,
+ 'lb.PV':`正立面 · 主视图`,'lb.PO':`水平面 · 俯视图`,'lb.PL':`侧立面 · 左视图`,
  'lb.h':n=>`观察者高度 h = ${n}`,'lb.D':n=>`观察者距离 D = ${n}`,'lb.Fpp':` = 主点`,
  'lb.rayP':`投射线（汇聚于视点O）`,'lb.rayO':th=>`平行斜投射线（θ = ${th}°）`,'lb.rayR':`平行投射线，垂直于投影面`,
- ltAbbr:`基线`,ltAbbrM:`OX`,'sym.Tq':`Tπ`,'sym.Tp':`Th`,'pln.pv':`V面`,'pln.po':`H面`,'pln.pl':`W面`,'lb.LTm':`投影轴 OX`,vpPre:`F`,mods:n=>`${n}`,
- 'r.cls':`分类`,'r.truef':`反映实形的面`,'r.fold':`展开角度`,'r.distPV':`到V面的距离`,'r.dPL':`到W面的距离`,'r.hPO':`到H面的高度`,
+ ltAbbr:`基线`,ltAbbrM:`投影轴`,'sym.Tq':`Tπ`,'sym.Tp':`Th`,'pln.pv':`正立面`,'pln.po':`水平面`,'pln.pl':`侧立面`,'lb.LTm':`投影轴`,vpPre:`F`,mods:n=>`${n}`,
+ 'r.cls':`分类`,'r.truef':`反映实形的面`,'r.fold':`展开角度`,'r.distPV':`到正立面的距离`,'r.dPL':`到侧立面的距离`,'r.hPO':`到水平面的高度`,
  'r.vps':`灭点`,'r.par':`平行于画面`,'r.distO':`O到画面的距离（视距 D）`,'r.hO':`O的高度（视高 H）`,'r.va':`视角`,
  'r.k':`系数 k`,'r.incl':`轴线倾角`,'r.quadro':`投影面`,'r.rays':`投射线`,'r.tilts':`倾斜对象`,'r.solid':`立体 (X · Y · Z)`,
  'mg.part':`双面正投影 · 特殊位置`,'mg.gen':`双面正投影 · 一般位置`,
@@ -968,7 +966,7 @@ zh:{
  'r.quadroH':`水平，平行于基面`,'r.quadroV':`竖直`,
  'r.raysObl':(a,q,th)=>`α ${a}° · q ${q} · 偏离垂线 θ ${th}°`,'r.raysPerp':`⟂ 投影面`,
  'r.tiltQ':`投影面（立体不动）`,'r.tiltS':`立体（投影面不动）`,
- 'sub.monge':`每条投射线都垂直于其投影面（V面、H面、W面）`,'sub.ortho':`投射线相互平行，垂直于投影面`,
+ 'sub.monge':`每条投射线都垂直于其投影面（正立面、水平面、侧立面）`,'sub.ortho':`投射线相互平行，垂直于投影面`,
  'sub.obl':th=>`投射线相互平行，与投影面垂线夹角 ${th}°`,'sub.persp':`投射线从有限距离处的一点（视点O）出发`,
  slugFam:{persp:'perspective',monge:'orthogonal-projections',axo:'axonometry'},slugMod:`modified`
 }};
@@ -1011,14 +1009,14 @@ Object.assign(TR.zh,{
  'lab.sw':`教学模式：用截平面法求两个立体的相贯线`,
  'lab.h':`相贯的立体`,
  'lab.note':`移动并调整两个立体的方位，使它们相互贯穿。截平面给出两个截断面：二者轮廓线的交点就是相贯线上的点。`,
- 'lab.A':`立体 A`,'lab.B':`立体 B`,'lab.axT':`立体的轴线`,'lab.axV':`竖直`,'lab.axH':`水平`,
- 'lab.dpl':`中心到W面的距离`,'lab.dpv':`中心到V面的距离`,'lab.q':`中心到H面的高度`,
+ 'lab.A':`立体甲`,'lab.B':`立体乙`,'lab.axT':`立体的轴线`,'lab.axV':`竖直`,'lab.axH':`水平`,
+ 'lab.dpl':`中心到侧立面的距离`,'lab.dpv':`中心到正立面的距离`,'lab.q':`中心到水平面的高度`,
  'lab.rot':`绕自身轴线旋转`,
  'lab.cutT':`截平面`,'lab.cutS':`与某一投影面平行的平面同时截切两个立体：可以看到两个截断面，以及它们轮廓线相交的点。`,
  'lab.plH':`水平面`,'lab.plF':`正平面`,'lab.plP':`侧平面`,
- 'lab.pos.po':`截平面的高度`,'lab.pos.pv':`截平面到V面的距离`,'lab.pos.pl':`截平面到W面的距离`,
+ 'lab.pos.po':`截平面的高度`,'lab.pos.pv':`截平面到正立面的距离`,'lab.pos.pl':`截平面到侧立面的距离`,
  'lab.anim':`动画演示`,'lab.stop':`停止`,'lab.trail':`保留交点轨迹`,'lab.clr':`清除轨迹`,'lab.ctr':`两个立体居中`,
- 'lab.cutN':`红点是 A 的截断面轮廓与 B 的截断面轮廓的交点：它们位于相贯线上。移动截平面，相贯线便被逐点画出。`,
+ 'lab.cutN':`红点是立体甲的截断面轮廓与立体乙的截断面轮廓的交点：它们位于相贯线上。移动截平面，相贯线便被逐点画出。`,
  'lab.noSec':`截平面没有同时截到两个立体：没有交点。`,'lab.noNodes':`两个截断面的轮廓线没有相交。`,
  'lab.letters':`相贯线上的点标注字母`,
  'lab.tag':`两个立体，一个截平面：逐点求出相贯线。`,'lab.lead':`移动并调整两个立体的方位，使其相互贯穿，然后移动截平面：两个截断面的轮廓相交于相贯线上的点，可在正投影和轴测图中查看。`,
@@ -2116,7 +2114,7 @@ function rbExtLines(rb){
   const c=mk('Q2'),f=mk('Qf');return c&&f?{c,f,key:rb.vc===1?'po':'pv'}:null;
 }
 // il piano di taglio si chiama α; le sue tracce: α′ su PO, α″ su PV, α‴ su PL (italiano); in inglese e cinese αH, αV, αL / αW. Tra parentesi la figura ribaltata: (α), (A), (B)…
-const trSym=k=>lang==='it'?'α'+{po:'′',pv:'″',pl:'‴'}[k]:'α'+{po:'H',pv:'V',pl:lang==='zh'?'W':'L'}[k];
+const trSym=k=>lang==='it'?'α'+{po:'′',pv:'″',pl:'‴'}[k]:lang==='zh'?'α'+{po:'水',pv:'正',pl:'侧'}[k]:'α'+{po:'H',pv:'V',pl:'L'}[k];
 const rbSym=ch=>'('+ch+')';
 const ribOff=()=>state.hideRib||state.hidePl;   // senza piano di taglio visibile non c'è ribaltamento
 const msecOn=S=>!!(S.mg&&state.cut&&!ribOff()&&S.ex&&S.ex.rab);
@@ -2668,7 +2666,7 @@ function updateMonge(S){
     const LS=lblSet().filter(o=>o.ix<S.W.length),okL=sh.letters&&LS.length>0,n=LS.length,dS=[],dP=[];
     for(let k=0;k<16;k++){const id='ls'+k;
       if(okL&&k<n&&sh.solid&&ang<89.8){const W=S.W[LS[k].ix],dir=W.clone().sub(S.center);if(dir.length()>1e-6)dir.normalize();
-        setLabel(id,W.clone().addScaledVector(dir,0.32),true,0,0,true);labels[id].el.textContent=LS[k].ch;labels[id].el.style.opacity=String(1-Math.min(1,ang/90));labels[id].on=true;dS.push(W);}
+        setLabel(id,W.clone().addScaledVector(dir,0.32),true,0,0,true);labels[id].el.textContent=LC(LS[k].ch);labels[id].el.style.opacity=String(1-Math.min(1,ang/90));labels[id].on=true;dS.push(W);}
       else labels[id].on=false;}
     [MG.pv,MG.po,MG.pl].forEach((P,vi)=>{const gs=okL&&sh.image?vGroups(S,vi):[];
       for(let k=0;k<16;k++){const id='lp'+vi+'_'+k,g=gs[k];
@@ -2678,7 +2676,7 @@ function updateMonge(S){
       [0,1].forEach(i=>{const q=(rb.trs||[])[i],id='rt'+i;if(!q||state.hidePl){labels[id].on=false;return;}setLabel(id,RB.grp.localToWorld(q.la.clone().lerp(q.lb,0.8)),true,0,-10,true);labels[id].el.textContent=rbSym(trSym(q.key));});}
     else{labels.rt0.on=false;labels.rt1.on=false;}
     if(rbOn&&sh.letters){const LR=lblSet();LR.forEach((o,k)=>{if(k>=16||o.ix>=S.W.length)return;const i=rb.idx.indexOf(o.ix);if(i<0)return;
-        const q=RB.grp.localToWorld(rb.P0[i].clone().sub(rb.p0));setLabel('rs'+k,q,true,12,-2,true);labels['rs'+k].el.textContent=rbSym(o.ch);dP.push(q);});}
+        const q=RB.grp.localToWorld(rb.P0[i].clone().sub(rb.p0));setLabel('rs'+k,q,true,12,-2,true);labels['rs'+k].el.textContent=rbSym(LC(o.ch));dP.push(q);});}
     setPoints(lDotS,dS);setPoints(lDotP,dP);
   }
   placeScale(E.xa+0.3,0,E.zt+1.1,V(0,0,0.25));setLabel('mod',V(E.xa+0.3+M/2,0,E.zt+1.1),false,0,26,true);
@@ -2778,7 +2776,7 @@ new ResizeObserver(()=>{if(typeof lastS!=='undefined'&&lastS)drawImage(insetCv,l
 // comandi sul 3D: modo compatto (schermi stretti), menu scena, etichetta della famiglia, riquadro immagine riducibile, suggerimento
 (function(){
   const st=document.getElementById('stage'),ins=document.getElementById('inset'),tg=document.getElementById('inset-tg'),sb=document.getElementById('scenebar'),mb=document.getElementById('sc-more'),lc=document.getElementById('leftcol'),sw=document.getElementById('selwrap'),sbx=document.getElementById('selbox'),hint=document.getElementById('hint');
-  let userMini=null;
+  let userMini=true;   // il riquadro dell'immagine parte ridotto
   function fit(){const w=v3d.clientWidth,h=v3d.clientHeight;if(w<2||h<2)return;
     const nar=w<880||h<430;st.classList.toggle('narrow',nar);
     if(!nar)sb.classList.remove('open');
@@ -2806,9 +2804,12 @@ new ResizeObserver(()=>{if(typeof lastS!=='undefined'&&lastS)drawImage(insetCv,l
   canvas.addEventListener('pointerdown',()=>{hint.classList.add('gone');},{once:true});
 })();
 const LET='ABCDEFGHIJKLMNOP';
+// in cinese i punti si indicano con i caratteri 甲乙丙丁… (dieci tronchi celesti, poi dodici rami terrestri); oltre il ventiduesimo, il numero
+const ZHL='甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥';
+const LC=ch=>{if(lang!=='zh')return ch;const i=ch.charCodeAt(0)-65+(ch.length>1?26:0);return i>=0&&i<ZHL.length?ZHL[i]:String(i+1);};
 const LN=(i,k)=>LET[i]||'PQ'[k];   // nome del punto: la lettera del vertice, o P e Q per i solidi senza lettere (sfera, cilindro, cono)
 // notazione delle proiezioni: italiana A″ (PV) A′ (PO) A‴ (PL); cinese e inglese a′ (V) a (H) a″ (W), minuscole
-const projSym=(ch,vi)=>lang==='it'?ch+['″','′','‴'][vi]:ch.toLowerCase()+['′','','″'][vi];
+const projSym=(ch,vi)=>lang==='it'||lang==='zh'?LC(ch)+['″','′','‴'][vi]:ch.toLowerCase()+['′','','″'][vi];   // zh: 甲 (spazio), 甲′ (PO), 甲″ (PV), 甲‴ (PL)
 // lettere dei vertici: senza piano di taglio quelle del solido; con il piano di taglio il solido non ha lettere e le ricevono i vertici della sezione
 function lblSet(){
   /*LAB*/if(state.lab)return[];   // nel lab le lettere stanno sui punti dell'intersezione, non sui vertici dei solidi
@@ -2948,7 +2949,7 @@ function drawSheet(ctx,w,h,S,big){
     S.views.forEach((v,vi)=>{let cx=0,cz=0;v.sh.forEach(q=>{cx+=q[0];cz+=q[1];});cx/=v.sh.length;cz/=v.sh.length;
       vGroups(S,vi).forEach(g=>{const p=v.sh[g.i];pts.push({g,px:X(p[0]),py:Y(p[1]),rt:p[0]>=cx-1e-6,up:p[1]>=cz-1e-6});addBox(X(p[0])-3,Y(p[1])-3,6,6);});});
     if(rbS){const rb=S.ex.rab;let cx=0,cy=0;rb.Pf.forEach(P=>{cx+=P.x;cy+=P.y;});cx/=rb.Pf.length;cy/=rb.Pf.length;
-      lblSet().forEach(o=>{const i=rb.idx.indexOf(o.ix);if(i<0)return;const P=rb.Pf[i];pts.push({g:{text:rbSym(o.ch)},px:X(P.x),py:Y(P.y),rt:P.x>=cx-1e-6,up:P.y>=cy-1e-6});});}
+      lblSet().forEach(o=>{const i=rb.idx.indexOf(o.ix);if(i<0)return;const P=rb.Pf[i];pts.push({g:{text:rbSym(LC(o.ch))},px:X(P.x),py:Y(P.y),rt:P.x>=cx-1e-6,up:P.y>=cy-1e-6});});}
     const inside=b=>b.x>=2&&b.y>=2&&b.x+b.w<=w-2&&b.y+b.h<=h-2;
     pts.forEach(o=>{
       const tw=ctx.measureText(o.g.text).width,{px,py}=o,res=[];
@@ -3977,15 +3978,15 @@ function labCons3D(S,sec){   // piani aperti: proiettanti dal punto ai tre piani
 function labMongeLetters(S){   // lettere dei punti: A nello spazio; A″ sul PV, A′ sul PO, A‴ sul PL
   const sh=state.show,lt=sh.letters?labLetters():[];labLetterOff(/^x[iqp]/);
   lt.forEach((l,k)=>{const W=labW(S,l.P);
-    if(solidGroup.visible)labLetterSet('xq'+k,l.ch,W,true,9,-9);
+    if(solidGroup.visible)labLetterSet('xq'+k,LC(l.ch),W,true,9,-9);
   });
   if(sh.image)['pv','po','pl'].forEach((kk,vi)=>{
     labGroup(lt,l=>{const v=LAB_LOC[kk](labW(S,l.P));return[v.x,v.y,v.z].map(t=>Math.round(t*500)).join(',');},ch=>projSym(ch,vi)).forEach((g,k)=>
       labLetterSet('xp'+vi+'_'+k,g.text,MG[kk].grp.localToWorld(LAB_LOC[kk](labW(S,g.l.P))),true,9,-9));});}
 function labAxoLetters(S){
   const sh=state.show,lt=sh.letters?labLetters():[];labLetterOff(/^x[iqp]/);
-  lt.forEach((l,k)=>{if(solidGroup.visible)labLetterSet('xq'+k,l.ch,labW(S,l.P),true,9,-9);});
-  if(sh.image)labGroup(lt,l=>{const q=S.Q(labW(S,l.P));return Math.round(q.x*500)+','+Math.round(q.z*500);},ch=>ch).forEach((g,k)=>{const q=S.Q(labW(S,g.l.P));labLetterSet('xi'+k,g.text,V(q.x,-0.035,q.z),false,9,-9);});}
+  lt.forEach((l,k)=>{if(solidGroup.visible)labLetterSet('xq'+k,LC(l.ch),labW(S,l.P),true,9,-9);});
+  if(sh.image)labGroup(lt,l=>{const q=S.Q(labW(S,l.P));return Math.round(q.x*500)+','+Math.round(q.z*500);},ch=>LC(ch)).forEach((g,k)=>{const q=S.Q(labW(S,g.l.P));labLetterSet('xi'+k,g.text,V(q.x,-0.035,q.z),false,9,-9);});}
 function labMonge(S){   // chiamata da updateMonge
   const L=S.lab;if(!L)return;
   const sh=state.show,sec=L.sec;LAB.shown=true;labLayerHide(LAB_I);
@@ -4056,7 +4057,7 @@ function labEnter(){
   if(state.lab)return;
   LAB.snap=JSON.parse(JSON.stringify(state));   // fotografia dello stato standard, ripristinata all'uscita
   Object.assign(state,labDef(),{lab:true,shadow:false,ms:false,cut:false,cutF:false,hidePl:false,hideRib:false,sel:null,shV:null,solo:false,rib:false,ribT:0,meas:false,measT:0,
-    solid:'esagonale',solB:'esagonale',ang:0});
+    solid:'cubo',solB:'esagonale',ang:0});
   state.show=Object.assign({},state.show,{letters:true,rays:false});
   angAnim=null;ribAnim=null;measAnim=null;LAB.trail.length=0;LAB.lastF=null;
   if(state.mode==='persp'){applyPreset('mg1',false);}   // le viste prospettiche non esistono nel lab

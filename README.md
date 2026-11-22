@@ -6,7 +6,7 @@
 
 **Live:** [www.zypsilon.com](https://www.zypsilon.com) · **Cite:** [10.5281/zenodo.24405119](https://doi.org/10.5281/zenodo.24405119) · **Licence:** [PolyForm Noncommercial 1.0.0](LICENSE) · 🇮🇹 [Italiano](README.it.md) · 🇨🇳 [中文](README.zh.md)
 
-Interface in **English, Italian and Simplified Chinese** (selector at the top right of the panel; the browser language is used on first visit, or force it with `?lang=en`, `?lang=it`, `?lang=zh`).
+Interface in **English, Italian and Simplified Chinese** (selector at the top right of the panel). The application always opens in English; open it with `?lang=it` or `?lang=zh` to start in Italian or Chinese. In Chinese, points are named 甲, 乙, 丙 … and the planes 正立面, 水平面, 侧立面.
 
 ## What it shows
 

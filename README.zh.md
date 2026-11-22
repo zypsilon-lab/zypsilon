@@ -6,7 +6,7 @@
 
 **在线使用：** [www.zypsilon.com](https://www.zypsilon.com) · **引用：** [10.5281/zenodo.24405119](https://doi.org/10.5281/zenodo.24405119) · **许可：** [PolyForm Noncommercial 1.0.0](LICENSE) · 🇬🇧 [English](README.md) · 🇮🇹 [Italiano](README.it.md)
 
-界面提供**英语、意大利语和简体中文**（面板右上角切换；首次访问时使用浏览器语言，也可用 `?lang=en`、`?lang=it`、`?lang=zh` 指定）。项目的权威文本为[英文版](README.md)，本页为其中文译本。
+界面提供**英语、意大利语和简体中文**（面板右上角切换）。应用始终以英语打开；用 `?lang=it` 或 `?lang=zh` 打开则以意大利语或中文开始。中文界面中，点用甲、乙、丙……表示，投影面称为正立面、水平面、侧立面。项目的权威文本为[英文版](README.md)，本页为其中文译本。
 
 ## 功能一览
 

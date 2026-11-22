@@ -6,7 +6,7 @@
 
 **Online:** [www.zypsilon.com](https://www.zypsilon.com) · **Come citarlo:** [10.5281/zenodo.24405119](https://doi.org/10.5281/zenodo.24405119) · **Licenza:** [PolyForm Noncommercial 1.0.0](LICENSE) · 🇬🇧 [English](README.md) · 🇨🇳 [中文](README.zh.md)
 
-Interfaccia in **inglese, italiano e cinese semplificato** (selettore in alto a destra nel pannello; alla prima visita si usa la lingua del browser, oppure si forza con `?lang=en`, `?lang=it`, `?lang=zh`). Il testo di riferimento del progetto è l'[inglese](README.md); questa pagina ne è la traduzione.
+Interfaccia in **inglese, italiano e cinese semplificato** (selettore in alto a destra nel pannello). L'applicazione si apre sempre in inglese; con `?lang=it` o `?lang=zh` si parte in italiano o in cinese. In cinese i punti si chiamano 甲, 乙, 丙 … e i piani 正立面, 水平面, 侧立面. Il testo di riferimento del progetto è l'[inglese](README.md); questa pagina ne è la traduzione.
 
 ## Cosa mostra
 

@@ -1,9 +1,17 @@
-Required Notice: Copyright (c) 2026 Baires Raffaelli — ZYpsilon · Laboratorio di proiezioni (https://www.zypsilon.com)
+Required Notice: Copyright (c) 2026 ZYpsilon (https://www.zypsilon.com)
 
-ZYpsilon is licensed under the PolyForm Noncommercial License 1.0.0 (see LICENSE):
-free use, copying and modification for noncommercial purposes (study, teaching, schools).
+ZYpsilon · Projection lab is licensed under the PolyForm Noncommercial License 1.0.0 (see LICENSE):
+free use, copying and modification for noncommercial purposes (study, teaching, research, schools).
 Redistribution must stay free of charge and keep this notice, the credits and the link
 to https://www.zypsilon.com in the application unchanged.
 
+Commercial use requires a separate written licence from the author. Any use by or on behalf of a
+for-profit party (publishers included) - for example including or embedding the software, its screens,
+graphics or logo in books, digital textbooks, apps, courses or websites that are sold or carry
+advertising, or hosting it on a commercial platform - needs a licence. Licences are agreed case by
+case: write to info@zypsilon.com. Quoting or naming ZYpsilon (for example in a bibliography) and
+linking to https://www.zypsilon.com is free for everyone. The ZYpsilon name and logo may not be
+used to suggest endorsement, partnership or affiliation without written permission.
+
 Third-party software included in this repository:
-- Three.js r128 (vendor/three.min.js) — Copyright 2010-2021 Three.js Authors — MIT License.
+- Three.js r128 (vendor/three.min.js) - Copyright 2010-2021 Three.js Authors - MIT License.

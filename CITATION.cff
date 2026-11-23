@@ -5,8 +5,8 @@ type: software
 authors:
   - family-names: Raffaelli
     given-names: Baires
-version: 1.2.0
-date-released: 2026-11-22
+version: 1.2.2
+date-released: 2026-11-23
 doi: 10.5281/zenodo.24405119
 license: PolyForm-Noncommercial-1.0.0
 url: "https://www.zypsilon.com"
@@ -15,7 +15,9 @@ abstract: >-
   Free interactive 3D laboratory for studying descriptive geometry: orthogonal
   projections (Monge), axonometry, perspective, shadows and sections with a
   cutting plane, plus an Intersection Lab for the interpenetration of two
-  solids by the cutting-plane method. Interface in English, Italian and Chinese.
+  solids by the cutting-plane method. Drawings are laid out on an A4, A3 or A2
+  drawing sheet (in centimetres, 1:1) and can be downloaded as PNG or PDF.
+  Interface in English, Italian and Chinese.
 keywords:
   - descriptive geometry
   - orthogonal projections

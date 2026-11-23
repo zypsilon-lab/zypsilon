@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ZYpsilon · Projection lab</title>
-<meta name="description" content="Free interactive 3D laboratory for descriptive geometry: orthogonal projections (Monge), axonometry, perspective, shadows and sections with a cutting plane. Italian, English, Chinese.">
+<meta name="description" content="Free interactive 3D laboratory for descriptive geometry: orthogonal projections (Monge), axonometry, perspective, shadows, sections with a cutting plane and the interpenetration of two solids; drawing sheet A4 · A3 · A2 with PDF export. Italian, English, Chinese.">
 <link rel="canonical" href="https://www.zypsilon.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ZYpsilon">
 <meta property="og:title" content="ZYpsilon · Projection lab">
-<meta property="og:description" content="Free interactive 3D laboratory for descriptive geometry: Monge projections, axonometry, perspective, shadows and sections.">
+<meta property="og:description" content="Free interactive 3D laboratory for descriptive geometry: Monge projections, axonometry, perspective, shadows, sections and the interpenetration of two solids.">
 <meta property="og:url" content="https://www.zypsilon.com/">
 <meta property="og:image" content="https://www.zypsilon.com/assets/zypsilon-logo.png">
 <meta name="twitter:card" content="summary">
@@ -74,7 +74,8 @@ h3 .dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right
 .resetbtn svg{width:15px;height:15px;flex:none}
 .resetbtn:hover{border-color:#aeb2bc}
 .resetbtn[hidden]{display:none}
-#layouts .resetbtn[hidden]{display:none}
+#layouts #reset2[hidden]{display:block;visibility:hidden}   /* il posto resta riservato: la barra non si sposta */
+#layouts #reset2{border-left:0;border-right:1px solid var(--rule)}
 .resetbtn.dirty{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
 #layouts .resetbtn{margin:0;border:0;border-left:1px solid var(--rule);border-radius:0;padding:7px 10px;line-height:0;box-shadow:none}
 #layouts .resetbtn.dirty{background:var(--ink);color:#fff}
@@ -298,6 +299,9 @@ html[lang="zh-Hans"] .tagline{font-family:var(--font-ui);font-weight:500;font-si
 #ckbar[hidden]{display:none}
 #ckwall{position:fixed;inset:0;z-index:85;background:rgba(14,17,26,.55)}   /* patina scura finché non si sceglie sui cookie */
 #ckwall[hidden]{display:none}
+#cknote{position:fixed;left:16px;bottom:16px;z-index:90;width:min(430px,calc(100% - 32px));background:#fff;color:var(--ink);border:1px solid var(--rule);border-radius:10px;box-shadow:0 8px 28px rgba(20,24,34,.22);padding:11px 14px;font:13px/1.5 var(--font-ui)}
+#cknote[hidden]{display:none}
+#cknote .ck-chg{font:inherit;font-weight:600;color:#2b4fa8;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
 #ckbar .ck-h{font:600 14px var(--font-ui);margin-bottom:4px}
 #ckbar p{margin:0 0 6px;font-size:13px;line-height:1.5;color:#2e3440}
 #ckbar .ck-more{font-size:12.5px;color:#2b4fa8}
@@ -364,7 +368,7 @@ html[lang="zh-Hans"] .tagline{font-family:var(--font-ui);font-weight:500;font-si
 #stage.narrow #selbox.open::after{top:16px;transform:rotate(-135deg)}
 #stage.narrow #inset{right:8px;bottom:8px}
 #stage.narrow #inset:not(.mini){width:min(250px,calc(100% - 16px))}
-#stage.narrow #layouts{left:8px;bottom:8px;transform:none}
+#stage.sw #layouts{left:8px;bottom:8px;transform:none}
 #stage.narrow #hint{display:none}
 #stage.narrow #dnudge{bottom:56px}
 
@@ -419,8 +423,7 @@ body.lab-on #panel #lab-tabs .chip[aria-pressed="true"]{border-color:rgba(255,25
 body.lab-on #panel .sw{outline:1px solid rgba(255,255,255,.28)}
 
 /* comandi di posizione e misure: nel colore del solido selezionato (--sel, --selfg sono impostati da labSyncUI) */
-body.lab-on #panel #sec-lab #lab-axis .chip[aria-pressed="true"],body.lab-on #panel #sec-lab #lab-ctr{background:var(--sel,#ff5a1f);border-color:var(--sel,#ff5a1f);color:var(--selfg,#fff);font-weight:600}
-body.lab-on #panel #sec-lab #lab-ctr:hover{filter:brightness(1.08);border-color:var(--sel,#ff5a1f)}
+body.lab-on #panel #sec-lab #lab-axis .chip[aria-pressed="true"]{background:var(--sel,#ff5a1f);border-color:var(--sel,#ff5a1f);color:var(--selfg,#fff);font-weight:600}
 body.lab-on #panel #sec-lab #lab-sl .slider input,body.lab-on #panel #sec-lab #lab-msrbox input{accent-color:var(--sel,#ff5a1f)}
 body.lab-on #panel #sec-lab #lab-sl .nm input,body.lab-on #panel #sec-lab #lab-msr input{border-color:color-mix(in srgb,var(--sel,#ff5a1f) 55%,transparent)}
 body.lab-on #panel #sec-lab #lab-sl .nm input:focus,body.lab-on #panel #sec-lab #lab-msr input:focus{outline:2px solid var(--sel,#ff5a1f);outline-offset:0;border-color:var(--sel,#ff5a1f)}
@@ -435,6 +438,60 @@ body.lab-on #colbtn[aria-pressed="true"] .cdot{background:linear-gradient(90deg,
 #panel .tagline:lang(zh){word-break:keep-all}
 
 body.lab-on .lbl{font-size:10px}
+body.lab-on .lbl.m{font-size:11.5px}
+
+/* tasto «Foglio» accanto alle viste, menu del formato, scheda delle distanze di un vertice */
+#lab-vrow{display:flex;align-items:stretch;gap:6px;max-width:100%}
+#lab-fmt{display:block;position:relative;flex:none}
+#lab-fmt{display:block}
+#lab-fmt-b{appearance:none;display:flex;align-items:center;gap:6px;height:100%;border:1px solid var(--rule);border-radius:7px;background:#fff;font:500 12.5px var(--font-ui);padding:8px 12px;color:var(--ink);cursor:pointer;box-shadow:0 1px 2px rgba(20,22,28,.08);white-space:nowrap}
+#lab-fmt-b[aria-pressed="true"]{background:var(--ink);color:#fff}
+#lab-fmt-m{position:absolute;left:0;bottom:calc(100% + 6px);z-index:30;min-width:268px;background:#fff;border:1px solid var(--rule);border-radius:9px;box-shadow:0 8px 24px rgba(20,22,28,.2);padding:10px 12px 8px;pointer-events:auto}
+#lab-fmt-m[hidden]{display:none}
+#lab-fmt-m .mt{font:600 11px var(--font-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+#lab-fmt-m .r{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+#lab-fmt-m .k{flex:1;font:600 12.5px var(--font-ui)}
+#lab-fmt-m .k i{display:block;font:400 11px var(--font-ui);font-style:normal;color:var(--muted)}
+#lab-fmt-m .g{font-size:14px;line-height:1}
+#lab-fmt-m .note{margin:8px 0 0;font-size:11.5px;color:var(--muted)}
+.lbl.vcard{background:#fff;border:1px solid var(--rule);border-left:4px solid #a3224f;border-radius:7px;padding:6px 10px;box-shadow:0 3px 10px rgba(20,22,28,.22);font:500 11.5px/1.5 var(--font-ui);color:var(--ink);text-shadow:none;pointer-events:none}
+.lbl.vcard .vt{font:700 12.5px var(--font-mono);color:#a3224f;margin-bottom:2px}
+.lbl.vcard .vr{display:flex;justify-content:space-between;gap:16px}
+.lbl.vcard .vr b{font-family:var(--font-mono);font-weight:600}
+
+#sheet-lay{appearance:none;flex:none;border:1px solid var(--rule);border-radius:7px;background:#fff;font:500 12.5px var(--font-ui);padding:8px 12px;color:var(--ink);cursor:pointer;box-shadow:0 1px 2px rgba(20,22,28,.08);white-space:nowrap}
+#sheet-lay:hover:not(:disabled){background:#f1f2f5}
+#sheet-lay:disabled{opacity:.45;cursor:not-allowed}
+/* in basso a sinistra restano solo il tasto 3D e il formato della tavola */
+#views button:not([data-v="3d"]){display:none}
+#lab-lay:disabled{opacity:.45;cursor:not-allowed}
+.lbl.sheetq{font:700 13px var(--font-ui);color:#5b616e;letter-spacing:.02em;text-shadow:none}
+/* il riquadro del foglio da disegno prende le proporzioni e l'orientamento del formato scelto */
+#inset.sheet canvas{height:auto;aspect-ratio:var(--r)}
+#inset.sheet.pt{width:auto}
+#inset.sheet.pt canvas{height:236px;width:auto;margin:0 auto}
+#inset.sheet.pt.mini canvas{height:126px}
+#inset.sheet.mini canvas{height:auto}
+
+.lbl.vcard{pointer-events:auto}
+.lbl.vcard .vr{display:flex;align-items:center;gap:6px;margin:2px 0}
+.lbl.vcard .vr .n{flex:1;min-width:64px}
+.lbl.vcard .vr input{width:62px;border:1px solid var(--rule);border-radius:5px;padding:2px 5px;font:600 12px var(--font-mono);text-align:right;background:#fff;color:var(--ink)}
+.lbl.vcard .vr input:focus{outline:2px solid #a3224f;outline-offset:0}
+.lbl.vcard .vr i{font-style:normal;color:var(--muted);font-size:11px}
+
+#dlmenu{position:absolute;bottom:56px;transform:translateX(-50%);z-index:8;background:#fff;border:1px solid var(--rule);border-radius:9px;box-shadow:0 8px 24px rgba(20,22,28,.2);padding:4px;min-width:170px}
+#dlmenu[hidden]{display:none}
+#dlmenu button{appearance:none;display:flex;width:100%;align-items:baseline;gap:4px;border:0;background:#fff;border-radius:6px;padding:8px 12px;font:500 12.5px var(--font-ui);color:var(--ink);cursor:pointer;text-align:left}
+#dlmenu button:hover{background:#f1f2f5}
+#dlmenu i{font-style:normal;color:var(--muted);font-size:11.5px}
+#layouts #sc-link{border-left:1px solid var(--rule);border-right:0;line-height:0}
+#layouts #sc-link .scl{display:none}
+#layouts #sc-link svg{width:18px;height:18px}
+
+#sheet-msg{position:absolute;left:50%;top:50px;transform:translateX(-50%);max-width:min(700px,88%);z-index:4;background:#fff4e5;border:1px solid #e8b46a;color:#7a4300;border-radius:8px;padding:8px 12px;font:500 12.5px/1.4 var(--font-ui);text-align:center;box-shadow:0 2px 8px rgba(20,22,28,.12);pointer-events:none}
+#sheet-msg[hidden],#sheet-msg-i[hidden]{display:none}
+#sheet-msg-i{position:absolute;left:6px;bottom:6px;width:20px;height:20px;border-radius:50%;background:#e8830c;color:#fff;font:700 13px/20px var(--font-ui);text-align:center;cursor:help;z-index:4}
 </style>
 </head>
 <body>
@@ -499,7 +556,7 @@ body.lab-on .lbl{font-size:10px}
       <h2 id="h-show" data-i18n="hShow">Mostra</h2>
       <div class="checks" id="checks"></div>
     </section>
-    <footer id="foot"><a class="resetbtn" id="donate" href="#" target="_blank" rel="noopener" hidden data-i18n="donate">♥ Sostieni il progetto</a><div class="frow"><a class="site" href="https://www.zypsilon.com" target="_blank" rel="noopener">www.zypsilon.com</a></div><div class="frow"><a class="site" href="https://github.com/zypsilon-lab/zypsilon" target="_blank" rel="noopener">github.com/zypsilon-lab/zypsilon</a></div><div class="frow"><a class="site" href="mailto:info@zypsilon.com">info@zypsilon.com</a></div><div class="frow"><button type="button" class="site" id="pol-link" data-i18n="polLink">Informazioni d'uso e privacy</button></div><div class="frow"><button type="button" class="site" id="ck-link" data-i18n="ckLink">Cookie e consenso</button></div><div id="legal"><span id="ver">ZYpsilon v1.2.1</span><span>© 2026 ZYpsilon</span><a class="site" href="https://polyformproject.org/licenses/noncommercial/1.0.0" target="_blank" rel="noopener">PolyForm Noncommercial 1.0.0</a></div></footer>
+    <footer id="foot"><a class="resetbtn" id="donate" href="#" target="_blank" rel="noopener" hidden data-i18n="donate">♥ Sostieni il progetto</a><div class="frow"><a class="site" href="https://www.zypsilon.com" target="_blank" rel="noopener">www.zypsilon.com</a></div><div class="frow"><a class="site" href="https://github.com/zypsilon-lab/zypsilon" target="_blank" rel="noopener">github.com/zypsilon-lab/zypsilon</a></div><div class="frow"><a class="site" href="mailto:info@zypsilon.com">info@zypsilon.com</a></div><div class="frow"><button type="button" class="site" id="pol-link" data-i18n="polLink">Informazioni d'uso e privacy</button></div><div class="frow"><button type="button" class="site" id="ck-link" data-i18n="ckLink">Cookie e consenso</button></div><div id="legal"><span id="ver">ZYpsilon v1.2.2</span><span>© 2026 ZYpsilon</span><a class="site" href="https://polyformproject.org/licenses/noncommercial/1.0.0" target="_blank" rel="noopener">PolyForm Noncommercial 1.0.0</a></div></footer>
   </aside>
   <div id="policy" role="dialog" aria-modal="true" aria-labelledby="pol-title" hidden>
   <div class="pol-bar"><button type="button" class="resetbtn" id="pol-back">← <span data-i18n="polBack">Torna al software</span></button><div id="pol-langs" role="group"></div></div>
@@ -549,6 +606,7 @@ body.lab-on .lbl{font-size:10px}
   </div>
 </div>
 <div id="ckwall" hidden></div>
+<div id="cknote" role="status" aria-live="polite" hidden><span data-i18n="ck.off"></span> <button type="button" class="ck-chg" data-go="cookie" data-i18n="ck.chg"></button></div>
 <div id="ckbar" role="dialog" aria-labelledby="ck-bt" aria-describedby="ck-bp" hidden>
   <div class="ck-h" id="ck-bt" data-i18n="ck.bt"></div>
   <p id="ck-bp" data-i18n="ck.bp"></p>
@@ -611,7 +669,9 @@ let lang='it';
 (function(){
   let l=null;
   try{const m=/[?&]lang=(it|en|zh)/.exec(location.search);if(m)l=m[1];}catch(e){}
-  if(!l)l='en';   // si apre sempre in inglese; ?lang=it|zh o il selettore cambiano lingua
+  try{if(!l){const s=localStorage.getItem('zypsilon-lang');if(LANGS.indexOf(s)>=0)l=s;}}catch(e){}   // lingua scelta in precedenza
+  if(!l){const n=String((navigator.languages&&navigator.languages[0])||navigator.language||'en').toLowerCase();
+    l=n.indexOf('it')===0?'it':n.indexOf('zh')===0?'zh':'en';}   // lingua del browser: italiano, cinese; ogni altra lingua → inglese
   lang=l;
 })();
 const it=(x,n=2)=>x.toLocaleString(LOC[lang],{minimumFractionDigits:n,maximumFractionDigits:n});
@@ -623,12 +683,12 @@ it:{
  'sc.hint':`Nella vista 3D tocca un raggio luminoso (o un vertice) per evidenziarlo e vederne la costruzione; tocca ancora per deselezionare.`,
  'sel.lr':`Raggio luminoso`,'sel.lrA':`è parallelo a tutti gli altri (luce lontana): passa per il vertice e incontra il piano nell'ombra del vertice`,'sel.lrP':`parte dalla lampada L, passa per il vertice e incontra il piano nell'ombra del vertice`,
  polLink:`Licenze, uso e privacy`,ckLink:`Cookie e consenso`,polBack:`Torna al software`,polTabP:`Licenze e privacy`,polTabC:`Cookie e consenso`,polTitle:`Licenze, uso e privacy`,ckTitle:`Cookie e consenso`,polUp:`Ultimo aggiornamento: novembre 2026`,
- 'pol.h1':`Uso gratuito`,'pol.p1':`ZYpsilon · Laboratorio di proiezioni è un software didattico gratuito per studiare proiezioni ortogonali (doppia proiezione di Monge), assonometrie, prospettiva, teoria delle ombre e sezioni con piano di taglio. Si usa direttamente nel browser, senza registrazione, per studio, insegnamento e lezioni.`,
+ 'pol.h1':`Uso gratuito`,'pol.p1':`ZYpsilon · Laboratorio di proiezioni è un software didattico gratuito per studiare proiezioni ortogonali (doppia proiezione di Monge), assonometrie, prospettiva, teoria delle ombre, sezioni con piano di taglio e compenetrazione di due solidi (Intersection Lab); i disegni si impaginano su un foglio A4, A3 o A2 e si scaricano in PNG o PDF. Si usa direttamente nel browser, senza registrazione, per studio, insegnamento e lezioni.`,
  'pol.h2':`Distribuzione e crediti`,'pol.p2':`Il software è concesso con licenza PolyForm Noncommercial 1.0.0: uso, copia e modifica per scopi non commerciali (studio, insegnamento e scuole compresi). Può essere distribuito liberamente, purché gratuitamente e lasciando invariati i crediti e il link al sito, così chi lo desidera può sostenere il progetto con una donazione volontaria. Non è consentito rimuovere o alterare i crediti e il link al sito:`,
  'pol.hL':`Licenze e usi commerciali`,'pol.pL1':`ZYpsilon è concesso in licenza solo per scopi non commerciali. Qualsiasi uso da parte o per conto di un soggetto con fini di lucro, case editrici comprese, richiede una licenza scritta separata dell'autore: ad esempio includere o incorporare il software, le sue schermate, grafiche o il logo in libri, libri di testo digitali, app, corsi o siti offerti a pagamento o con pubblicità, oppure ospitarlo su una piattaforma commerciale. Citare o nominare ZYpsilon (ad esempio in una bibliografia) e collegarsi a www.zypsilon.com resta libero per tutti. Il nome e il logo ZYpsilon non possono essere usati per suggerire approvazione, partnership o affiliazione con l'autore senza autorizzazione scritta.`,'pol.pLf':`Gratuito, senza bisogno di chiedere:`,'pol.f1':`studenti, docenti e scuole che lo usano per studio e lezioni;`,'pol.f2':`università ed enti pubblici di ricerca che lo usano per didattica e ricerca non commerciale;`,'pol.f3':`enti benefici, enti pubblici e amministrazioni;`,'pol.f4':`chi lo cita in un articolo, una tesi, una bibliografia o una pagina web, o vi rimanda con un link.`,'pol.pLn':`Serve una licenza:`,'pol.n1':`case editrici, per libri, libri di testo digitali, siti o app di accompagnamento;`,'pol.n2':`aziende ed enti di formazione, per corsi a pagamento o piattaforme di e-learning commerciali;`,'pol.n3':`chi incorpora, include o ospita ZYpsilon in software o siti, soprattutto con costi di accesso o pubblicità;`,'pol.n4':`uso professionale o aziendale in attività retribuite;`,'pol.n5':`ogni altro uso con finalità commerciale, come la rivendita o la distribuzione sponsorizzata.`,'pol.pLh':`A chi rivolgersi per una licenza`,'pol.pLq':`Non c'è un listino: le licenze si concordano caso per caso. Scrivi a info@zypsilon.com indicando chi sei, cosa intendi fare, per quale pubblico e per quanto tempo, e in quali paesi. Se non sei sicuro che il tuo uso rientri tra quelli gratuiti, chiedi prima di cominciare.`,
- 'pol.hC':`Come citare e collegarsi`,'pol.pC1':`ZYpsilon è archiviato su Zenodo con un DOI, che rimanda sempre all'ultima versione; ogni rilascio ha anche un proprio DOI di versione, da usare per citare esattamente la versione che hai usato. I dati per la citazione sono anche nel file CITATION.cff del repository GitHub:`,'pol.pC2':`Le scene si possono salvare e condividere come link web (pulsante «Link») o come file («Salva»). Il link apre la scena sul sito ufficiale www.zypsilon.com e si può condividere liberamente, ad esempio in articoli, presentazioni, pagine di corsi o libri. Incorporare l'applicazione in un'altra pagina o copiarla su un altro sito rientra invece nelle condizioni di licenza sopra.`,
+ 'pol.hC':`Come citare e collegarsi`,'pol.pC1':`ZYpsilon è archiviato su Zenodo con un DOI, che rimanda sempre all'ultima versione; ogni rilascio ha anche un proprio DOI di versione, da usare per citare esattamente la versione che hai usato. I dati per la citazione sono anche nel file CITATION.cff del repository GitHub:`,'pol.pC2':`Le scene si possono salvare e condividere come link web (pulsante «Link»), come file («Salva») o tramite il link contenuto in un PDF scaricato. Il link apre la scena sul sito ufficiale www.zypsilon.com e si può condividere liberamente, ad esempio in articoli, presentazioni, pagine di corsi o libri. Incorporare l'applicazione in un'altra pagina o copiarla su un altro sito rientra invece nelle condizioni di licenza sopra.`,
  'pol.h3':`Titolare del trattamento e contatti`,'pol.p3':`Titolare del trattamento è l'autore del software, che gestisce il sito www.zypsilon.com. Per informazioni o per esercitare i tuoi diritti scrivi a info@zypsilon.com.`,
- 'pol.h4':`Dati personali raccolti dall'applicazione`,'pol.p4':`L'applicazione non raccoglie, non richiede e non memorizza dati personali: non ci sono account, moduli o contenuti inviati a un server. Memorizza solo, nel tuo browser, la lingua scelta, la tua scelta sul consenso e, solo se lo chiedi, di non rivedere il promemoria della donazione (memoria locale), che non vengono trasmesse. Salvare una scena crea un file sul tuo dispositivo; il «Link» scrive le stesse impostazioni nell'indirizzo, dopo il simbolo #, parte che il browser non invia al server del sito. Né il file né il link contengono dati personali, solo le impostazioni della scena; aprire un file o un link le legge soltanto nel tuo browser. Anche il download dell'immagine avviene sul tuo dispositivo.`,
+ 'pol.h4':`Dati personali raccolti dall'applicazione`,'pol.p4':`L'applicazione non raccoglie, non richiede e non memorizza dati personali: non ci sono account, moduli o contenuti inviati a un server. Memorizza solo, nel tuo browser, la lingua scelta, la tua scelta sul consenso e, solo se lo chiedi, di non rivedere il promemoria della donazione (memoria locale), che non vengono trasmesse. Salvare una scena crea un file sul tuo dispositivo; il «Link» scrive le stesse impostazioni nell'indirizzo, dopo il simbolo #, parte che il browser non invia al server del sito. Né il file né il link contengono dati personali, solo le impostazioni della scena; aprire un file o un link le legge soltanto nel tuo browser. Anche il download dell'immagine (PNG) o del PDF avviene sul tuo dispositivo: il PDF è generato nel tuo browser e contiene un link che riapre lo stesso disegno sul sito, con le impostazioni della scena dopo il simbolo #, senza dati personali.`,
  'pol.h5':`Statistiche di accesso (Google Analytics)`,'pol.p5':`Solo se dai il consenso, il sito usa Google Analytics per contare le visite. In tal caso Google raccoglie dati di navigazione (ad esempio pagine visitate, tipo di dispositivo e di browser, provenienza approssimativa, indirizzo IP e identificativi online). Finalità: statistiche aggregate sull'uso del sito. Base giuridica: il tuo consenso (art. 6.1.a GDPR e art. 122 del Codice privacy). Conservazione: secondo le impostazioni di conservazione di Google Analytics. Google Analytics è presente solo sul sito ufficiale www.zypsilon.com: nelle copie scaricate o pubblicate altrove non c'è. Il rifiuto non limita in alcun modo le funzioni dell'applicazione e puoi cambiare scelta in qualsiasi momento. Non raccogliamo altri dati.`,
  'pol.goCk':`Gestisci la tua scelta nella pagina «Cookie e consenso»`,
  'pol.h6':`Servizi di terze parti`,'pol.p6':`Per funzionare, la pagina carica i caratteri tipografici da Google Fonts e la libreria 3D Three.js da cdnjs: questi servizi possono ricevere l'indirizzo IP del tuo browser. Google può trattare i dati anche fuori dall'Unione europea, secondo le proprie garanzie. Il sito è ospitato su GitHub Pages (GitHub, Inc.), che può registrare l'indirizzo IP dei visitatori nei propri log tecnici. Nella versione «standalone» la libreria 3D è inclusa nel file; i caratteri restano online e, se non disponibili, vengono sostituiti da quelli di sistema.`,
@@ -713,7 +773,7 @@ it:{
  'lb.PV':`PV · prospetto`,'lb.PO':`PO · pianta`,'lb.PL':`PL · vista laterale`,
  'lb.h':n=>`altezza osservatore h = ${n}`,'lb.D':n=>`distanza osservatore D = ${n}`,'lb.Fpp':` = punto principale`,
  'lb.rayP':`raggi proiettanti (convergono in O)`,'lb.rayO':th=>`raggi paralleli obliqui (θ = ${th}°)`,'lb.rayR':`raggi paralleli, perpendicolari al quadro`,
- ltAbbr:`LT`,ltAbbrM:`LT`,'sym.Tq':`Tq`,'sym.Tp':`Tp`,'pln.pv':`PV`,'pln.po':`PO`,'pln.pl':`PL`,'lb.LTm':`linea di terra`,vpPre:`F`,mods:n=>`${n}`,
+ ltAbbr:`LT`,ltAbbrM:`LT`,'sym.Tq':`Tq`,'sym.Tp':`Tp`,'pln.pv':`PV`,'pln.po':`PO`,'pln.pl':`PL`,'lb.LTm':`linea di terra`,vpPre:`F`,mods:n=>`${n} cm`,
  'r.cls':`Classificazione`,'r.truef':`Facce in vera forma`,'r.fold':`Rabbattimento`,'r.distPV':`Distanza dal PV`,'r.dPL':`Distanza dal PL`,'r.hPO':`Altezza sul PO`,
  'r.vps':`Punti di fuga`,'r.par':`Paralleli al quadro`,'r.distO':`Distanza O–quadro`,'r.hO':`Altezza di O`,'r.va':`Angolo visuale`,
  'r.k':`Coefficienti k`,'r.incl':`Inclinazione degli assi`,'r.quadro':`Quadro`,'r.rays':`Raggi`,'r.tilts':`Si inclina`,'r.solid':`Solido (X · Y · Z)`,
@@ -741,12 +801,12 @@ en:{
  'sc.hint':`In the 3D view, tap a light ray (or a vertex) to highlight it and see its construction; tap again to deselect.`,
  'sel.lr':`Light ray`,'sel.lrA':`is parallel to all the others (distant light): it passes through the vertex and meets the plane at the vertex's shadow`,'sel.lrP':`starts at the lamp L, passes through the vertex and meets the plane at the vertex's shadow`,
  polLink:`Licences, terms & privacy`,ckLink:`Cookies & consent`,polBack:`Back to the software`,polTabP:`Licences & privacy`,polTabC:`Cookies & consent`,polTitle:`Licences, terms & privacy`,ckTitle:`Cookies & consent`,polUp:`Last updated: November 2026`,
- 'pol.h1':`Free to use`,'pol.p1':`ZYpsilon · Projection Lab is a free educational tool for studying orthographic projections (Monge's double projection), axonometry, perspective, the theory of shadows and sections with a cutting plane. It runs directly in the browser, with no sign-up, for study, teaching and lessons.`,
+ 'pol.h1':`Free to use`,'pol.p1':`ZYpsilon · Projection Lab is a free educational tool for studying orthographic projections (Monge's double projection), axonometry, perspective, the theory of shadows, sections with a cutting plane and the interpenetration of two solids (Intersection Lab); drawings can be laid out on an A4, A3 or A2 sheet and downloaded as PNG or PDF. It runs directly in the browser, with no sign-up, for study, teaching and lessons.`,
  'pol.h2':`Distribution and credits`,'pol.p2':`The software is licensed under the PolyForm Noncommercial License 1.0.0: use, copying and modification for noncommercial purposes (study, teaching and schools included). It may be freely redistributed, provided it stays free of charge and the credits and the link to the website are left unchanged, so that anyone who wishes can support the project with a voluntary donation. Removing or altering the credits and the link to the website is not permitted:`,
  'pol.hL':`Commercial use and licences`,'pol.pL1':`ZYpsilon is licensed for noncommercial purposes only. Any use by or for a for-profit entity, including publishers, requires a separate written licence from the author: for example bundling or embedding the software, its screenshots, graphics or logo in books, digital textbooks, apps, courses or websites offered for a fee or with advertising, or hosting it on a commercial platform. Citing or mentioning ZYpsilon (for example in a bibliography) and linking to www.zypsilon.com remain free for everyone. The name and logo ZYpsilon may not be used to suggest endorsement, partnership or affiliation with the author without written permission.`,'pol.pLf':`Free, no need to ask:`,'pol.f1':`students, teachers and schools using it for study and lessons;`,'pol.f2':`universities and public research bodies using it for teaching and noncommercial research;`,'pol.f3':`charities, public bodies and government institutions;`,'pol.f4':`anyone citing it in a paper, thesis, bibliography or web page, or linking to it.`,'pol.pLn':`A licence is required:`,'pol.n1':`publishers, for books, digital textbooks, companion websites or apps;`,'pol.n2':`companies and training providers, for paid courses or commercial e-learning platforms;`,'pol.n3':`anyone embedding, bundling or hosting ZYpsilon in software or websites, especially with fees or advertising;`,'pol.n4':`professional or company use in paid work;`,'pol.n5':`any other use with a commercial purpose, such as resale or sponsored distribution.`,'pol.pLh':`How to ask for a licence`,'pol.pLq':`There is no price list: licences are agreed case by case. Write to info@zypsilon.com saying who you are, what you intend to do, for what audience and for how long, and in which countries. If you are unsure whether your use is covered by the free terms, ask before you start.`,
- 'pol.hC':`How to cite and link`,'pol.pC1':`ZYpsilon is archived on Zenodo with a DOI, which always points to the latest version; every release also has its own version DOI, to cite the exact version you worked with. Citation details are also in the CITATION.cff file of the GitHub repository:`,'pol.pC2':`Scenes can be saved and shared as a web link (the “Link” button) or as a file (“Save”). A link opens the scene on the official site www.zypsilon.com and may be shared freely, for example in papers, slides, course pages or books. Embedding the application in another page or copying it to another site is covered by the licence terms above.`,
+ 'pol.hC':`How to cite and link`,'pol.pC1':`ZYpsilon is archived on Zenodo with a DOI, which always points to the latest version; every release also has its own version DOI, to cite the exact version you worked with. Citation details are also in the CITATION.cff file of the GitHub repository:`,'pol.pC2':`Scenes can be saved and shared as a web link (the “Link” button), as a file (“Save”) or through the link inside a downloaded PDF. A link opens the scene on the official site www.zypsilon.com and may be shared freely, for example in papers, slides, course pages or books. Embedding the application in another page or copying it to another site is covered by the licence terms above.`,
  'pol.h3':`Data controller and contact`,'pol.p3':`The data controller is the author of the software, who runs the website www.zypsilon.com. For information or to exercise your rights, write to info@zypsilon.com.`,
- 'pol.h4':`Personal data collected by the application`,'pol.p4':`The application does not collect, ask for or store personal data: there are no accounts, forms or content sent to a server. It only stores, in your browser, your chosen language, your consent choice and, only if you ask for it, not to see the donation reminder again (local storage), which are never transmitted. Saving a scene creates a file on your device; the “Link” writes the same settings into the address, after the # symbol, a part the browser does not send to the site's server. Neither the file nor the link contains personal data, only the scene settings; opening a file or a link reads them only in your browser. Image downloads also happen on your device.`,
+ 'pol.h4':`Personal data collected by the application`,'pol.p4':`The application does not collect, ask for or store personal data: there are no accounts, forms or content sent to a server. It only stores, in your browser, your chosen language, your consent choice and, only if you ask for it, not to see the donation reminder again (local storage), which are never transmitted. Saving a scene creates a file on your device; the “Link” writes the same settings into the address, after the # symbol, a part the browser does not send to the site's server. Neither the file nor the link contains personal data, only the scene settings; opening a file or a link reads them only in your browser. Downloads of the image (PNG) or of the PDF also happen on your device: the PDF is generated in your browser and contains a link that reopens the same drawing on the site, with the scene settings after the # symbol and no personal data.`,
  'pol.h5':`Visit statistics (Google Analytics)`,'pol.p5':`Only if you give your consent, the website uses Google Analytics to count visits. In that case Google collects browsing data (for example pages viewed, device and browser type, approximate origin, IP address and online identifiers). Purpose: aggregate statistics on how the site is used. Legal basis: your consent (Art. 6(1)(a) GDPR and the ePrivacy rules). Retention: according to the retention settings of Google Analytics. Google Analytics is present only on the official website www.zypsilon.com: it is not in downloaded copies or copies published elsewhere. Declining does not limit any function of the application, and you can change your choice at any time. We collect no other data.`,
  'pol.goCk':`Manage your choice on the “Cookies & consent” page`,
  'pol.h6':`Third-party services`,'pol.p6':`To work, the page loads typefaces from Google Fonts and the 3D library Three.js from cdnjs: these services may receive your browser's IP address. Google may process data outside the European Union under its own safeguards. The site is hosted on GitHub Pages (GitHub, Inc.), which may record visitors' IP addresses in its technical logs. In the “standalone” version the 3D library is included in the file; the typefaces are still loaded online and, if unavailable, system fonts are used instead.`,
@@ -831,7 +891,7 @@ en:{
  'lb.PV':`VP · front view`,'lb.PO':`HP · plan`,'lb.PL':`LP · side view`,
  'lb.h':n=>`observer height h = ${n}`,'lb.D':n=>`observer distance D = ${n}`,'lb.Fpp':` = principal point`,
  'lb.rayP':`projecting rays (converge at O)`,'lb.rayO':th=>`parallel oblique rays (θ = ${th}°)`,'lb.rayR':`parallel rays, perpendicular to the plane`,
- ltAbbr:`GL`,ltAbbrM:`GL`,'sym.Tq':`Tπ`,'sym.Tp':`Th`,'pln.pv':`VP`,'pln.po':`HP`,'pln.pl':`LP`,'lb.LTm':`ground line`,vpPre:`V`,mods:n=>`${n}`,
+ ltAbbr:`GL`,ltAbbrM:`GL`,'sym.Tq':`Tπ`,'sym.Tp':`Th`,'pln.pv':`VP`,'pln.po':`HP`,'pln.pl':`LP`,'lb.LTm':`ground line`,vpPre:`V`,mods:n=>`${n} cm`,
  'r.cls':`Classification`,'r.truef':`Faces in true shape`,'r.fold':`Folding`,'r.distPV':`Distance from VP`,'r.dPL':`Distance from LP`,'r.hPO':`Height above HP`,
  'r.vps':`Vanishing points`,'r.par':`Parallel to the plane`,'r.distO':`Distance O–plane`,'r.hO':`Height of O`,'r.va':`Viewing angle`,
  'r.k':`Coefficients k`,'r.incl':`Axis inclinations`,'r.quadro':`Plane`,'r.rays':`Rays`,'r.tilts':`What tilts`,'r.solid':`Solid (X · Y · Z)`,
@@ -859,12 +919,12 @@ zh:{
  'sc.hint':`在 3D 视图中点击一条光线（或一个顶点）即可高亮并查看其作图；再次点击取消选择。`,
  'sel.lr':`光线`,'sel.lrA':`与其他所有光线平行（远距光源）：经过该顶点，与投影面相交于该顶点的落影`,'sel.lrP':`从灯 L 出发，经过该顶点，与投影面相交于该顶点的落影`,
  polLink:`许可、使用条款与隐私`,ckLink:`Cookie 与同意`,polBack:`返回软件`,polTabP:`许可与隐私`,polTabC:`Cookie 与同意`,polTitle:`许可、使用条款与隐私`,ckTitle:`Cookie 与同意`,polUp:`最后更新：2026年11月`,
- 'pol.h1':`免费使用`,'pol.p1':`ZYpsilon · 投影实验室是一款免费的教学软件，用于学习正投影（蒙日法）、轴测投影、透视、阴影理论和剖切面截断。它直接在浏览器中运行，无需注册，可用于学习、教学和课堂。`,
+ 'pol.h1':`免费使用`,'pol.p1':`ZYpsilon · 投影实验室是一款免费的教学软件，用于学习正投影（蒙日法）、轴测投影、透视、阴影理论、剖切面截断和两个立体的相贯（相贯实验室）；图样可按 A4、A3 或 A2 图纸排版，并下载为 PNG 或 PDF。它直接在浏览器中运行，无需注册，可用于学习、教学和课堂。`,
  'pol.h2':`传播与署名`,'pol.p2':`本软件依据 PolyForm Noncommercial 1.0.0 许可证授权：可为非商业目的（包括学习、教学和学校）使用、复制和修改。可以自由传播，但必须保持免费，并且保留原有的署名和网站链接，以便有意愿的人自愿捐助支持本项目。不得删除或更改署名及网站链接：`,
  'pol.hL':`商业使用与许可`,'pol.pL1':`ZYpsilon 仅授权用于非商业目的。任何以营利为目的的主体（包括出版社）或为其进行的使用，均须取得作者另行出具的书面许可：例如将本软件、其截图、图形或标志捆绑或嵌入收费或带广告的图书、电子教材、应用、课程或网站，或将其部署在商业平台上。引用或提及 ZYpsilon（例如列入参考文献）以及链接到 www.zypsilon.com，对所有人仍然自由。未经书面许可，不得使用 ZYpsilon 的名称和标志暗示获得作者的认可、合作或隶属关系。`,'pol.pLf':`免费，无需询问：`,'pol.f1':`学生、教师和学校用于学习和授课；`,'pol.f2':`大学和公共研究机构用于教学和非商业研究；`,'pol.f3':`慈善机构、公共机构和政府部门；`,'pol.f4':`在论文、学位论文、参考文献或网页中引用，或提供链接的任何人。`,'pol.pLn':`需要许可：`,'pol.n1':`出版社：用于图书、电子教材、配套网站或应用；`,'pol.n2':`企业和培训机构：用于收费课程或商业在线学习平台；`,'pol.n3':`将 ZYpsilon 嵌入、捆绑或托管于软件或网站的任何人，尤其是收费或带广告的情形；`,'pol.n4':`在有偿工作中的专业或企业使用；`,'pol.n5':`其他任何商业目的的使用，例如转售或赞助式分发。`,'pol.pLh':`如何申请许可`,'pol.pLq':`没有价目表：许可按个案协商。请写信至 info@zypsilon.com，说明您的身份、使用意图、面向的受众和期限，以及使用的国家或地区。如果不确定您的使用是否属于免费范围，请在开始之前先询问。`,
- 'pol.hC':`如何引用与链接`,'pol.pC1':`ZYpsilon 已存档于 Zenodo 并具有 DOI，该 DOI 始终指向最新版本；每个发布版本还有各自的版本 DOI，可用于引用您实际使用的确切版本。引用信息也包含在 GitHub 仓库的 CITATION.cff 文件中：`,'pol.pC2':`场景可以保存并以网页链接（“链接”按钮）或文件（“保存”）的形式分享。链接会在官方网站 www.zypsilon.com 上打开该场景，可以自由分享，例如用于论文、演示文稿、课程页面或图书。将本应用嵌入其他页面或复制到其他网站，则适用上述许可条款。`,
+ 'pol.hC':`如何引用与链接`,'pol.pC1':`ZYpsilon 已存档于 Zenodo 并具有 DOI，该 DOI 始终指向最新版本；每个发布版本还有各自的版本 DOI，可用于引用您实际使用的确切版本。引用信息也包含在 GitHub 仓库的 CITATION.cff 文件中：`,'pol.pC2':`场景可以保存并以网页链接（“链接”按钮）、文件（“保存”）或所下载 PDF 中的链接的形式分享。链接会在官方网站 www.zypsilon.com 上打开该场景，可以自由分享，例如用于论文、演示文稿、课程页面或图书。将本应用嵌入其他页面或复制到其他网站，则适用上述许可条款。`,
  'pol.h3':`数据控制者与联系方式`,'pol.p3':`数据控制者为本软件的作者，其运营网站 www.zypsilon.com。如需了解信息或行使您的权利，请发送邮件至 info@zypsilon.com。`,
- 'pol.h4':`应用本身收集的个人数据`,'pol.p4':`本应用不会收集、索取或存储个人数据：没有账号、表单，也不会向服务器发送任何内容。它仅在您的浏览器中（本地存储）保存您选择的语言、您的同意选择，以及（仅当您要求时）不再显示捐助提示的选择，这些信息不会被传输。保存场景会在您的设备上生成一个文件；“链接”则把同样的设置写入网址中 # 符号之后的部分，浏览器不会把这一部分发送给网站服务器。文件和链接都不含个人数据，只包含场景设置；打开文件或链接时，这些设置仅在您的浏览器中读取。图片下载同样在您的设备上完成。`,
+ 'pol.h4':`应用本身收集的个人数据`,'pol.p4':`本应用不会收集、索取或存储个人数据：没有账号、表单，也不会向服务器发送任何内容。它仅在您的浏览器中（本地存储）保存您选择的语言、您的同意选择，以及（仅当您要求时）不再显示捐助提示的选择，这些信息不会被传输。保存场景会在您的设备上生成一个文件；“链接”则把同样的设置写入网址中 # 符号之后的部分，浏览器不会把这一部分发送给网站服务器。文件和链接都不含个人数据，只包含场景设置；打开文件或链接时，这些设置仅在您的浏览器中读取。图片（PNG）或 PDF 的下载同样在您的设备上完成：PDF 在您的浏览器中生成，并包含一个链接，可在网站上重新打开同一幅图，场景设置位于 # 符号之后，不含任何个人数据。`,
  'pol.h5':`访问统计（Google Analytics）`,'pol.p5':`仅在您同意的情况下，网站才会使用 Google Analytics 统计访问量。此时 Google 会收集浏览数据（例如访问的页面、设备和浏览器类型、大致来源、IP 地址和在线标识符）。目的：关于网站使用情况的汇总统计。法律依据：您的同意（GDPR 第 6 条第 1 款 a 项及电子隐私规则）。保存期限：按 Google Analytics 的数据保留设置。Google Analytics 仅存在于官方网站 www.zypsilon.com：下载的副本或在其他地方发布的副本中不含它。拒绝不会限制应用的任何功能，您可以随时更改选择。我们不收集任何其他数据。`,
  'pol.goCk':`在“Cookie 与同意”页面管理您的选择`,
  'pol.h6':`第三方服务`,'pol.p6':`为正常运行，页面会从 Google Fonts 加载字体，并从 cdnjs 加载 3D 库 Three.js：这些服务可能会获取您浏览器的 IP 地址。Google 可能依其自身的保障措施在欧盟以外处理数据。本网站托管于 GitHub Pages（GitHub, Inc.），其技术日志可能记录访问者的 IP 地址。在“独立版”中，3D 库已包含在文件内；字体仍从网上加载，若无法加载则改用系统字体。`,
@@ -949,7 +1009,7 @@ zh:{
  'lb.PV':`正立面 · 主视图`,'lb.PO':`水平面 · 俯视图`,'lb.PL':`侧立面 · 左视图`,
  'lb.h':n=>`观察者高度 h = ${n}`,'lb.D':n=>`观察者距离 D = ${n}`,'lb.Fpp':` = 主点`,
  'lb.rayP':`投射线（汇聚于视点O）`,'lb.rayO':th=>`平行斜投射线（θ = ${th}°）`,'lb.rayR':`平行投射线，垂直于投影面`,
- ltAbbr:`基线`,ltAbbrM:`投影轴`,'sym.Tq':`Tπ`,'sym.Tp':`Th`,'pln.pv':`正立面`,'pln.po':`水平面`,'pln.pl':`侧立面`,'lb.LTm':`投影轴`,vpPre:`F`,mods:n=>`${n}`,
+ ltAbbr:`基线`,ltAbbrM:`投影轴`,'sym.Tq':`Tπ`,'sym.Tp':`Th`,'pln.pv':`正立面`,'pln.po':`水平面`,'pln.pl':`侧立面`,'lb.LTm':`投影轴`,vpPre:`F`,mods:n=>`${n} cm`,
  'r.cls':`分类`,'r.truef':`反映实形的面`,'r.fold':`展开角度`,'r.distPV':`到正立面的距离`,'r.dPL':`到侧立面的距离`,'r.hPO':`到水平面的高度`,
  'r.vps':`灭点`,'r.par':`平行于画面`,'r.distO':`O到画面的距离（视距 D）`,'r.hO':`O的高度（视高 H）`,'r.va':`视角`,
  'r.k':`系数 k`,'r.incl':`轴线倾角`,'r.quadro':`投影面`,'r.rays':`投射线`,'r.tilts':`倾斜对象`,'r.solid':`立体 (X · Y · Z)`,
@@ -986,7 +1046,14 @@ Object.assign(TR.it,{
  'lab.noSec':`Il piano non taglia entrambi i solidi: nessun nodo.`,'lab.noNodes':`Le due sezioni non hanno contorni che si incrociano.`,
  'lab.letters':`Lettere sui punti dell'intersezione`,
  'lab.tag':`Due solidi, un piano secante: la curva di intersezione, punto per punto.`,'lab.lead':`Sposta e orienta i due solidi fino a farli compenetrare, poi fai scorrere il piano secante: le sezioni dei due solidi si incrociano nei punti della curva, che compare in proiezioni ortogonali e in assonometria.`,
- 'lab.nodes':n=>`${n} ${n===1?'nodo':'nodi'} sulla curva di compenetrazione.`
+ 'lab.nodes':n=>`${n} ${n===1?'nodo':'nodi'} sulla curva di compenetrazione.`,
+ 'ck.off':`Statistiche disattivate: nessun dato viene raccolto e l'applicazione funziona normalmente.`,'ck.chg':`Cambia scelta`,
+ 'lab.fmt':`Foglio`,'lab.fmtT':`Formato del foglio`,'lab.fmtH':`Orizzontale`,'lab.fmtV':`Verticale`,'lab.fmtNo':`Nessun foglio`,
+ 'lab.fmtNote':`La tavola, in scala 1:1 con la squadratura, compare nello spazio quando ribalti i piani. Tutte le misure sono in centimetri.`,
+ 'lab.fmtFit':`il disegno supera la squadratura: scegli un formato più grande`,
+ 'sh.lay':`Impagina`,'sh.big':`Le misure sono troppo grandi per questo foglio: per entrare andrebbero ridotte a 1:{n}{h}.`,'sh.half':` (dimezzate)`,'sh.bigA':` Oppure scegli un foglio più grande ({a}).`,'sh.cons':`Parte della costruzione (ribaltamento, orizzonte, punti di fuga) esce dalla squadratura: avvicina le distanze o premi Impagina.`,'sh.pos':`Il disegno esce dalla squadratura: premi Impagina per centrarlo.`,'sh.sm':`Il disegno occupa poco foglio: le misure potrebbero essere ingrandite a {n}:1{h}.`,'sh.dbl':` (raddoppiate)`,'sh.smA':` Oppure scegli un foglio più piccolo ({a}).`,'dl.png':`Immagine (PNG)`,'dl.pdf':`PDF`,'sh.hl':`LO`,'sh.layT':`Dispone il disegno nel foglio nel modo migliore: nei quadranti PV, PO e PL (proiezioni ortogonali) oppure al centro del quadro (assonometria e prospettiva)`,'sh.layNeed':`Scegli prima il formato del foglio`,
+ 'lab.vtx':`Vertice`,'lab.vPV':`dal PV`,'lab.vPO':`dal PO`,'lab.vPL':`dal PL`,
+ rUnit:`Unità di misura: il centimetro (cm). Le misure dei solidi, le distanze dai piani e la tavola da disegno (scala 1:1) sono in cm. Un quadrato della griglia a terra misura 5 cm.`
 });
 Object.assign(TR.en,{
  'lab.sw':`Teaching mode: interpenetration of two solids by the cutting-plane method`,
@@ -1003,7 +1070,14 @@ Object.assign(TR.en,{
  'lab.noSec':`The plane does not cut both solids: no nodes.`,'lab.noNodes':`The two sections have no crossing outlines.`,
  'lab.letters':`Letters on the intersection points`,
  'lab.tag':`Two solids, one cutting plane: the intersection curve, point by point.`,'lab.lead':`Move and orient the two solids until they interpenetrate, then slide the cutting plane: the two sections cross at the points of the curve, shown in orthogonal projections and in axonometry.`,
- 'lab.nodes':n=>`${n} ${n===1?'node':'nodes'} on the curve of interpenetration.`
+ 'lab.nodes':n=>`${n} ${n===1?'node':'nodes'} on the curve of interpenetration.`,
+ 'ck.off':`Statistics are off: no data is collected and the application works normally.`,'ck.chg':`Change choice`,
+ 'lab.fmt':`Sheet`,'lab.fmtT':`Sheet format`,'lab.fmtH':`Landscape`,'lab.fmtV':`Portrait`,'lab.fmtNo':`No sheet`,
+ 'lab.fmtNote':`The drawing sheet, at scale 1:1 with its border, appears in space when you fold the planes. All measures are in centimetres.`,
+ 'lab.fmtFit':`the drawing exceeds the border: choose a larger format`,
+ 'sh.lay':`Lay out`,'sh.big':`The measures are too large for this sheet: to fit they would need to be reduced to 1:{n}{h}.`,'sh.half':` (halved)`,'sh.bigA':` Or choose a larger sheet ({a}).`,'sh.cons':`Part of the construction (folding, horizon, vanishing points) falls outside the border: reduce the distances or press Lay out.`,'sh.pos':`The drawing runs outside the border: press Lay out to centre it.`,'sh.sm':`The drawing fills little of the sheet: the measures could be enlarged to {n}:1{h}.`,'sh.dbl':` (doubled)`,'sh.smA':` Or choose a smaller sheet ({a}).`,'dl.png':`Image (PNG)`,'dl.pdf':`PDF`,'sh.hl':`HL`,'sh.layT':`Arranges the drawing on the sheet in the best way: in the VP, HP and LP quadrants (orthogonal projections) or centred on the picture plane (axonometry and perspective)`,'sh.layNeed':`Choose the sheet format first`,
+ 'lab.vtx':`Vertex`,'lab.vPV':`from VP`,'lab.vPO':`from HP`,'lab.vPL':`from LP`,
+ rUnit:`Unit of measure: the centimetre (cm). Solid measures, distances from the planes and the drawing sheet (scale 1:1) are in cm. One square of the ground grid measures 5 cm.`
 });
 Object.assign(TR.zh,{
  'lab.sw':`教学模式：用截平面法求两个立体的相贯线`,
@@ -1020,7 +1094,14 @@ Object.assign(TR.zh,{
  'lab.noSec':`截平面没有同时截到两个立体：没有交点。`,'lab.noNodes':`两个截断面的轮廓线没有相交。`,
  'lab.letters':`相贯线上的点标注字母`,
  'lab.tag':`两个立体，一个截平面：逐点求出相贯线。`,'lab.lead':`移动并调整两个立体的方位，使其相互贯穿，然后移动截平面：两个截断面的轮廓相交于相贯线上的点，可在正投影和轴测图中查看。`,
- 'lab.nodes':n=>`相贯线上有 ${n} 个交点。`
+ 'lab.nodes':n=>`相贯线上有 ${n} 个交点。`,
+ 'ck.off':`统计已关闭：不会收集任何数据，应用可正常使用。`,'ck.chg':`更改选择`,
+ 'lab.fmt':`图纸`,'lab.fmtT':`图纸幅面`,'lab.fmtH':`横向`,'lab.fmtV':`纵向`,'lab.fmtNo':`不显示图纸`,
+ 'lab.fmtNote':`翻转投影面时，图框（1:1 比例）会出现在空间中。所有尺寸均以厘米为单位。`,
+ 'lab.fmtFit':`图形超出图框：请选择更大的幅面`,
+ 'sh.lay':`排版`,'sh.big':`尺寸对该幅面过大：需缩小至 1:{n}{h} 才能放入。`,'sh.half':`（减半）`,'sh.bigA':`或选择更大的幅面（{a}）。`,'sh.cons':`部分作图线（翻折、视平线、灭点）超出图框：请减小距离或点“排版”。`,'sh.pos':`图形超出图框：请点“排版”居中。`,'sh.sm':`图形在幅面中偏小：可放大至 {n}:1{h}。`,'sh.dbl':`（加倍）`,'sh.smA':`或选择更小的幅面（{a}）。`,'dl.png':`图片 (PNG)`,'dl.pdf':`PDF`,'sh.hl':`视平线`,'sh.layT':`将图形在图纸上排版得最佳：正投影时置于 V、H、W 面各自的象限内，轴测或透视时居中于画面`,'sh.layNeed':`请先选择图纸幅面`,
+ 'lab.vtx':`顶点`,'lab.vPV':`到V面`,'lab.vPO':`到H面`,'lab.vPL':`到W面`,
+ rUnit:`度量单位：厘米（cm）。立体的尺寸、到各投影面的距离和图纸（比例 1:1）均以厘米表示。地面网格的一格为 5 cm。`
 });
 Object.assign(TR.it,{'lg.h':`retta di fuga dei raggi luminosi (per FL e FL′)`});
 Object.assign(TR.en,{'lg.h':`vanishing line of the light rays (through VL and VL′)`});
@@ -1065,7 +1146,7 @@ const state={
   preset:'pa',modified:false,mode:'persp',quadro:'V',solid:'cubo',
   psi:-30,phi:0,theta:0,scale:1,ms:false,mw:5,mv:5,mz:5,adv:false,tilt:'solid',ang:0,mh:1.25,d:1.5,h:0,alpha:45,q:1,D:7.5,Ez:5,Ex:0,
   dl:null,cut:false,cutH:0.6,cutI:0,cutR:0,cutO:'pv',cutT:0,cutF:false,cutK:'back',shadow:false,hideRib:false,hidePl:false,ribPl:'auto',shMode:'par',lx:-4.5,ly:-6.5,lz:7,
-  /*LAB*/lab:false,labSel:'A',solB:'esagonale',aAx:'y',aRot:0,aW:1.3,aV:1.3,aH:1.3,aX:-0.5,aD:4,aZ:3.2,bAx:'z',bRot:0,bW:1.3,bV:1.3,bH:1.3,bX:0.6,bD:3.6,bZ:3.4,labPl:'po',labF:0.5,labAnim:false,labTrail:true,labCons:true,laz:-125,lel:45,shV:null,shAll:false,sel:null,solo:false,rib:false,ribT:0,meas:false,measT:0,color:false,
+  /*LAB*/lab:false,sheet:null,labSel:'A',solB:'esagonale',aAx:'y',aRot:0,aW:1.3,aV:1.3,aH:1.3,aX:-0.5,aD:4,aZ:3.2,bAx:'z',bRot:0,bW:1.3,bV:1.3,bH:1.3,bX:0.6,bD:3.6,bZ:3.4,labPl:'po',labF:0.5,labAnim:false,labTrail:true,labCons:true,laz:-125,lel:45,shV:null,shAll:false,sel:null,solo:false,rib:false,ribT:0,meas:false,measT:0,color:false,
   show:{rays:true,image:true,hidden:true,axes:true,vp:true,solid:true,labels:true,inset:true,hd:true,letters:true,traces:true,srays:true,cons:true}
 };
 
@@ -1197,7 +1278,39 @@ SOLIDS.sfera.round={k:'sph',r:1.15,z0:0,z1:0};
 const PREP={};Object.keys(SOLIDS).forEach(k=>PREP[k]=prepSolid(SOLIDS[k]));
 /* ------------------------------------------- misure del solido (centimetri sul foglio) */
 const MOD_U=5;                  // numero che corrisponde a 1 modulo (lato del cubo a scala 1): l'unità (cm, m…) la sceglie chi usa il software
-const MU=1.25/M*MOD_U;         // numero per unità di definizione dei solidi (cubo: lato 2 → 5)
+const MU=1.25/M*MOD_U;
+/*SHEET*/const SHEET_FMT={A4:[210,297],A3:[297,420],A2:[420,594]},SH_MM=M/MOD_U/10,SH_MG={l:20,r:10,t:10,b:10};let SHEET_READY=false;   // mm; 1 mm del foglio = SH_MM unità di scena (le misure sono in cm, il disegno è 1:1); margini della squadratura: 2 cm a sinistra (rilegatura), 1 cm sugli altri lati
+function sheetSig(S){let a=1e9,b=-1e9,c=1e9,e=-1e9;S.Qv.forEach(p=>{a=Math.min(a,p.x);b=Math.max(b,p.x);c=Math.min(c,p.z);e=Math.max(e,p.z);});return [a,b,c,e,S.eye.x,S.eye.z,state.D].map(v=>v.toFixed(2)).join(',');}
+function sheetPan(S){const f=state.sheet;return(f&&f.pan&&S.persp&&f.sig===sheetSig(S))?f:null;}   // impaginazione prospettica valida per il disegno corrente
+function sheetDims(){const f=state.sheet;if(!f||!SHEET_FMT[f.k])return null;const a=SHEET_FMT[f.k];return f.o==='h'?[a[1],a[0]]:[a[0],a[1]];}   // larghezza × altezza in mm
+function sheetPaper(w,h,big){const d=sheetDims();if(!d)return null;const pad=(big&&!window.__shEx)?Math.min(36,Math.min(w,h)*0.05):0,s=Math.min((w-2*pad)/d[0],(h-2*pad)/d[1]),pw=d[0]*s,ph=d[1]*s,px=(w-pw)/2,py=(h-ph)/2,m=SH_MG;
+  return{d,s,px,py,pw,ph,fx:px+m.l*s,fy:py+m.t*s,fw:pw-(m.l+m.r)*s,fh:ph-(m.t+m.b)*s,k:state.sheet.k};}
+function brandMark(ctx,xr,yb,mm){   // marchio + indirizzo, allineati a destra su xr, riga di base yb; mm = pixel per millimetro. Memorizza il rettangolo (per il collegamento nel PDF)
+  ctx.save();ctx.textAlign='right';ctx.fillStyle='#14161c';ctx.globalAlpha=.8;ctx.font='500 '+(2.7*mm)+'px "IBM Plex Sans","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif';
+  if('letterSpacing' in ctx)ctx.letterSpacing='0px';const tw=ctx.measureText('www.zypsilon.com').width,lh=5*mm;ctx.fillText('www.zypsilon.com',xr,yb);ctx.globalAlpha=1;let x0=xr-tw;
+  try{if(logoImg.complete&&logoImg.naturalWidth){const lw=lh*logoImg.naturalWidth/logoImg.naturalHeight;x0=xr-tw-2.5*mm-lw;ctx.drawImage(logoImg,x0,yb+0.4*mm-lh,lw,lh);}}catch(e){}
+  ctx.restore();window.__brandRect={x0,x1:xr,y0:yb+0.4*mm-lh,y1:yb+0.8*mm};}
+function sheetMsgEl(big){const id=big?'sheet-msg':'sheet-msg-i';let e=document.getElementById(id);
+  if(!e){e=document.createElement('div');e.id=id;e.setAttribute('role','status');e.hidden=true;const host=document.getElementById(big?'imgpane':'inset');if(!host)return null;host.appendChild(e);if(!big)e.textContent='!';}return e;}
+function sheetAdvise(rF,rA,pos,big){   // messaggio (senza ridurre né ingrandire il disegno): misure da ridurre o ingrandire, oppure foglio diverso. rF: figura / cornice; rA: con le linee di costruzione
+  if(window.__shEx||!state.sheet)return;const e=sheetMsgEl(big);if(!e)return;
+  const d=sheetDims(),m=SH_MG,fw=d[0]-m.l-m.r,fh=d[1]-m.t-m.b,names=['A4','A3','A2'];
+  const sf=k=>{const a=SHEET_FMT[k],dd=state.sheet.o==='h'?[a[1],a[0]]:[a[0],a[1]];return Math.min((dd[0]-m.l-m.r)/fw,(dd[1]-m.t-m.b)/fh);};
+  const altBig=r=>{let b=null;names.forEach(k=>{const s=sf(k);if(s>1.001&&r/s<=1&&(!b||s<sf(b)))b=k;});return b;};
+  const altSm=r=>{let b=null;names.forEach(k=>{const s=sf(k);if(s<0.999&&r/s<=0.95&&(!b||s<sf(b)))b=k;});return b;};
+  const rp=(t,o)=>t.replace(/\{(\w+)\}/g,(x,k)=>o[k]);let txt='';
+  if(rF>1.0005){const n=[2,5,10,20,50,100].find(k=>rF/k<=1)||100,a=altBig(rF);txt=rp(tx('sh.big'),{n,h:n===2?tx('sh.half'):''})+(a?rp(tx('sh.bigA'),{a}):'');}
+  else if(rA>1.0005){const a=altBig(rA);txt=tx('sh.cons')+(a?rp(tx('sh.bigA'),{a}):'');}
+  else if(!pos)txt=tx('sh.pos');
+  e.hidden=!txt;if(big)e.textContent=txt;else e.title=txt;}
+function sheetPaint(ctx,P,w,h,big,fits){ctx.save();ctx.fillStyle='#e3e6ec';ctx.fillRect(0,0,w,h);
+  ctx.shadowColor='rgba(20,22,28,.28)';ctx.shadowBlur=big?10:3;ctx.fillStyle='#fff';ctx.fillRect(P.px,P.py,P.pw,P.ph);ctx.shadowBlur=0;
+  ctx.strokeStyle='#9aa0ae';ctx.lineWidth=1;ctx.strokeRect(P.px+.5,P.py+.5,P.pw-1,P.ph-1);
+  ctx.strokeStyle='#14161c';ctx.lineWidth=Math.max(1.2,0.7*P.s);ctx.strokeRect(P.fx,P.fy,P.fw,P.fh);
+  ctx.font='600 '+(big?12:Math.max(8,Math.min(10,P.s*3.4)))+'px "IBM Plex Sans","Noto Sans SC",sans-serif';ctx.textAlign='right';ctx.textBaseline='alphabetic';
+  ctx.fillStyle='#7b8191';ctx.fillText(P.k+' · 1:'+(P.n||1),P.px+P.pw-P.s*3,P.py+P.ph-P.s*3);ctx.textAlign='left';
+  {const mm=P.s;if(5*mm>=7)brandMark(ctx,P.fx+P.fw-2*mm,P.fy+P.fh-2*mm,mm);}
+  ctx.restore();}         // numero per unità di definizione dei solidi (cubo: lato 2 → 5)
 const MKIND={cubo:'cube',prisma:'box',logo:'logo',cilindro:'round',cono:'round',sfera:'sph'};
 const MUNI=k=>k==='cube'||k==='sph'||k==='logo';   // un solo campo: le proporzioni sono fisse
 const MDIM={};
@@ -1212,7 +1325,7 @@ function mDims(k){   // misure di partenza a scala 1: s lato (o diametro, o lung
 }
 const MEAS_MIN=2,MEAS_MAX=15;   // valori ammessi per tutte le misure di tutti i solidi (interi, per non scrivere decimali)
 function mRange(k){
-  const r=[MEAS_MIN,MEAS_MAX];
+  const md=state.lab?'monge':state.mode,r=md==='persp'?[5,30]:(md==='ortho'||md==='obl')?[3,14]:[MEAS_MIN,MEAS_MAX];   // limiti tarati sul foglio A3: prisma esagonale (lato = altezza) che resta nella cornice
   return{kind:mDims(k).kind,s:r,s2:r,h:r};
 }
 function clampMeas(){
@@ -1416,7 +1529,7 @@ function buildSolid(sol,full){
   const eg=new THREE.BufferGeometry();eg.setAttribute('position',new THREE.Float32BufferAttribute(ep,3));
   const ln=new THREE.LineSegments(eg,new THREE.LineBasicMaterial({color:COL.ink,transparent:true}));
   solidGroup.add(m,ln);
-  /*LAB*/if(state.lab)labEdges3D(sol);
+  /*LAB*/if(state.lab){labSplitMesh(sol,m,vn);labEdges3D(sol);}
   if(sol.cut){
     // faccia di sezione colorata
     const cg=new THREE.BufferGeometry();cg.setAttribute('position',new THREE.Float32BufferAttribute(cpos,3));cg.setAttribute('normal',new THREE.Float32BufferAttribute(cnor,3));
@@ -1542,14 +1655,16 @@ const MG={pv:mkPlane(0x8d96b5),po:mkPlane(0x86b09c),pl:mkPlane(0xb8a38d),
   lt:segPool(2,0x14161c,mg)};
 // piano di taglio ribaltato (Monge): figura della sezione che ruota attorno alla traccia su PO insieme ai piani di proiezione
 const RB=(()=>{const grp=new THREE.Group();MG.po.grp.add(grp);
-  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(62*9),3));g.setDrawRange(0,0);
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(3000*9),3));g.setDrawRange(0,0);
   const fill=new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:0xe9953a,transparent:true,opacity:0.92,side:THREE.DoubleSide,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-4}));
   fill.renderOrder=5;fill.frustumCulled=false;grp.add(fill);
   const lg=new THREE.BufferGeometry();lg.setAttribute('position',new THREE.BufferAttribute(new Float32Array(64*3),3));lg.setDrawRange(0,0);
   const line=new THREE.LineLoop(lg,new THREE.LineBasicMaterial({color:0x8a4a0c,polygonOffset:true,polygonOffsetFactor:-6,polygonOffsetUnits:-6}));line.renderOrder=6;line.frustumCulled=false;grp.add(line);
   const tg=new THREE.BufferGeometry();tg.setAttribute('position',new THREE.BufferAttribute(new Float32Array(12),3));tg.setDrawRange(0,0);
   const tl=new THREE.LineSegments(tg,new THREE.LineBasicMaterial({color:0xd9731a,polygonOffset:true,polygonOffsetFactor:-6,polygonOffsetUnits:-6}));tl.renderOrder=6;tl.frustumCulled=false;grp.add(tl);
-  grp.visible=false;return{grp,fill,line,g,lg,tg,tl};})();
+  const xg=new THREE.BufferGeometry();xg.setAttribute('position',new THREE.BufferAttribute(new Float32Array(1600*6),3));xg.setDrawRange(0,0);
+  const xl=new THREE.LineSegments(xg,new THREE.LineBasicMaterial({color:0x8a4a0c,polygonOffset:true,polygonOffsetFactor:-6,polygonOffsetUnits:-6}));xl.renderOrder=6;xl.frustumCulled=false;grp.add(xl);   // contorni degli altri pezzi sezionati
+  grp.visible=false;return{grp,fill,line,g,lg,tg,tl,xg,xl};})();
 function setQuad(P,q){const a=P.mesh.geometry.attributes.position.array,o=P.outline.geometry.attributes.position.array;
   [q[0],q[1],q[2],q[0],q[2],q[3]].forEach((v,i)=>{a[i*3]=v.x;a[i*3+1]=v.y;a[i*3+2]=v.z;});
   q.forEach((v,i)=>{o[i*3]=v.x;o[i*3+1]=v.y;o[i*3+2]=v.z;});
@@ -1899,6 +2014,7 @@ function quadroBottom(G,raw){const uz=V(0,0,1).transformDirection(G),r=[0,0];
 // il quadro si adatta all'immagine (ombra compresa), a passi di mezzo modulo
 function fitQuadro(S){
   if(S.mg)return false;
+  {const d_=sheetDims();if(d_){const nw_=d_[0]*SH_MM/2,nt_=(d_[1]-SH_MG.b)*SH_MM,nb_=-SH_MG.b*SH_MM,ch_=nw_!==QW||nt_!==QT||nb_!==QB;QW=nw_;QT=nt_;QB=nb_;return ch_;}}   /*SHEET: il quadro è il foglio*/
   let xm=0,zM=-1e9,zm=1e9;const add=(x,z)=>{xm=Math.max(xm,Math.abs(x));zM=Math.max(zM,z);zm=Math.min(zm,z);};
   S.Qv.forEach(q=>add(q.x,q.z));if(axOn())S.axis.forEach(a=>{add(a.qo.x,a.qo.z);add(a.qt.x,a.qt.z);});
   S.ex.sd.forEach(o=>(o.img||[]).forEach(P=>{const q=S.Q(P);add(q.x,q.z);}));
@@ -2061,6 +2177,7 @@ function shadowFront(S,imgQ){
 // Monge: ribaltamento del piano di taglio attorno alla sua traccia su PO (o su PV, per i piani proiettanti sul quadro), fino a farlo coincidere con quel piano, dalla parte che copre meno il disegno; la sezione risulta in vera forma
 function mongeRab(S,n,c,pl){
   const f=S.faces.find(q=>q.cut);if(!f||f.idx.length<3)return null;
+  const fx=S.faces.filter(q=>q.cut&&q!==f&&q.idx.length>=3);   // altri pezzi sezionati dello stesso piano (solidi composti)
   if(Math.max(Math.abs(n.x),Math.abs(n.y),Math.abs(n.z))>0.9995)return null;   // piano di taglio parallelo a un piano di proiezione: la sezione è già in vera forma in quella proiezione
   const hn={po:Math.hypot(n.x,n.y),pv:Math.hypot(n.x,n.z),pl:Math.hypot(n.y,n.z)},L=S.ext.xL;
   // il piano di taglio si ribalta sul piano di proiezione al quale è perpendicolare (ortogonale a PL → su PL, a PV → su PV, a PO → su PO); un piano generico, su PO
@@ -2070,12 +2187,12 @@ function mongeRab(S,n,c,pl){
   if(mode==='po'){h=V(n.x/hn.po,n.y/hn.po,0);u=V(-h.y,h.x,0);p0=h.clone().multiplyScalar(c/hn.po);toS=P=>V(P.x,P.y,0);}
   else if(mode==='pv'){h=V(n.x/hn.pv,0,n.z/hn.pv);u=V(h.z,0,-h.x);p0=h.clone().multiplyScalar(c/hn.pv);toS=P=>V(P.x,P.z,0);}   // coordinate sul foglio: (x,y) per PO, (x,z) per PV
   else{h=V(0,n.y/hn.pl,n.z/hn.pl);u=V(0,h.z,-h.y);p0=V(L,0,0).addScaledVector(h,(c-n.x*L)/hn.pl);toS=P=>V(L-P.y,P.z,0);}   // PL: (xL−y, z)
-  const m=n.clone().cross(u).normalize(),idx=f.idx.slice(0,64),P0=idx.map(i=>S.W[i].clone());   // m: direzione del piano, perpendicolare alla traccia
+  const m=n.clone().cross(u).normalize(),idx=f.idx.slice(0,64),P0=idx.map(i=>S.W[i].clone()),Px=fx.map(g=>g.idx.slice(0,64).map(i=>S.W[i].clone()));   // m: direzione del piano, perpendicolare alla traccia
   // il ribaltamento può cadere da una parte o dall'altra della traccia: si sceglie la parte che copre meno le proiezioni del foglio (a parità, quella opposta al solido)
   const boxes=S.views.map(v=>{let a0=1e9,a1=-1e9,b0=1e9,b1=-1e9;v.sh.forEach(p=>{a0=Math.min(a0,p[0]);a1=Math.max(a1,p[0]);b0=Math.min(b0,p[1]);b1=Math.max(b1,p[1]);});return[a0,a1,b0,b1];});
   const cand=sg=>{const d=h.clone().multiplyScalar(sg),phi=Math.atan2(u.dot(m.clone().cross(d)),m.dot(d)),
-      map=P=>{const r=P.clone().sub(p0);return toS(p0.clone().addScaledVector(u,r.dot(u)).addScaledVector(d,r.dot(m)));},Pf=P0.map(map);
-    let a0=1e9,a1=-1e9,b0=1e9,b1=-1e9;Pf.forEach(P=>{a0=Math.min(a0,P.x);a1=Math.max(a1,P.x);b0=Math.min(b0,P.y);b1=Math.max(b1,P.y);});
+      map=P=>{const r=P.clone().sub(p0);return toS(p0.clone().addScaledVector(u,r.dot(u)).addScaledVector(d,r.dot(m)));},Pf=P0.map(map),PfX=Px.map(a=>a.map(map));
+    let a0=1e9,a1=-1e9,b0=1e9,b1=-1e9;Pf.concat(...PfX).forEach(P=>{a0=Math.min(a0,P.x);a1=Math.max(a1,P.x);b0=Math.min(b0,P.y);b1=Math.max(b1,P.y);});
     const E=S.ext,out=a1<E.xa||a0>E.xL+E.yb||b1<-E.yb||b0>E.zt;   // figura tutta fuori dallo spazio dei tre piani
     // la figura ribaltata deve restare nello spazio libero del piano su cui si ribalta (senza invadere gli altri due piani né le proiezioni): PV sopra la linea di terra e a sinistra di PL,
     // PO sotto la linea di terra e a sinistra di PL, PL a destra dell'asse e sopra la linea di terra; fuori da quella zona si paga una penalità
@@ -2083,10 +2200,10 @@ function mongeRab(S,n,c,pl){
     let cx=0,cy=0;Pf.forEach(P=>{cx+=P.x;cy+=P.y;});cx/=Pf.length;cy/=Pf.length;
     const tie=mode==='pv'?cx-cy:mode==='po'?cx+cy:-cx-cy;   // a parità: verso lo spazio vuoto (PV in alto a sinistra, PO in basso a sinistra, PL in alto a destra)
     const ov=boxes.reduce((t,q)=>t+Math.max(0,Math.min(a1,q[1])-Math.max(a0,q[0]))*Math.max(0,Math.min(b1,q[3])-Math.max(b0,q[2])),0)+(out?40+15*Math.max(0,E.xa-a1,a0-(E.xL+E.yb),-E.yb-b1,b0-E.zt):0)+100*pen+1e-4*tie;
-    return{phi,Pf,ov,out,map,pen};};
+    return{phi,Pf,PfX,ov,out,map,pen};};
   const sg0=mode==='po'?(n.z>=0?1:-1):1,A=cand(sg0),B=cand(-sg0),C=B.ov<A.ov-1e-9?B:A;
   const vc=mode==='po'?0:mode==='pv'?1:0;   // piano di appoggio della costruzione: quello adiacente nel foglio (PV per PO e PL, PO per PV)
-  const R={mode,hk:mode,vi:{pv:0,po:1,pl:2}[mode],vc,lo:mode==='pl'?V(L,0,0):V(0,0,0),idx,P0,Pf:C.Pf,p0,u,phi:C.phi,out:C.out,pen:C.pen,pen2:(C===A?B:A).pen,map:C.map,s0:toS(p0),su:toS(u).sub(toS(V(0,0,0))),O:null,cq:null};
+  const R={mode,hk:mode,vi:{pv:0,po:1,pl:2}[mode],vc,lo:mode==='pl'?V(L,0,0):V(0,0,0),idx,P0,Pf:C.Pf,ex:C.PfX.map((Pf,i)=>({P0:Px[i],Pf})),p0,u,phi:C.phi,out:C.out,pen:C.pen,pen2:(C===A?B:A).pen,map:C.map,s0:toS(p0),su:toS(u).sub(toS(V(0,0,0))),O:null,cq:null};
   // costruzione grafica: O = punto in cui le due tracce si incontrano sullo spigolo comune (la linea di terra, o l'asse fra PV e PL); ogni punto P si porta con una retta del piano parallela alla cerniera
   // sulla traccia Q del piano di appoggio; l'arco di centro O porta Q sulla traccia ribaltata; da lì la parallela alla cerniera incontra la perpendicolare alla cerniera condotta dalla proiezione sul piano della cerniera
   const uc=vc===1?u.z:u.y,sx=mode==='pl'?R.su.x:R.su.y;
@@ -2281,7 +2398,7 @@ function applyExtras(S){
     if(ex.selc&&sh.srays&&solOn&&(!mgOn||state.ang<=0.5)){const c=ex.selc;setSeg(lraySel,lg.par?c.P.clone().addScaledVector(lg.dir,-lg.dist):lg.L.clone(),c.Sh,0.045);lraySel.visible=true;}
     if(!mgOn){
       const Z=q=>V(q.x,QOFF+0.004,q.z);
-      if(sh.srays&&ex.selc){const c=ex.selc,L0=LET[c.ix]||'',Pp=[c.P,c.F,c.Sh,V(c.pi.x,QOFF,c.pi.z),V(c.fi.x,QOFF,c.fi.z),V(c.si.x,QOFF,c.si.z)],tt=[L0,L0+'′',L0+'₀',L0.toLowerCase(),L0.toLowerCase()+'′',L0.toLowerCase()+'₀'];
+      if(sh.srays&&ex.selc){const c=ex.selc,L0=LCs(LET[c.ix]||''),I0=IMGL(LET[c.ix]||''),Pp=[c.P,c.F,c.Sh,V(c.pi.x,QOFF,c.pi.z),V(c.fi.x,QOFF,c.fi.z),V(c.si.x,QOFF,c.si.z)],tt=[L0,L0+'′',L0+'₀',I0,I0+'′',I0+'₀'];
         Pp.forEach((q,i)=>{if(i<3&&!solOn)return;if(i>=3&&!sh.image)return;setLabel('sc'+i,q,true,i%3===0?-8:8,-8);labels['sc'+i].el.textContent=tt[i];});}
       if(sh.image&&sh.srays){
         setLines(consV,ex.cl.filter(c=>c.k==='v').map(c=>[Z(c.a),Z(c.b)]),false);
@@ -2349,7 +2466,7 @@ function applyRibV(S){
   if(far)setSeg(ribLine[0],Tt,rot(far),0.055);else ribLine[0].visible=false;
   ends.forEach((P,k)=>{if(!oks[k])return;const Q=S.Q(P),E0=O.distanceTo(P)>=O.distanceTo(Q)?P:Q;
     rays.push([Ot,rot(E0)]);const At=rot(P),a=rot(Q);pts.push(At,a);
-    labs.push(['rb'+(1+k),At,LN(k===0?x.a:x.b,k)+(end?'₁':'')]);labs.push(['rb'+(3+k),a,LN(k===0?x.a:x.b,k).toLowerCase()]);});
+    labs.push(['rb'+(1+k),At,LN(k===0?x.a:x.b,k)+(end?'₁':'')]);labs.push(['rb'+(3+k),a,IMG(k===0?x.a:x.b,k)]);});
   setLines(ribRays,rays,false);setLines(ribOF,[[Ot,Ft]],true);
   setPoints(ribPts,pts.slice(0,5));ribPts.geometry.setDrawRange(0,Math.min(5,pts.length));ribPts.visible=true;
   const pa=ribGeo.attributes.position.array;[Ot,Tt,Ft].forEach((P,i)=>{pa[i*3]=P.x;pa[i*3+1]=P.y;pa[i*3+2]=P.z;});ribGeo.attributes.position.needsUpdate=true;ribPlane.visible=true;
@@ -2391,7 +2508,7 @@ function applyRib(S){
   const labs=[['rb0',Og,'O'+sub],['rb1',A1,LN(x.a,0)+'′'+sub],['rb2',B1,LN(x.b,1)+'′'+sub]];
   if(Math.abs(h)>0.02)labs.push(['rb3',T1,tx('sym.Tq')+'′']);
   labs.forEach(l=>{setLabel(l[0],l[1],true,8,l[0]==='rb3'?14:-8);labels[l[0]].el.textContent=l[2];});
-  if(Math.abs(h)>0.02){setLabel('rb5',V(T.x,q,T.z/2),true,-100,0);labels.rb5.el.textContent=tx('lb.hq',it(h/M,2));}
+  if(Math.abs(h)>0.02){setLabel('rb5',V(T.x,q,T.z/2),true,-100,0);labels.rb5.el.textContent=tx('lb.hq',it(h/M*MOD_U,1)+' cm');}
   selPar.visible=false;
   if(state.meas&&end)applyMeas(S);
 }
@@ -2419,10 +2536,10 @@ function applyMeas(S){
   setLines(measRuler,rl,false);setLines(measRays,rays,true);
   const lab=[['rb6',Mp,'M',8,-10]];let far=null;
   g.ends.forEach(e=>{const R=Y(g.Rq(e.L)),Q=g.cut(e.L);keys.push([R,Mp]);pts.push(R);rl.push([V(R.x,yq,R.z-tk*1.6),V(R.x,yq,R.z+tk*1.6)]);
-    if(Q){pts.push(Y(Q));lab.push([e.k===0?'rb8':'rb9',Y(Q),LN(e.i,e.k).toLowerCase(),-12,-12]);}
+    if(Q){pts.push(Y(Q));lab.push([e.k===0?'rb8':'rb9',Y(Q),IMG(e.i,e.k),-12,-12]);}
     if(!far||e.L>far.L)far={L:e.L,R};});
   setLines(measRuler,rl,false);setLines(measKey,keys,false);setPoints(measPts,pts.slice(0,6));
-  if(far)lab.push(['rb7',far.R,tx('lb.ell',it(far.L/M,2)),0,16]);
+  if(far)lab.push(['rb7',far.R,tx('lb.ell',it(far.L/M*MOD_U,1)+' cm'),0,16]);
   lab.forEach(l=>{setLabel(l[0],l[1],true,l[3],l[4]);labels[l[0]].el.textContent=l[2];});
 }
 function measGo(target){
@@ -2551,11 +2668,11 @@ function updateScene(S){
     if(state.mode==='ortho'||state.mode==='obl'){
       const Pw=S.W.map(p=>p.clone().applyMatrix4(S.G));let lo=Pw[0];Pw.forEach(p=>{if(p.z<lo.z-1e-6)lo=p;});zmin=lo.z;
       if(zmin>0.01){segs=[[lo,V(lo.x,lo.y,0)]];lp=V(lo.x,lo.y,zmin/2);}}
-    setLines(hdLine,segs,true);setLabel('hd',lp,segs.length>0,-64,0,true);labels.hd.el.textContent=tx('lb.hd',state.lab?it(zmin/LAB_U,1):it(zmin/M,2));   /*LAB*/}
+    setLines(hdLine,segs,true);setLabel('hd',lp,segs.length>0,-64,0,true);labels.hd.el.textContent=tx('lb.hd',(state.lab?it(zmin/LAB_U,1):it(zmin/M*MOD_U,1))+' cm');   /*LAB*/}
   setLabel('perp',P0.clone().lerp(foot,0.5),obl,8,0);
   setLabel('mod',V(-6.7+M/2,-0.8,0.03),false,0,26,true);
-  setLabel('hL',V(S.eye.x,S.eye.y,S.eye.z/2),persp,34,0);labels.hL.el.textContent=tx('lb.h',it(state.Ez/M,2));
-  setLabel('dL',V(S.eye.x,S.eye.y/2,S.eye.z),vpOn,0,-4);labels.dL.el.textContent=tx('lb.D',it(state.D/M,2));
+  setLabel('hL',V(S.eye.x,S.eye.y,S.eye.z/2),persp,34,0);labels.hL.el.textContent=tx('lb.h',it(state.Ez/M*MOD_U,1)+' cm');
+  setLabel('dL',V(S.eye.x,S.eye.y/2,S.eye.z),vpOn,0,-4);labels.dL.el.textContent=tx('lb.D',it(state.D/M*MOD_U,1)+' cm');
   // etichette
   setLabel('quadro',V(-QW+0.3,0,QT-0.5),true);
   setLabel('LT',V(QW-0.8,0,qzb[1]+0.05),!S.QH,0,16);labels.LT.el.textContent=tx('lb.LT');
@@ -2642,14 +2759,18 @@ function updateMonge(S){
   if(rbOn){const par=MG[rb.mode].grp;if(RB.grp.parent!==par)par.add(RB.grp);}   // il piano ribaltato segue il piano di proiezione che contiene la cerniera
   if(rbOn){const t=Math.min(1,ang/90),n=rb.P0.length,pa=RB.g.attributes.position.array,la=RB.lg.attributes.position.array;let k=0;
     for(let i=1;i<n-1;i++)[0,i,i+1].forEach(j=>{const r=rb.P0[j].clone().sub(rb.p0);pa[k++]=r.x;pa[k++]=r.y;pa[k++]=r.z;});
+    {const xz=RB.xg.attributes.position.array;let kx=0;   // altri pezzi sezionati: triangoli e contorni
+      (rb.ex||[]).forEach(e=>{const m2=e.P0.length;for(let i=1;i<m2-1&&k<pa.length-9;i++)[0,i,i+1].forEach(j=>{const r=e.P0[j].clone().sub(rb.p0);pa[k++]=r.x;pa[k++]=r.y;pa[k++]=r.z;});
+        for(let i=0;i<m2&&kx<xz.length-6;i++){const a=e.P0[i].clone().sub(rb.p0),b=e.P0[(i+1)%m2].clone().sub(rb.p0);xz[kx++]=a.x;xz[kx++]=a.y;xz[kx++]=a.z;xz[kx++]=b.x;xz[kx++]=b.y;xz[kx++]=b.z;}});
+      RB.xg.attributes.position.needsUpdate=true;RB.xg.setDrawRange(0,kx/3);}
     RB.g.attributes.position.needsUpdate=true;RB.g.setDrawRange(0,k/3);
     rb.P0.forEach((P,i)=>{const r=P.clone().sub(rb.p0);la[i*3]=r.x;la[i*3+1]=r.y;la[i*3+2]=r.z;});RB.lg.attributes.position.needsUpdate=true;RB.lg.setDrawRange(0,n);
     {const ta=RB.tg.attributes.position.array,tr=rb.trs||[];tr.slice(0,2).forEach((q,i)=>{ta[i*6]=q.la.x;ta[i*6+1]=q.la.y;ta[i*6+2]=q.la.z;ta[i*6+3]=q.lb.x;ta[i*6+4]=q.lb.y;ta[i*6+5]=q.lb.z;});RB.tg.attributes.position.needsUpdate=true;RB.tg.setDrawRange(0,state.hidePl?0:Math.min(2,tr.length)*2);}
     RB.grp.position.copy(rb.p0).sub(rb.lo);RB.grp.quaternion.setFromAxisAngle(rb.u,rb.phi*t);RB.grp.updateMatrixWorld(true);
-    if(sh.rays&&sh.image)rb.P0.forEach((P,i)=>{if(i<30)rich.push([S.views[rb.vi].Q[rb.idx[i]].clone().applyMatrix4(MG[rb.mode].grp.matrixWorld),RB.grp.localToWorld(P.clone().sub(rb.p0))]);});}
+    if(sh.rays&&sh.image&&!rb.ex.length)rb.P0.forEach((P,i)=>{if(i<30)rich.push([S.views[rb.vi].Q[rb.idx[i]].clone().applyMatrix4(MG[rb.mode].grp.matrixWorld),RB.grp.localToWorld(P.clone().sub(rb.p0))]);});}
   setLines(MG.rich,rich,true);
   {const cs=[];   // costruzione del ribaltamento nello spazio: rette sul piano di appoggio e sul piano di taglio, archi di centro O a piani distesi
-    if(msecOn(S)&&sh.rays&&rb&&rb.cq){const tt=Math.min(1,ang/90),par=MG[rb.mode].grp,car=(rb.vc===1?MG.po:MG.pv).grp,st=Math.max(1,Math.ceil(rb.P0.length/12)),
+    if(msecOn(S)&&sh.rays&&rb&&rb.cq&&!rb.ex.length){const tt=Math.min(1,ang/90),par=MG[rb.mode].grp,car=(rb.vc===1?MG.po:MG.pv).grp,st=Math.max(1,Math.ceil(rb.P0.length/12)),
         fw=X=>X.clone().sub(rb.p0).applyAxisAngle(rb.u,rb.phi*tt).add(rb.p0).sub(rb.lo).applyMatrix4(par.matrixWorld);
       for(let i=0;i<rb.P0.length;i+=st){const c=rb.cq[i];cs.push([c.P2.clone().applyMatrix4(car.matrixWorld),c.Q3.clone().applyMatrix4(car.matrixWorld)],[fw(rb.P0[i]),fw(c.Q3)]);
         if(ang>=89.5){const O=rb.O,R=c.Q2.distanceTo(O);if(R<1e-3)continue;const a0=Math.atan2(c.Q2.y-O.y,c.Q2.x-O.x),a1=Math.atan2(c.Qf.y-O.y,c.Qf.x-O.x);let dA=a1-a0;while(dA>Math.PI)dA-=2*Math.PI;while(dA<-Math.PI)dA+=2*Math.PI;
@@ -2682,6 +2803,7 @@ function updateMonge(S){
   placeScale(E.xa+0.3,0,E.zt+1.1,V(0,0,0.25));setLabel('mod',V(E.xa+0.3+M/2,0,E.zt+1.1),false,0,26,true);
   S.axis.forEach((ax,i)=>setLabel('a3'+i,ax.tip.clone().addScaledVector(ax.a,0.25),false,0,0,true));
   /*LAB*/if(state.lab)labMonge(S);
+  /*SHEET*/sheetBoard(S);
   applyExtras(S);
   dirty=true;
 }
@@ -2706,7 +2828,7 @@ function renderSel(S){
   if(document.activeElement!==sl)sl.value=Math.round(state.ribT*100);
   sl.setAttribute('aria-label',tx('sel.rib'));
   if(x.kind==='edge'){
-    out.push('<b>'+tx('sel.te')+' '+(LET[x.a]||'')+(LET[x.b]||'')+'</b>');
+    out.push('<b>'+tx('sel.te')+' '+LCs(LET[x.a]||'')+LCs(LET[x.b]||'')+'</b>');
     if(rOk&&state.meas&&ribKind(S)==='h'){out.push(row('M',tx('sel.m1')));out.push(row('ℓ',tx('sel.m2')));out.push(row('a b',tx('sel.m3')));}
     else if(rOk&&(state.rib||state.ribT>0.001)&&ribKind(S)==='h'){out.push(row('r′',tx('sel.rh1')));out.push(row('O₁',tx('sel.rh2')));out.push(row('h',tx('sel.rh3')));}
     else if(rOk&&(state.rib||state.ribT>0.001)){out.push(row('O₁',tx('sel.rb1')));out.push(row('r₁',tx('sel.rb2')));out.push(row('a b',tx('sel.rb3')));}
@@ -2715,13 +2837,13 @@ function renderSel(S){
     if(i.Tq)out.push(row(tx('sym.Tq'),tx('sel.tq')));else if(i.pq)out.push(row('–',tx('sel.pq')));
     if(state.solo){}else if(i.Tp)out.push(row(tx('sym.Tp'),tx('sel.tp')));else if(i.ph)out.push(row('–',tx('sel.ph')));
     if(persp&&i.F){out.push(row(tx('vpPre'),tx('sel.f')));if(i.ph)out.push(row('–',tx('sel.hor')));if(i.Tq)out.push(row(tx('sym.Tq')+'–'+tx('vpPre'),tx('sel.fo')));}}}
-  else if(x.kind==='lray'){out.push('<b>'+tx('sel.lr')+' '+(LET[x.c.ix]||'')+'</b>');
+  else if(x.kind==='lray'){out.push('<b>'+tx('sel.lr')+' '+LCs(LET[x.c.ix]||'')+'</b>');
     out.push(row('→',tx(x.par?'sel.lrA':'sel.lrP')));}
   else if(x.kind==='ray'){out.push('<b>'+tx('sel.ray')+'</b>');
     out.push(row(persp?'O':'l',tx(persp?'sel.rayP':'sel.rayA')));}
   else{
     out.push('<b>'+tx('sel.ts')+'</b>');
-    if(x.gen>=0)out.push(row('→',tx('sel.gen')+' '+(LET[x.ia]||'')+(LET[x.ib]||'')));
+    if(x.gen>=0)out.push(row('→',tx('sel.gen')+' '+LCs(LET[x.ia]||'')+LCs(LET[x.ib]||'')));
     if(x.einfo)out.push(row(x.einfo.Tp?'T':'=',tx(x.einfo.Tp?'sel.meet':'sel.eq')));
     if(persp&&x.info){const q=x.info;out.push(row('·',tx('sel.shl')));if(q.Tq)out.push(row(tx('sym.Tq'),tx('sel.tq')));if(q.F){out.push(row(tx('vpPre'),tx('sel.f')));out.push(row('–',tx('sel.hor')));}if(q.Tq&&q.F)out.push(row(tx('sym.Tq')+'–'+tx('vpPre'),tx('sel.fo')));}}
   el.innerHTML=out.join('');wrap.hidden=false;
@@ -2777,7 +2899,7 @@ new ResizeObserver(()=>{if(typeof lastS!=='undefined'&&lastS)drawImage(insetCv,l
 (function(){
   const st=document.getElementById('stage'),ins=document.getElementById('inset'),tg=document.getElementById('inset-tg'),sb=document.getElementById('scenebar'),mb=document.getElementById('sc-more'),lc=document.getElementById('leftcol'),sw=document.getElementById('selwrap'),sbx=document.getElementById('selbox'),hint=document.getElementById('hint');
   let userMini=true;   // il riquadro dell'immagine parte ridotto
-  function fit(){const w=v3d.clientWidth,h=v3d.clientHeight;if(w<2||h<2)return;
+  function fit(){st.classList.toggle('sw',st.clientWidth<760);const w=v3d.clientWidth,h=v3d.clientHeight;if(w<2||h<2)return;
     const nar=w<880||h<430;st.classList.toggle('narrow',nar);
     if(!nar)sb.classList.remove('open');
     const mini=userMini===null?w<560:userMini;ins.classList.toggle('mini',mini);st.classList.toggle('ins-big',!mini);tg.setAttribute('aria-expanded',String(!mini));st.style.setProperty('--insh',ins.offsetHeight+'px');}
@@ -2804,16 +2926,19 @@ new ResizeObserver(()=>{if(typeof lastS!=='undefined'&&lastS)drawImage(insetCv,l
   canvas.addEventListener('pointerdown',()=>{hint.classList.add('gone');},{once:true});
 })();
 const LET='ABCDEFGHIJKLMNOP';
-// in cinese i punti si indicano con i caratteri 甲乙丙丁… (dieci tronchi celesti, poi dodici rami terrestri); oltre il ventiduesimo, il numero
-const ZHL='甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥';
-const LC=ch=>{if(lang!=='zh')return ch;const i=ch.charCodeAt(0)-65+(ch.length>1?26:0);return i>=0&&i<ZHL.length?ZHL[i]:String(i+1);};
-const LN=(i,k)=>LET[i]||'PQ'[k];   // nome del punto: la lettera del vertice, o P e Q per i solidi senza lettere (sfera, cilindro, cono)
+// i punti dello spazio sono sempre lettere latine maiuscole, in tutte le lingue (anche in cinese: norma GB, A B C; le proiezioni sono a a′ a″)
+const LC=ch=>ch;
+const LNr=(i,k)=>LET[i]||'PQ'[k];
+const LCs=ch=>ch?LC(ch):'';
+const LN=(i,k)=>LCs(LNr(i,k));   // nome del punto: la lettera del vertice, o P e Q per i solidi senza lettere (sfera, cilindro, cono)
+const IMGL=ch=>!ch?'':lang==='it'?ch+'*':ch.toLowerCase();   // immagine di un punto sul quadro: it/zh maiuscola con asterisco, en minuscola
+const IMG=(i,k)=>IMGL(LNr(i,k));   // nome del punto: la lettera del vertice, o P e Q per i solidi senza lettere (sfera, cilindro, cono)
 // notazione delle proiezioni: italiana A″ (PV) A′ (PO) A‴ (PL); cinese e inglese a′ (V) a (H) a″ (W), minuscole
-const projSym=(ch,vi)=>lang==='it'||lang==='zh'?LC(ch)+['″','′','‴'][vi]:ch.toLowerCase()+['′','','″'][vi];   // zh: 甲 (spazio), 甲′ (PO), 甲″ (PV), 甲‴ (PL)
+const projSym=(ch,vi)=>lang==='it'?ch+['″','′','‴'][vi]:ch.toLowerCase()+['′','','″'][vi];   // it: A″ (PV) A′ (PO) A‴ (PL); en e zh (norma GB): a′ (V) a (H) a″ (W)
 // lettere dei vertici: senza piano di taglio quelle del solido; con il piano di taglio il solido non ha lettere e le ricevono i vertici della sezione
 function lblSet(){
   /*LAB*/if(state.lab)return[];   // nel lab le lettere stanno sui punti dell'intersezione, non sui vertici dei solidi
-  if(state.cut){const f=solid.faces.find(q=>q.cut);if(!f||solid.smooth.size>0||f.idx.length>16)return[];return f.idx.map((ix,k)=>({ix,ch:LET[k]}));}
+  if(state.cut){const f=solid.faces.find(q=>q.cut);if(!f||solid.smooth.size>0||f.idx.length>16||solid.faces.filter(q=>q.cut).length>1)return[];return f.idx.map((ix,k)=>({ix,ch:LET[k]}));}
   const n=solid.smooth.size===0?(solid.v.length<=16?solid.v.length:0):(solid.letN||0);
   return Array.from({length:n},(_,k)=>({ix:k,ch:LET[k]}));}
 const hasLetters=()=>lblSet().length>0;
@@ -2829,13 +2954,23 @@ function drawSheet(ctx,w,h,S,big){
   let x0=S.ext.xL,x1=S.ext.xL,z0=0,z1=0;
   S.views.forEach(v=>v.sh.forEach(p=>{x0=Math.min(x0,p[0]);x1=Math.max(x1,p[0]);z0=Math.min(z0,p[1]);z1=Math.max(z1,p[1]);}));
   const rbS=msecOn(S)&&!S.ex.rab.out;   // se il ribaltamento esce dallo spazio dei piani non entra nel foglio (compare l'avviso nel 3D)
-  if(rbS)S.ex.rab.Pf.forEach(P=>{x0=Math.min(x0,P.x);x1=Math.max(x1,P.x);z0=Math.min(z0,P.y);z1=Math.max(z1,P.y);});
+  if(rbS)S.ex.rab.Pf.concat(...S.ex.rab.ex.map(g=>g.Pf)).forEach(P=>{x0=Math.min(x0,P.x);x1=Math.max(x1,P.x);z0=Math.min(z0,P.y);z1=Math.max(z1,P.y);});
   if(rbS&&!state.hidePl){const L=rbExtLines(S.ex.rab);if(L)[L.c,L.f].forEach(l=>l.forEach(P=>{const lim0=0.6*Math.max(x1-x0,z1-z0);if(P.x>x0-lim0&&P.x<x1+lim0&&P.y>z0-lim0&&P.y<z1+lim0){x0=Math.min(x0,P.x);x1=Math.max(x1,P.x);z0=Math.min(z0,P.y);z1=Math.max(z1,P.y);}}));}
   if(rbS&&state.show.rays&&S.ex.rab.cq&&S.ex.rab.O){   // gli archi della costruzione entrano nel foglio, entro un limite ragionevole
     const lim=0.6*Math.max(x1-x0,z1-z0),bx0=x0,bx1=x1,bz0=z0,bz1=z1,st=Math.max(1,Math.ceil(S.ex.rab.P0.length/16));
     S.ex.rab.cq.forEach((c,i)=>{if(i%st)return;rbArcPts(c,S.ex.rab.O,12).forEach(P=>{if(P.x>bx0-lim&&P.x<bx1+lim&&P.y>bz0-lim&&P.y<bz1+lim){x0=Math.min(x0,P.x);x1=Math.max(x1,P.x);z0=Math.min(z0,P.y);z1=Math.max(z1,P.y);}});});}   // il piano di sezione ribaltato sta sul piano della pianta
-  const bw=Math.max(0.5,x1-x0),bh=Math.max(0.5,z1-z0),sc=Math.min((w-2*pad-2*ex)/bw,(h-2*pad-(ex?(big?40:22):0))/bh),mx=(x0+x1)/2,mz=(z0+z1)/2;
+  const SP=sheetPaper(w,h,big);let sc=0,mx=0,mz=0;
+  {const bw=Math.max(0.5,x1-x0),bh=Math.max(0.5,z1-z0);sc=Math.min((w-2*pad-2*ex)/bw,(h-2*pad-(ex?(big?40:22):0))/bh);mx=(x0+x1)/2;mz=(z0+z1)/2;}
+  let fitsSP=true,rAll=0;
+  if(SP){   /*SHEET: foglio 1:1, diviso in quattro dagli assi (linea di terra e asse PL) che si incontrano al centro della squadratura*/
+    sc=SP.s/SH_MM;const fcx=SP.fx+SP.fw/2,fcy=SP.fy+SP.fh/2,xL_=S.ext.xL;mx=xL_-(fcx-w/2)/sc;mz=(fcy-h/2)/sc;
+    const hx=SP.fw/2/sc,hz=SP.fh/2/sc;rAll=Math.max(Math.max(xL_-x0,x1-xL_)/hx,Math.max(-z0,z1)/hz);fitsSP=x0>=xL_-hx-1e-6&&x1<=xL_+hx+1e-6&&z0>=-hz-1e-6&&z1<=hz+1e-6;
+    x0=xL_-hx+0.3;x1=xL_+hx-0.3;z0=-hz+0.3;z1=hz-0.3;}
   const X=x=>w/2+(x-mx)*sc,Y=z=>h/2-(z-mz)*sc,sh=state.show;
+  if(SP){sheetPaint(ctx,SP,w,h,big,fitsSP);
+    {const FWm=SP.d[0]-SH_MG.l-SH_MG.r,FHm=SP.d[1]-SH_MG.t-SH_MG.b;let rM=0;   /*avviso*/ // ogni vista deve entrare nel proprio quadrante
+      S.views.forEach(vw=>{if(!vw.sh||!vw.sh.length)return;let a=1e9,b=-1e9,c=1e9,e=-1e9;vw.sh.forEach(p=>{a=Math.min(a,p[0]);b=Math.max(b,p[0]);c=Math.min(c,p[1]);e=Math.max(e,p[1]);});rM=Math.max(rM,(b-a)/SH_MM/(FWm/2),(e-c)/SH_MM/(FHm/2));});
+      sheetAdvise(rM,Math.max(rM,rAll),true,big);}}
   ctx.lineCap='round';
   // linea di terra e asse PL/PV
   ctx.strokeStyle='#14161c';ctx.lineWidth=1.3*lk;ctx.setLineDash([]);
@@ -2843,8 +2978,10 @@ function drawSheet(ctx,w,h,S,big){
   const boxes=[],addBox=(x,y,bw_,bh_)=>boxes.push({x,y,w:bw_,h:bh_});
   ctx.fillStyle='#5b616e';ctx.font='500 '+(big?13:10)+'px "IBM Plex Sans","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';ctx.fillText(tx('ltAbbrM'),X(x0-0.3),Y(0)-4*lk);
   addBox(X(x0-0.3),Y(0)-4*lk-(big?13:10),ctx.measureText(tx('ltAbbrM')).width,big?13:10);
+  if(SP){const fs=Math.max(9,Math.min(big?18:12,SP.s*(big?5.5:4.5))),pd=Math.max(4,SP.s*2.5);ctx.save();ctx.font='700 '+fs+'px "IBM Plex Sans","Noto Sans SC",sans-serif';ctx.fillStyle='#5b616e';ctx.textAlign='left';ctx.textBaseline='alphabetic';   /*SHEET: sigla di ogni quadrante*/
+    [[tx('pln.pv'),SP.fx+pd,SP.fy+pd+fs*0.8],[tx('pln.pl'),X(S.ext.xL)+pd,SP.fy+pd+fs*0.8],[tx('pln.po'),SP.fx+pd,SP.fy+SP.fh-pd]].forEach(([t,x,y])=>{ctx.fillText(t,x,y);addBox(x,y-fs,ctx.measureText(t).width,fs+2);});ctx.restore();}
   // linee di richiamo
-  if(sh.rays&&sh.image){ctx.strokeStyle='#8a90a0';ctx.lineWidth=1*lk;ctx.setLineDash([4*lk,3*lk]);
+  if(sh.rays&&sh.image){ctx.strokeStyle='#9aa0ae';ctx.lineWidth=0.6*lk;ctx.setLineDash([]);
     solid.rayV.forEach(ix=>{const a=S.views[0].sh[ix],b=S.views[1].sh[ix],c=S.views[2].sh[ix];
       ctx.beginPath();ctx.moveTo(X(a[0]),Y(a[1]));ctx.lineTo(X(b[0]),Y(b[1]));ctx.moveTo(X(a[0]),Y(a[1]));ctx.lineTo(X(c[0]),Y(c[1]));ctx.stroke();});ctx.setLineDash([]);}
   // nomi dei piani: se nel foglio non c'è spazio per la frase estesa si scrive solo la sigla
@@ -2894,8 +3031,8 @@ function drawSheet(ctx,w,h,S,big){
         if(rbS){const rbx0=Math.min(...S.ex.rab.Pf.map(P=>X(P.x)))-6,rbx1=Math.max(...S.ex.rab.Pf.map(P=>X(P.x)))+6,rby0=Math.min(...S.ex.rab.Pf.map(P=>Y(P.y)))-6,rby1=Math.max(...S.ex.rab.Pf.map(P=>Y(P.y)))+6;   // il nome del piano non copre la sezione ribaltata
           if(tx_<rbx1&&tx_+tw>rbx0&&y-13<rby1&&y+2>rby0){const l=rbx0-tw-4,r=rbx1+4;if(l>=4)tx_=l;else if(r+tw<=w-4)tx_=r;}}
         ctx.fillText(t,tx_,y);addBox(tx_,y-13,tw,15);};
-      if(big){ctx.font='500 13px "IBM Plex Sans","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';put(l2,nearY);ctx.font='600 13px "IBM Plex Sans","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';put(l1,nearY+dirn*lh);}
-      else put(l1,nearY);}
+      if(big&&!SP){ctx.font='500 13px "IBM Plex Sans","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';put(l2,nearY);ctx.font='600 13px "IBM Plex Sans","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';put(l1,nearY+dirn*lh);}
+      else if(!SP)put(l1,nearY);}
   });
   /*LAB*/if(state.lab)labSheet(ctx,S,X,Y,lk,shPt);
   // piano di sezione ribaltato sulla pianta attorno alla sua traccia: sezione in vera forma, con (α), (A), (B)… tra parentesi
@@ -2903,7 +3040,7 @@ function drawSheet(ctx,w,h,S,big){
     let w0=1e9,w1=-1e9;rb.P0.forEach(P=>{const q=P.clone().sub(rb.p0).dot(rb.u);w0=Math.min(w0,q);w1=Math.max(w1,q);});
     if(!state.hidePl){let a=rb.s0.clone().addScaledVector(rb.su,w0-0.5),b=rb.s0.clone().addScaledVector(rb.su,w1+0.5);{const w=clipRectT(a,b,plateRect(S.ext,rb.mode));if(w){const a2=a.clone().lerp(b,w[0]);b=a.clone().lerp(b,w[1]);a=a2;}}ctx.strokeStyle='#d9731a';ctx.lineWidth=2*lk;ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(X(a.x),Y(a.y));ctx.lineTo(X(b.x),Y(b.y));ctx.stroke();   // cerniera: traccia α′ del piano di taglio su PO
       if(!sh.traces)trLab.push({nm:trSym(rb.hk),ax:X(a.x),ay:Y(a.y),bx:X(b.x),by:Y(b.y),f:big?12:9});}
-    if(sh.rays){   // come si trovano i punti: perpendicolare alla traccia dal punto in pianta, triangolo di ribaltamento (cateti: distanza dalla traccia e quota) e arco di centro il piede sulla traccia
+    if(sh.rays&&!rb.ex.length){   // come si trovano i punti: perpendicolare alla traccia dal punto in pianta, triangolo di ribaltamento (cateti: distanza dalla traccia e quota) e arco di centro il piede sulla traccia
       const n=rb.P0.length;ctx.lineWidth=1*lk;ctx.strokeStyle='#8a90a0';ctx.setLineDash([4*lk,3*lk]);
       rb.idx.forEach((ix,i)=>{const a=po.sh[ix],b=rb.Pf[i];ctx.beginPath();ctx.moveTo(X(a[0]),Y(a[1]));ctx.lineTo(X(b.x),Y(b.y));ctx.stroke();});
       if(rb.cq&&rb.O){ctx.save();clipSheet();ctx.lineWidth=0.9*lk;ctx.strokeStyle='#8a90a0';   // costruzione: dal punto sul piano di appoggio alla traccia, arco di centro O, parallela alla cerniera
@@ -2927,6 +3064,7 @@ function drawSheet(ctx,w,h,S,big){
       trLab.push({nm:rbSym(trSym(t.key)),ax:ca[0],ay:ca[1],bx:cb[0],by:cb[1],f:big?12:9,ts:[0.6,0.45,0.75,0.3,0.9,0.15]});});
     ctx.beginPath();rb.Pf.forEach((P,i)=>{i?ctx.lineTo(X(P.x),Y(P.y)):ctx.moveTo(X(P.x),Y(P.y));});ctx.closePath();
     ctx.fillStyle='rgba(233,149,58,0.55)';ctx.fill();ctx.strokeStyle='#8a4a0c';ctx.lineWidth=1.8*lk;ctx.stroke();
+    rb.ex.forEach(e=>{ctx.beginPath();e.Pf.forEach((P,i)=>{i?ctx.lineTo(X(P.x),Y(P.y)):ctx.moveTo(X(P.x),Y(P.y));});ctx.closePath();ctx.fill();ctx.stroke();});
     {let cx=0,cy=0;rb.Pf.forEach(P=>{cx+=P.x;cy+=P.y;});cx=X(cx/rb.Pf.length);cy=Y(cy/rb.Pf.length);const t=rbSym('α'),fs=big?13:10;
       ctx.font='600 '+fs+'px "IBM Plex Sans","Noto Sans SC",sans-serif';ctx.textAlign='center';ctx.lineWidth=3;ctx.strokeStyle='#fff';ctx.strokeText(t,cx,cy+fs*0.35);ctx.fillStyle='#8a4a0c';ctx.fillText(t,cx,cy+fs*0.35);ctx.textAlign='left';
       const tw=ctx.measureText(t).width;addBox(cx-tw/2,cy-fs*0.7,tw,fs);}
@@ -2967,8 +3105,36 @@ function drawSheet(ctx,w,h,S,big){
 }
 const axAng=a=>{if(a.k===null||a.k<0.02)return null;let d=a.ang/D2R;if(d>90.001)d-=180;else if(d<=-89.999)d+=180;if(Math.abs(d)<0.05)d=0;return d;};
 const fmtDeg=d=>d.toLocaleString(LOC[lang],{maximumFractionDigits:1})+'°';
+/*SHEET: nello spazio del foglio, in prospettiva: linea di terra, linea d'orizzonte, punto principale, punto di vista ribaltato sulla linea d'orizzonte (a distanza D dal punto principale) e un paio di punti di fuga*/
+function perspExtras(S,upF){
+  const D=state.D,Ex=S.eye.x,Ez=S.eye.z,d=sheetDims(),PN=sheetPan(S);let up=true;
+  if(d)up=Ez+D<=(d[1]-SH_MG.b-SH_MG.t)*SH_MM-1e-6;
+  if(PN&&PN.up!==undefined)up=PN.up;if(upF!==undefined)up=upF;   // il punto di vista si ribalta sopra la linea d'orizzonte se nel foglio c'è posto, altrimenti sotto
+  const so=[Ex,up?Ez+D:Ez-D],vps=[];
+  S.vps.forEach((p,i)=>{if(p&&Math.abs(p.x)<=60&&p.z<=60&&p.z>=-40&&vps.length<2)vps.push({x:p.x,z:p.z,t:tx('vpPre')+AXN[i].toLowerCase()});});
+  if(vps.length<2){const o=[{x:Ex+D,z:Ez,t:'D'},{x:Ex-D,z:Ez,t:'D′'}];vps.push(...o);}   // fuga frontale: punto principale e punti di distanza
+  const pts=[[Ex,0],[Ex,Ez],so];vps.forEach(p=>pts.push([p.x,p.z]));
+  return{Ex,Ez,so,vps,pts};}
+function perspExtrasDraw(ctx,PX,X,Y,w,h,lk,big){
+  ctx.save();ctx.lineCap='round';const SP=sheetPaper(w,h,big),F='"IBM Plex Sans","Noto Sans SC",sans-serif',fs=big?11:8.5;
+  if(SP){ctx.beginPath();ctx.rect(SP.fx,SP.fy,SP.fw,SP.fh);ctx.clip();}
+  const x0=SP?SP.fx:0,x1=SP?SP.fx+SP.fw:w,PUR='#7b1fa2';
+  ctx.font='500 '+fs+'px '+F;ctx.textBaseline='alphabetic';ctx.setLineDash([]);
+  ctx.strokeStyle='#14161c';ctx.lineWidth=1.3*lk;ctx.beginPath();ctx.moveTo(x0,Y(0));ctx.lineTo(x1,Y(0));ctx.stroke();   // linea di terra
+  ctx.fillStyle='#14161c';ctx.textAlign='left';ctx.fillText(tx(big?'lb.LT':'ltAbbr'),x0+4,Y(0)-3*lk);
+  ctx.strokeStyle=PUR;ctx.lineWidth=1*lk;ctx.setLineDash([6*lk,3*lk]);ctx.beginPath();ctx.moveTo(x0,Y(PX.Ez));ctx.lineTo(x1,Y(PX.Ez));ctx.stroke();ctx.setLineDash([]);   // linea d'orizzonte
+  ctx.fillStyle=PUR;ctx.fillText(tx(big?'lb.LO':'sh.hl'),x0+4,Y(PX.Ez)-3*lk);
+  const px=X(PX.Ex),pz=Y(PX.Ez),sx=X(PX.so[0]),sz=Y(PX.so[1]);
+  ctx.strokeStyle='rgba(123,31,162,.55)';ctx.lineWidth=0.9*lk;ctx.setLineDash([4*lk,3*lk]);
+  ctx.beginPath();ctx.moveTo(px,pz);ctx.lineTo(sx,sz);PX.vps.forEach(p=>{if(Math.abs(p.z-PX.Ez)<1e-3){ctx.moveTo(sx,sz);ctx.lineTo(X(p.x),Y(p.z));}});ctx.stroke();ctx.setLineDash([]);   // punto principale – punto di vista ribaltato e visuali verso i punti di fuga
+  ctx.lineWidth=1.2*lk;ctx.beginPath();ctx.moveTo(px-4*lk,pz);ctx.lineTo(px+4*lk,pz);ctx.moveTo(px,pz-4*lk);ctx.lineTo(px,pz+4*lk);ctx.stroke();   // punto principale
+  const dot=(x,y,r,t,dx,dy,fill)=>{ctx.beginPath();ctx.arc(x,y,r*lk,0,6.2832);if(fill){ctx.fillStyle=PUR;ctx.fill();}else{ctx.fillStyle='#fff';ctx.fill();ctx.stroke();}
+    if(t){ctx.font='600 '+fs+'px '+F;ctx.lineJoin='round';ctx.lineWidth=3;ctx.strokeStyle='#fff';ctx.fillStyle=PUR;ctx.strokeText(t,x+dx,y+dy);ctx.fillText(t,x+dx,y+dy);ctx.lineWidth=1.2*lk;ctx.strokeStyle=PUR;}};
+  dot(sx,sz,3.2,rbSym('O'),6*lk,4*lk,false);   // punto di vista ribaltato
+  PX.vps.forEach(p=>dot(X(p.x),Y(p.z),2.8,p.t,5*lk,-5*lk,true));
+  ctx.restore();}
 function drawImage(cv,S,big){
-  const ctx=cv.getContext('2d'),w=cv.clientWidth,h=cv.clientHeight,dpr=Math.min(2,window.devicePixelRatio||1);
+  const ctx=cv.getContext('2d'),w=cv.clientWidth,h=cv.clientHeight,dpr=window.__shEx?2:Math.min(2,window.devicePixelRatio||1);
   if(!w||!h)return;
   if(cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);}
   ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
@@ -2976,14 +3142,25 @@ function drawImage(cv,S,big){
   const pts=S.Qv.map(q=>[q.x,q.z]);
   (S.cons||[]).forEach(sg=>sg.forEach(P=>{const q=S.Q(P);pts.push([q.x,q.z]);}));
   if(axOn())S.axis.forEach(a=>{pts.push([a.qo.x,a.qo.z],[a.qt.x,a.qt.z]);});
+  const PX=(S.persp&&!S.QH)?perspExtras(S):null;if(PX&&!state.sheet)PX.pts.forEach(p=>pts.push(p));   /*SHEET: costruzione prospettica nel foglio*/
   {let a0=1e9,a1=-1e9,b0=1e9,b1=-1e9;pts.forEach(p=>{a0=Math.min(a0,p[0]);a1=Math.max(a1,p[0]);b0=Math.min(b0,p[1]);b1=Math.max(b1,p[1]);});
    const ex_=Math.max(a1-a0,b1-b0,1)*(S.persp?1.1:4),cl=(v,lo,hi)=>Math.max(lo-ex_,Math.min(hi+ex_,v));   // l'ombra allarga l'inquadratura ma entro un limite (in prospettiva può essere enorme)
    S.ex.sd.forEach(o=>{(o.img||[]).forEach(P=>{const q=S.Q(P);pts.push([cl(q.x,a0,a1),cl(q.z,b0,b1)]);});});
    S.ex.cl.forEach(c=>{if(c.k==='v'){pts.push([cl(c.a.x,a0,a1),cl(c.a.z,b0,b1)],[cl(c.b.x,a0,a1),cl(c.b.z,b0,b1)]);}});}
   let x0=1e9,x1=-1e9,z0=1e9,z1=-1e9;pts.forEach(p=>{x0=Math.min(x0,p[0]);x1=Math.max(x1,p[0]);z0=Math.min(z0,p[1]);z1=Math.max(z1,p[1]);});
   const pad=big?Math.min(90,Math.min(w,h)*0.14):14,lk=big?1.7:1;
-  const bw=Math.max(0.5,x1-x0),bh=Math.max(0.5,z1-z0),sc=Math.min((w-2*pad)/bw,(h-2*pad)/bh),mx=(x0+x1)/2,mz=(z0+z1)/2;
+  const SPI=sheetPaper(w,h,big),PN=SPI?sheetPan(S):null,nS=PN?PN.n||1:1,bw=Math.max(0.5,x1-x0),bh=Math.max(0.5,z1-z0),sc=SPI?SPI.s/SH_MM/nS:Math.min((w-2*pad)/bw,(h-2*pad)/bh);
+  let mx=(x0+x1)/2,mz=(z0+z1)/2;
+  if(SPI){   /*SHEET: il foglio è il quadro: stessa scala del quadro (1:1, in prospettiva anche 1:n se così impaginato), squadratura, immagine entro il bordo*/
+    const m_=SH_MG,W_=SPI.d[0]*SH_MM,H_=SPI.d[1]*SH_MM,pan=PN?PN.pan:[(m_.l-m_.r)/2*SH_MM,(H_-(m_.b+m_.t)*SH_MM)/2],fcx=SPI.fx+SPI.fw/2,fcy=SPI.fy+SPI.fh/2;
+    mx=pan[0]-(fcx-w/2)/sc;mz=pan[1]-(h/2-fcy)/sc;
+    let a0=x0,a1=x1,b0=z0,b1=z1;if(PX)PX.pts.forEach(p=>{a0=Math.min(a0,p[0]);a1=Math.max(a1,p[0]);b0=Math.min(b0,p[1]);b1=Math.max(b1,p[1]);});
+    const hw=SPI.fw/2/sc,hh=SPI.fh/2/sc;SPI.n=nS;
+    sheetPaint(ctx,SPI,w,h,big,true);
+    {const FWm=SPI.d[0]-SH_MG.l-SH_MG.r,FHm=SPI.d[1]-SH_MG.t-SH_MG.b,rF=Math.max((x1-x0)/SH_MM/FWm,(z1-z0)/SH_MM/FHm)*nS,rA=Math.max((a1-a0)/SH_MM/FWm,(b1-b0)/SH_MM/FHm)*nS;   /*avviso*/
+      sheetAdvise(rF,rA,a0>=pan[0]-hw-1e-6&&a1<=pan[0]+hw+1e-6&&b0>=pan[1]-hh-1e-6&&b1<=pan[1]+hh+1e-6,big);}}
   const X=x=>w/2+(x-mx)*sc,Y=z=>h/2-(z-mz)*sc;
+  if(PX)perspExtrasDraw(ctx,PX,X,Y,w,h,lk,big);
   // l'ombra non passa mai sopra l'oggetto: si ritaglia con il contorno delle sue facce visibili
   const clipOutObj=()=>{ctx.beginPath();ctx.rect(-1e4,-1e4,2e4,2e4);S.faces.forEach(f=>{if(!f.front)return;f.idx.forEach((j,i)=>{const q=S.Qv[j];i?ctx.lineTo(X(q.x),Y(q.z)):ctx.moveTo(X(q.x),Y(q.z));});ctx.closePath();});ctx.clip('evenodd');};
   S.ex.sd.forEach(o=>{if(!o.img||o.img.length<3)return;const q=o.img.map(P=>S.Q(P));   // immagine dell'ombra sul quadro
@@ -3044,7 +3221,7 @@ function drawImage(cv,S,big){
     ctx.restore();}
   if(big&&!S.mg&&!S.ex.selx&&(S.persp||state.shadow)){ctx.save();ctx.font='400 '+11+'px "IBM Plex Sans","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';ctx.fillStyle='#7b1fa2';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(tx(S.persp?'sel.hint':'sel.hintA'),10,16);ctx.restore();}
   if(state.shadow&&S.ex.lg&&S.ex.selc&&state.show.srays){   // nomi del vertice scelto, del suo piede e della sua ombra
-    const c=S.ex.selc,L0=(LET[c.ix]||'').toLowerCase(),f=big?13:10;ctx.save();ctx.beginPath();ctx.rect(0,0,w,h);ctx.clip();
+    const c=S.ex.selc,L0=IMGL(LET[c.ix]||''),f=big?13:10;ctx.save();ctx.beginPath();ctx.rect(0,0,w,h);ctx.clip();
     ctx.font='600 '+f+'px "IBM Plex Mono",monospace';ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.lineJoin='round';
     [[c.pi,L0],[c.fi,L0+'′'],[c.si,L0+'₀']].forEach(([q,t])=>{ctx.beginPath();ctx.arc(X(q.x),Y(q.z),3*lk,0,6.2832);ctx.fillStyle='#1f4fa8';ctx.fill();ctx.lineWidth=3;ctx.strokeStyle='#fff';ctx.strokeText(t,X(q.x)+6,Y(q.z)-6);ctx.fillStyle='#1f4fa8';ctx.fillText(t,X(q.x)+6,Y(q.z)-6);});
     ctx.restore();}
@@ -3105,9 +3282,9 @@ function readout(S){
     const tf=S.views.map(v=>S.faces.some(f=>Math.abs(f.n.dot(v.dir))>0.999)?v.name:null).filter(Boolean);
     rows.push([tx('r.truef'),tf.length?tf.join(' · '):tx('noView')]);
     rows.push([tx('r.fold'),it(state.ang,0)+'° '+tx('foldOf')+(state.ang>=89.5?tx('foldSheet'):state.ang<=0.5?tx('foldOpen'):'')]);
-    rows.push([tx('r.distPV'),tx('mods',it(state.d/M,2))+sp()+tx('readPlan')]);
-    rows.push([tx('r.dPL'),tx('mods',it(S.dlv/M,2))+sp()+tx('readSide')]);
-    rows.push([tx('r.hPO'),tx('mods',it(state.mh/M,2))+sp()+tx('readElev')]);
+    rows.push([tx('r.distPV'),tx('mods',it(state.d/M*MOD_U,1))+sp()+tx('readPlan')]);
+    rows.push([tx('r.dPL'),tx('mods',it(S.dlv/M*MOD_U,1))+sp()+tx('readSide')]);
+    rows.push([tx('r.hPO'),tx('mods',it(state.mh/M*MOD_U,1))+sp()+tx('readElev')]);
   }else if(state.mode==='persp'){
     const par=S.dirs.map(a=>Math.abs(a.y)<=0.02),n=par.filter(p=>!p).length;
     cls=tx(n<=1?'cls.pf':n===2?'cls.pa':'cls.p3');
@@ -3115,8 +3292,8 @@ function readout(S){
     rows.push([tx('r.vps'),S.dirs.map((a,i)=>par[i]?null:tx('vpEntry',vpN(i),AXN[i])).filter(Boolean).join(' · ')]);
     const pp=par.map((p,i)=>p?AXN[i]:null).filter(Boolean);
     rows.push([tx('r.par'),pp.length?pp.join(', ')+sp()+tx('stayPar'):tx('none')]);
-    rows.push([tx('r.distO'),tx('mods',it(state.D/M,2))]);
-    rows.push([tx('r.hO'),tx('mods',it(state.Ez/M,2))]);
+    rows.push([tx('r.distO'),tx('mods',it(state.D/M*MOD_U,1))]);
+    rows.push([tx('r.hO'),tx('mods',it(state.Ez/M*MOD_U,1))]);
     const va=S.vang;
     rows.push([tx('r.va'),it(va,0)+'° · '+tx(va<=30?'va.opt':va<=60?'va.ok':'va.wide')]);
   }else{
@@ -3141,7 +3318,7 @@ function readout(S){
     rows.push([tx('r.tilts'),tx(state.tilt==='quadro'?'r.tiltQ':'r.tiltS')]);
   }
   const ex=solid.ext.clone().multiplyScalar(state.scale/M);
-  rows.push([tx('r.solid'),tx('mods',it(ex.x,2)+' × '+it(ex.y,2)+' × '+it(ex.z,2))+(state.ms&&MKIND[state.solid]!=='logo'?' · '+tx('ms.rd')+' '+it(ex.x*MOD_U,1)+' × '+it(ex.y*MOD_U,1)+' × '+it(ex.z*MOD_U,1):'')]);
+  rows.push([tx('r.solid'),tx('mods',it(ex.x*MOD_U,1)+' × '+it(ex.y*MOD_U,1)+' × '+it(ex.z*MOD_U,1))]);
   const sub=famSub();
   document.getElementById('readout-rows').innerHTML=rows.map(r=>'<div class="kv"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>').join('');
   const rule=(state.shadow&&S.ex&&S.ex.lg)?'<span class="rule">'+tx(S.mg?'rule.mg':!S.ex.lg.par?'rule.pt':state.mode==='persp'?'rule.persP':'rule.axoP')+'</span>':'';
@@ -3191,24 +3368,24 @@ const SL=[
  {box:'obj',id:'phi',label:()=>tx(tiltQ()?'sl.phiQ':'sl.phiS'),sg:()=>tiltQ()?-1:1,min:-90,max:90,step:1,fmt:v=>it(v,0)+'°'},
  {box:'obj',id:'theta',label:()=>tx(tiltQ()?'sl.thQ':'sl.thS'),sg:()=>tiltQ()?-1:1,min:-180,max:180,step:1,fmt:v=>it(v,0)+'°'},
  {box:'obj',id:'scale',rng:()=>state.mode==='persp'?[0.8,4]:[0.5,2],label:()=>tx('sl.scale'),min:0.5,max:2,step:0.05,fmt:v=>'× '+it(v,2)},
- {box:'obj',id:'d',label:()=>tx(state.mode==='monge'?'sl.dM':state.quadro==='H'&&state.mode==='obl'?'sl.dH':'sl.dQ'),u:M,min:0,max:3.2,step:0.05,fmt:v=>it(v,2)},
- {box:'obj',id:'h',vis:()=>!(state.mode==='monge'||(state.mode==='obl'&&state.quadro==='H')),label:()=>tx('sl.h'),u:M,min:0,max:2.4,step:0.05,fmt:v=>it(v,2)},
- {box:'obj',id:'dl',only:'monge',label:()=>tx('sl.dL'),u:M,min:0,max:4,step:0.05,fmt:v=>it(v,2)},
- {box:'obj',id:'mh',only:'monge',label:()=>tx('sl.mh'),u:M,min:0,max:2.4,step:0.05,fmt:v=>it(v,2)},
+ {box:'obj',id:'d',label:()=>tx(state.mode==='monge'?'sl.dM':state.quadro==='H'&&state.mode==='obl'?'sl.dH':'sl.dQ'),u:M/MOD_U,min:0,max:16,step:0.25,fmt:v=>it(v,2)+' cm'},
+ {box:'obj',id:'h',vis:()=>!(state.mode==='monge'||(state.mode==='obl'&&state.quadro==='H')),label:()=>tx('sl.h'),u:M/MOD_U,min:0,max:24,step:0.25,fmt:v=>it(v,2)+' cm'},
+ {box:'obj',id:'dl',only:'monge',label:()=>tx('sl.dL'),u:M/MOD_U,min:0,max:20,step:0.25,fmt:v=>it(v,2)+' cm'},
+ {box:'obj',id:'mh',only:'monge',label:()=>tx('sl.mh'),u:M/MOD_U,min:0,max:24,step:0.25,fmt:v=>it(v,2)+' cm'},
  {box:'obl',id:'alpha',label:()=>tx('sl.alpha'),min:-180,max:180,step:1,fmt:v=>it(v,0)+'°'},
  {box:'obl',id:'q',label:()=>tx('sl.q'),min:0.1,max:1.5,step:0.05,fmt:v=>it(v)},
- {box:'per',id:'D',label:()=>tx('sl.D'),u:M,min:1.2,max:5.6,step:0.1,fmt:v=>it(v,1)},
- {box:'per',id:'Ez',label:()=>tx('sl.Ez'),u:M,min:0.2,max:3,step:0.05,fmt:v=>it(v,2)},
- {box:'per',id:'Ex',label:()=>tx('sl.Ex'),u:M,min:-2.8,max:2.8,step:0.05,fmt:v=>it(v,2)},
+ {box:'per',id:'D',label:()=>tx('sl.D'),u:M/MOD_U,min:6,max:28,step:0.5,fmt:v=>it(v,1)+' cm'},
+ {box:'per',id:'Ez',label:()=>tx('sl.Ez'),u:M/MOD_U,min:1,max:15,step:0.25,fmt:v=>it(v,2)+' cm'},
+ {box:'per',id:'Ex',label:()=>tx('sl.Ex'),u:M/MOD_U,min:-14,max:14,step:0.25,fmt:v=>it(v,2)+' cm'},
  {box:'cut',id:'cutH',free:true,cut:true,vis:()=>state.cut,label:()=>tx(lockedCut()?'sl.cutHm':'sl.cutH'),min:0.05,max:1,step:0.01,fmt:v=>it(v*100,0)+' %'},
  {box:'cut',id:'cutT',free:true,cut:true,vis:()=>state.cut&&lockedCut(),label:()=>tx('sl.cutT.'+state.cutO),min:-90,max:90,step:1,fmt:v=>it(v,0)+'°'},
  {box:'cut',id:'cutI',free:true,cut:true,vis:()=>state.cut&&!lockedCut(),label:()=>tx('sl.cutI'),min:0,max:90,step:1,fmt:v=>it(v,0)+'°'},
  {box:'cut',id:'cutR',free:true,cut:true,vis:()=>state.cut&&!lockedCut(),label:()=>tx('sl.cutR'),min:-180,max:180,step:1,fmt:v=>it(v,0)+'°'},
  {box:'sh',id:'laz',free:true,cut:true,vis:()=>state.shadow&&state.shMode==='par',label:()=>tx('sl.laz'),min:-180,max:180,step:1,fmt:v=>it(v,0)+'°'},
  {box:'sh',id:'lel',free:true,cut:true,vis:()=>state.shadow&&state.shMode==='par',label:()=>tx('sl.lel'),min:8,max:88,step:1,fmt:v=>it(v,0)+'°'},
- {box:'sh',id:'lx',free:true,cut:true,vis:()=>state.shadow&&state.shMode==='pt',label:()=>tx('sl.lx'),u:M,min:-5,max:5,step:0.05,fmt:v=>it(v,2)},
- {box:'sh',id:'ly',free:true,cut:true,vis:()=>state.shadow&&state.shMode==='pt',label:()=>tx('sl.ly'),u:M,min:-5.6,max:2.4,step:0.05,fmt:v=>it(v,2)},
- {box:'sh',id:'lz',free:true,cut:true,vis:()=>state.shadow&&state.shMode==='pt',label:()=>tx('sl.lz'),u:M,min:1.6,max:5,step:0.05,fmt:v=>it(v,2)},
+ {box:'sh',id:'lx',free:true,cut:true,vis:()=>state.shadow&&state.shMode==='pt',label:()=>tx('sl.lx'),u:M/MOD_U,min:-25,max:25,step:0.25,fmt:v=>it(v,2)+' cm'},
+ {box:'sh',id:'ly',free:true,cut:true,vis:()=>state.shadow&&state.shMode==='pt',label:()=>tx('sl.ly'),u:M/MOD_U,min:-28,max:12,step:0.25,fmt:v=>it(v,2)+' cm'},
+ {box:'sh',id:'lz',free:true,cut:true,vis:()=>state.shadow&&state.shMode==='pt',label:()=>tx('sl.lz'),u:M/MOD_U,min:8,max:25,step:0.25,fmt:v=>it(v,2)+' cm'},
  {box:'mon',id:'ang',free:true,label:()=>tx('sl.ang'),min:0,max:90,step:1,fmt:v=>it(v,0)+'°'}
 ];
 SL.forEach(s=>{
@@ -3295,17 +3472,17 @@ document.getElementById('ribbtn').addEventListener('click',function(){state.hide
 document.getElementById('ribpl').addEventListener('click',function(){const rb=lastS&&lastS.ex&&lastS.ex.rab;if(!rb)return;{const o=['po','pv','pl'];state.ribPl=o[(o.indexOf(rb.mode)+1)%3];}update();});
 
 /* ------------------------------------------------- salva / riapri la scena, link */
-const SC_SKIP=['sel','shV','solo','rib','ribT','meas','measT','labAnim'];   // selezioni e animazioni: non fanno parte della scena
+const SC_SKIP=['sel','shV','solo','rib','ribT','meas','measT','labAnim','sheet','labVs'];   // selezioni e animazioni: non fanno parte della scena
 const SC_ENUM={tilt:['solid','quadro'],quadro:['V','H'],shMode:['par','pt'],cutO:['po','pv','pl'],cutK:['front','back'],ribPl:['auto','po','pv','pl'],labSel:['A','B'],labPl:['po','pv','pl'],aAx:['x','y','z'],bAx:['x','y','z']};
 const SC_LAY=['inset','left','image'],SC_VB=['3d','top','side','eye'];
 const r4=v=>Math.round(v*1e4)/1e4;
-function sceneObj(full){
+function sceneObj(full,lay){
   const st={};
   Object.keys(DEF).forEach(k=>{if(SC_SKIP.indexOf(k)>=0)return;const v=state[k];
     if(k==='show'){const d={};Object.keys(v).forEach(q=>{if(full||v[q]!==DEF.show[q])d[q]=v[q];});if(full||Object.keys(d).length)st.show=d;return;}
     if(full||JSON.stringify(v)!==JSON.stringify(DEF[k]))st[k]=typeof v==='number'?r4(v):v;});
   const c=anim?anim.to:view,pb=viewsEl.querySelector('button[data-v][aria-pressed="true"]');
-  return {app:'zypsilon',v:1,lang,lay:stage.dataset.layout,st,
+  return {app:'zypsilon',v:1,lang,lay:lay||stage.dataset.layout,sheet:state.sheet?JSON.parse(JSON.stringify(state.sheet)):undefined,st,
     cam:{t:[c.target.x,c.target.y,c.target.z].map(r4),r:r4(c.r),th:r4(c.theta),ph:r4(c.phi),fov:r4(c.fov),lock:view.lock||null,vb:pb?pb.dataset.v:null}};
 }
 function applyScene(o,opt){
@@ -3326,6 +3503,8 @@ function applyScene(o,opt){
   if(!PRESETS.some(x=>x.id===n.preset))n.preset=DEF.preset;
   if(!n.adv){if(SOLIDS[n.solid].adv)n.solid='cubo';const cp=PRESETS.find(x=>x.id===n.preset);if(cp&&cp.adv)n.preset=cp.fb;}
   Object.assign(state,n);if(state.ms)clampMeas();
+  state.sheet=null;{const s=o.sheet;if(s&&typeof s==='object'&&SHEET_FMT[s.k]&&(s.o==='h'||s.o==='v')){const t={k:s.k,o:s.o};   // foglio da disegno (formato, orientamento, impaginazione prospettica)
+    if(Array.isArray(s.pan)&&s.pan.length===2&&s.pan.every(x=>typeof x==='number'&&isFinite(x)&&Math.abs(x)<1e4)){t.pan=s.pan;if(typeof s.n==='number'&&s.n>=1&&s.n<=1000)t.n=s.n;if(typeof s.up==='boolean')t.up=s.up;if(typeof s.sig==='string'&&s.sig.length<200)t.sig=s.sig;}state.sheet=t;}}
   state.sel=null;state.shV=null;state.solo=false;state.rib=false;state.ribT=0;state.meas=false;state.measT=0;
   ribAnim=null;measAnim=null;angAnim=null;lastOkLight=null;
   if(opt.lang&&LANGS.indexOf(o.lang)>=0&&o.lang!==lang){lang=o.lang;try{localStorage.setItem('zypsilon-lang',lang);}catch(e){}ensureCJK();applyStatic();}
@@ -3340,9 +3519,9 @@ function applyScene(o,opt){
 }
 const b64u={enc:t=>btoa(unescape(encodeURIComponent(t))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''),
   dec:t=>decodeURIComponent(escape(atob(t.replace(/-/g,'+').replace(/_/g,'/'))))};
-function sceneLink(){
+function sceneLink(lay){
   const l=location,base=(/^https?:$/.test(l.protocol)&&!/claude\.(ai|com)|claudeusercontent|anthropic/i.test(l.hostname))?l.origin+l.pathname:'https://www.zypsilon.com/';
-  return base+'#s='+b64u.enc(JSON.stringify(sceneObj(false)));
+  return base+'#s='+b64u.enc(JSON.stringify(sceneObj(false,lay)));
 }
 function loadHashScene(){
   const h=location.hash;if(h.indexOf('#s=')!==0)return false;
@@ -3405,10 +3584,46 @@ LAYS.forEach(l=>{const b=document.createElement('button');b.type='button';b.data
   b.innerHTML='<svg viewBox="0 0 26 18" aria-hidden="true">'+l[2]+'</svg>';b.addEventListener('click',()=>setLayout(l[0]));layoutsEl.appendChild(b);});
 {const b=document.createElement('button');b.type='button';b.id='reset2';b.className='resetbtn';b.hidden=true;b.dataset.i18nTitle='reset2Title';b.dataset.i18nAria='reset2Aria';
   b.innerHTML='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8a5 5 0 1 0 1.8-3.8M3 2.5V5h2.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  b.addEventListener('click',()=>resetAll());layoutsEl.appendChild(b);}
+  b.addEventListener('click',()=>resetAll());layoutsEl.prepend(b);}
 {const b=document.createElement('button');b.type='button';b.id='shot';b.className='resetbtn';b.dataset.i18nTitle='shotTitle';b.dataset.i18nAria='shotAria';
   b.innerHTML='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.2v7.4M4.9 6.7L8 9.8l3.1-3.1M2.6 12.9h10.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  b.addEventListener('click',()=>takeShot());layoutsEl.appendChild(b);}
+  b.setAttribute('aria-haspopup','true');b.setAttribute('aria-expanded','false');b.addEventListener('click',e=>{e.stopPropagation();dlMenu();});layoutsEl.appendChild(b);}
+{const lk=document.getElementById('sc-link');if(lk){lk.className='resetbtn';layoutsEl.appendChild(lk);}}   // il tasto Link sta nella barra in basso, accanto a Scarica
+{const m=document.createElement('div');m.id='dlmenu';m.hidden=true;m.setAttribute('role','menu');
+  m.innerHTML='<button type="button" role="menuitem" data-f="png"><span data-i18n="dl.png">Immagine (PNG)</span></button><button type="button" role="menuitem" data-f="pdf"><span data-i18n="dl.pdf">PDF</span><i id="dl-pdfs"></i></button>';
+  layoutsEl.parentNode.appendChild(m);
+  m.addEventListener('click',e=>{const b=e.target.closest('button[data-f]');if(!b)return;dlMenu(false);if(b.dataset.f==='pdf')downloadPDF();else takeShot();});
+  document.addEventListener('click',e=>{if(!m.hidden&&!m.contains(e.target))dlMenu(false);});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')dlMenu(false);});}
+function dlMenu(open){const m=document.getElementById('dlmenu'),b=document.getElementById('shot');if(!m||!b)return;
+  const o=open===undefined?m.hidden:open;m.hidden=!o;b.setAttribute('aria-expanded',String(o));
+  if(o){const d=sheetDims(),sr=stage.getBoundingClientRect(),br=b.getBoundingClientRect();document.getElementById('dl-pdfs').textContent=d?' · '+state.sheet.k+(d[0]>d[1]?' ▭':' ▯'):' · A4 ▭';m.style.left=(br.left-sr.left+br.width/2)+'px';}}
+// PDF: il foglio (o, senza foglio, il disegno su un A4 orizzontale) a pagina intera, alla dimensione del formato scelto
+function downloadPDF(){
+  const S=lastS;if(!S)return;
+  const d=sheetDims()||[420,297],k=3.2,wC=Math.round(d[0]*k),hC=Math.round(d[1]*k);
+  const cv=document.createElement('canvas');cv.style.cssText='position:fixed;left:-99999px;top:0;width:'+wC+'px;height:'+hC+'px';document.body.appendChild(cv);
+  window.__brandRect=null;window.__shEx=true;try{drawImage(cv,S,true);}finally{window.__shEx=false;}
+  const out=document.createElement('canvas');out.width=cv.width;out.height=cv.height;const c=out.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,out.width,out.height);c.drawImage(cv,0,0);cv.remove();
+  let BR=window.__brandRect,bsc=d[0]/wC;
+  if(!sheetDims()){const mm=out.width/d[0];brandMark(c,out.width-8*mm,out.height-5*mm,mm);BR=window.__brandRect;bsc=d[0]/out.width;}   // senza tavola: marchio in basso a destra del foglio
+  const pdfUri=sceneLink('image').replace(/[\\()]/g,c=>'\\'+c),pt0=v=>(v*72/25.4).toFixed(2),lk=BR?[pt0(BR.x0*bsc),pt0(d[1]-BR.y1*bsc),pt0(BR.x1*bsc),pt0(d[1]-BR.y0*bsc)]:null;
+  const pr0=PRESETS.find(p=>p.id===state.preset),slug=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const FL=TR[lang].slugFam,pn0=pr0?(lang==='it'?pr0.name:TR.en['pn.'+pr0.id]):'view';
+  const name=(state.mode==='persp'?FL.persp:state.mode==='monge'?FL.monge:FL.axo)+'-'+slug(pn0)+(state.modified?'-'+tx('slugMod'):'')+(sheetDims()?'-'+state.sheet.k.toLowerCase():'');
+  out.toBlob(b=>{if(!b)return;b.arrayBuffer().then(buf=>{
+    const jpg=new Uint8Array(buf),enc=new TextEncoder(),parts=[],offs=[];let len=0;
+    const push=u=>{parts.push(u);len+=u.length;},str=t=>push(enc.encode(t)),pt=v=>(v*72/25.4).toFixed(2);
+    const obj=(n,body)=>{offs[n]=len;str(n+' 0 obj\n'+body+'\nendobj\n');};
+    str('%PDF-1.4\n');obj(1,'<</Type/Catalog/Pages 2 0 R>>');obj(2,'<</Type/Pages/Kids[3 0 R]/Count 1>>');
+    obj(3,'<</Type/Page/Parent 2 0 R/MediaBox[0 0 '+pt(d[0])+' '+pt(d[1])+']/Resources<</XObject<</Im0 4 0 R>>>>/Contents 5 0 R'+(lk?'/Annots[6 0 R]':'')+'>>');
+    offs[4]=len;str('4 0 obj\n<</Type/XObject/Subtype/Image/Width '+out.width+'/Height '+out.height+'/ColorSpace/DeviceRGB/BitsPerComponent 8/Filter/DCTDecode/Length '+jpg.length+'>>\nstream\n');push(jpg);str('\nendstream\nendobj\n');
+    const cs='q '+pt(d[0])+' 0 0 '+pt(d[1])+' 0 0 cm /Im0 Do Q';obj(5,'<</Length '+cs.length+'>>\nstream\n'+cs+'\nendstream');
+    if(lk)obj(6,'<</Type/Annot/Subtype/Link/Rect['+lk.join(' ')+']/Border[0 0 0]/A<</S/URI/URI('+pdfUri+')>>>>');
+    const xr=len;const nO=lk?6:5;str('xref\n0 '+(nO+1)+'\n0000000000 65535 f \n');for(let i=1;i<=nO;i++)str(String(offs[i]).padStart(10,'0')+' 00000 n \n');
+    str('trailer\n<</Size '+(nO+1)+'/Root 1 0 R>>\nstartxref\n'+xr+'\n%%EOF');
+    const all=new Uint8Array(len);let o=0;parts.forEach(u=>{all.set(u,o);o+=u.length;});
+    saveBlob(name+'.pdf',new Blob([all],{type:'application/pdf'}));onDownloaded('image');});},'image/jpeg',0.92);}
 function imgTitle(){return document.getElementById('inset-h').textContent.toUpperCase();}
 function takeShot(){
   const s=2,vr=v3d.getBoundingClientRect(),ir=imgpane.getBoundingClientRect();
@@ -3448,7 +3663,7 @@ function takeShot(){
     c.fillStyle=FAM[state.mode].color;c.font='600 12.5px "IBM Plex Sans","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif';c.fillText(document.getElementById('imgtag').textContent,tg.left,tg.top+tg.height/2);
     c.drawImage(imgCv,cr.left,cr.top,cr.width,cr.height);
   }
-  { // marchio e indirizzo, in basso a sinistra
+  if(!(hasImg&&sheetDims())){ // marchio e indirizzo, in basso a sinistra (con la tavola sono già dentro la squadratura)
     const lw=120,lh=lw*logoImg.naturalHeight/(logoImg.naturalWidth||1),bx=x0+14,by=y1-14;
     c.save();c.globalAlpha=1;
     if(logoImg.complete&&logoImg.naturalWidth){c.drawImage(logoImg,bx,by-lh-15,lw,lh);}
@@ -3474,6 +3689,7 @@ function setLayout(k){
 function setViewBtn(n){viewsEl.querySelectorAll('button[data-v]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===n)));}
 
 function syncUI(){
+  /*SHEET*/if(SHEET_READY)try{sheetSync();}catch(e){}
   presetsEl.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed',String(!state.modified&&b.dataset.id===state.preset)));
   solidsEl.querySelectorAll('.chip').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.id===state.solid));b.title=tx('s.'+b.dataset.id);b.setAttribute('aria-label',tx('s.'+b.dataset.id));});
   solidsEl.querySelectorAll('.srow').forEach(r=>{const t=tx(r.dataset.bk);r.title=t;r.firstChild.setAttribute('aria-label',t);});
@@ -3485,13 +3701,13 @@ function syncUI(){
   {const n1=v=>v.toLocaleString(LOC[lang],{minimumFractionDigits:0,maximumFractionDigits:1}),mr=mRange(state.solid),box=mr.kind==='box',two=!MUNI(mr.kind),w=document.getElementById('msr-w'),v=document.getElementById('msr-v'),z=document.getElementById('msr-z');
     document.getElementById('msr').checked=state.ms;document.getElementById('msr-box').hidden=!state.ms||mr.kind==='logo';
     {const sc=solidsEl.querySelector('.chip[data-id="'+state.solid+'"]'),rw=sc&&sc.closest('.srow'),bx=document.getElementById('msr-box');if(rw&&rw.nextSibling!==bx)rw.after(bx);}   // il riquadro sta sotto la riga del solido scelto   // il logo non ha misure: nessun riquadro
-    document.getElementById('msr-l1').textContent=tx('ms.'+mr.kind);document.getElementById('msr-l3').textContent=tx('ms.wid');document.getElementById('msr-l2').textContent=tx('ms.h');
+    document.getElementById('msr-l1').textContent=tx('ms.'+mr.kind)+' (cm)';document.getElementById('msr-l3').textContent=tx('ms.wid')+' (cm)';document.getElementById('msr-l2').textContent=tx('ms.h')+' (cm)';
     document.getElementById('msr-f3').hidden=!box;document.getElementById('msr-f2').hidden=!two;
     w.min=mr.s[0];w.max=mr.s[1];v.min=mr.s2[0];v.max=mr.s2[1];z.min=mr.h[0];z.max=mr.h[1];
     if(document.activeElement!==w){w.value=+state.mw.toFixed(1);w.classList.remove('bad');}
     if(document.activeElement!==v){v.value=+state.mv.toFixed(1);v.classList.remove('bad');}
     if(document.activeElement!==z){z.value=+state.mz.toFixed(1);z.classList.remove('bad');}
-    const rg=(l,a)=>l.toLowerCase()+' '+n1(a[0])+'–'+n1(a[1]);
+    const rg=(l,a)=>l.toLowerCase()+' '+n1(a[0])+'–'+n1(a[1])+' cm';
     if(mr.kind!=='logo')document.getElementById('msr-note').textContent=tx('ms.rng')+(lang==='zh'?'':' ')+rg(tx('ms.'+mr.kind),mr.s)+(box?' · '+rg(tx('ms.wid'),mr.s2):'')+(two?' · '+rg(tx('ms.h'),mr.h):'')+(lang==='zh'?'。':'.');}
   const mon=state.mode==='monge',ob=state.mode==='ortho'||state.mode==='obl';
   document.getElementById('sec-mon').style.display=mon?'':'none';document.getElementById('monbar').hidden=!mon;
@@ -3555,7 +3771,8 @@ function update(){
   {const w=document.getElementById('sh-warn');w.hidden=!(S.mg&&state.shadow&&!S.shOk);w.textContent=tx('shOut');}
   lastS=S;computeExtras(S);
   if(fitQuadro(S)){S=compute();lastS=S;computeExtras(S);}
-  if(S.mg&&state.dl==null){const i=document.getElementById('s-dl'),o=document.getElementById('o-dl');if(i){i.value=S.dlv/M;o.textContent=it(S.dlv/M,2);}}   // senza scelta, il cursore mostra la distanza attuale da PL
+  /*SHEET*/if(!S.mg)sheetBoard(S);
+  if(S.mg&&state.dl==null){const i=document.getElementById('s-dl'),o=document.getElementById('o-dl');if(i){i.value=S.dlv/M*MOD_U;o.textContent=it(S.dlv/M*MOD_U,2)+' cm';}}   // senza scelta, il cursore mostra la distanza attuale da PL
   {const cb=document.getElementById('cutbtn');cb.hidden=!state.cut;cb.textContent=tx(state.hidePl?'cpShow':'cpHide');cb.setAttribute('aria-pressed',String(!!state.hidePl));}
   {const flat=state.ang>=89.5;   // «Ribalta su…» e «Nascondi ribaltamento» servono solo a piani aperti, «Sul foglio»
     const rbb=document.getElementById('ribbtn');rbb.hidden=!(flat&&S.mg&&state.cut&&!state.hidePl&&S.ex.rab);rbb.textContent=tx(state.hideRib?'rsShow':'rsHide');rbb.setAttribute('aria-pressed',String(!!state.hideRib));
@@ -3628,7 +3845,9 @@ if(document.fonts&&document.fonts.addEventListener)document.fonts.addEventListen
     }else{window['ga-disable-'+GA_ID]=true;g('consent','update',{analytics_storage:'denied'});delGaCookies();}
   }
   function setC(a){mem={a:a,t:Date.now(),v:1};try{localStorage.setItem(CKEY,JSON.stringify(mem));}catch(e){}
-    bar.hidden=true;wall.hidden=true;applyGA(a);render();}
+    bar.hidden=true;wall.hidden=true;applyGA(a);render();ckNote(!a&&!!GA_ID);}
+  let ckT=null;
+  function ckNote(on){const n=document.getElementById('cknote');if(!n)return;clearTimeout(ckT);n.hidden=!on;if(on)ckT=setTimeout(()=>{n.hidden=true;},12000);}   // avviso non bloccante: statistiche disattivate, l'app funziona normalmente
   function render(){
     const c=getC(),el=document.getElementById('ck-status');
     if(el){const d=c?new Date(c.t).toLocaleDateString(HTML_LANG[lang]||lang):'';el.textContent=!c?tx('ck.st0'):(c.a?tx('ck.st1',d):tx('ck.st2',d));}
@@ -3640,7 +3859,7 @@ if(document.fonts&&document.fonts.addEventListener)document.fonts.addEventListen
   function page(pg){
     ['privacy','cookie'].forEach(k=>{document.getElementById('pg-'+k).hidden=k!==pg;document.getElementById('tab-'+k).setAttribute('aria-selected',String(k===pg));});
     pol.scrollTop=0;try{history.replaceState(null,'','#'+pg);}catch(e){}render();}
-  function openPol(pg){if(pol.hidden)lastFocus=document.activeElement;pol.hidden=false;page(pg||'privacy');document.getElementById('pol-back').focus();}
+  function openPol(pg){ckNote(false);if(pol.hidden)lastFocus=document.activeElement;pol.hidden=false;page(pg||'privacy');document.getElementById('pol-back').focus();}
   function closePol(){pol.hidden=true;try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
     if(lastFocus&&lastFocus.focus)lastFocus.focus();dirty=true;}
   document.getElementById('pol-link').addEventListener('click',()=>openPol('privacy'));
@@ -3676,13 +3895,15 @@ const LAB_XL=Math.max(5,LAB_R.x+1.6);              // posizione di PL (coincide 
 const LAB_U=M/MOD_U;                               // 1 unità di misura (la stessa di lato, altezza, spostamenti e quote) in unità di scena
 const LAB_AX={po:V(0,0,1),pv:V(0,1,0),pl:V(1,0,0)};   // normale del piano secante: piano ∥ PO, ∥ PV, ∥ PL
 const LAB_COL={A:0x14161c,B:0x1f4fa8,curve:0xff3d00,secA:0xe08a00,secB:0x1a73e8};
-const LAB_CSS={A:'#14161c',B:'#1f4fa8',curve:'#ff3d00',secA:'#e08a00',secB:'#1a73e8'};
+const LAB_CSS={A:'#14161c',B:'#1f4fa8',curve:'#ff3d00',secA:'#e08a00',secB:'#1a73e8',gen:'#1f9d6b'};
 const LAB_LOC={pv:P=>V(P.x,-0.03,P.z),po:P=>V(P.x,P.y,0.03),pl:P=>V(-0.03,P.y,P.z)};   // come le immagini sui piani di Monge, appena più avanti
 // configurazione di partenza: due prismi esagonali (lato 3, altezza 10, in unità di misura), A orizzontale ⟂ PV e B verticale, che si compenetrano
-function labDef(){
-  const d=mDims('esagonale'),f=v=>v/d.s,g=v=>v/d.h,U=LAB_U;
-  return{aAx:'y',aRot:0,aW:f(3),aV:f(3),aH:g(10),aX:LAB_XL-13*U,aD:8*U,aZ:5*U,
-         bAx:'z',bRot:0,bW:f(3),bV:f(3),bH:g(10),bX:LAB_XL-9*U,bD:8*U,bZ:6.5*U,
+const LAB_CT=()=>[(Math.min(-5,-LAB_R.x-1.5)+LAB_XL)/2,Math.max(6,2*LAB_R.y+1.5)/2,Math.max(7,2*LAB_R.z+1.5)/2];   // centro dei piani di proiezione (x: PV/PL, d: PO, z: PV/PL)
+function labDef(){   // configurazione di partenza classica: prisma a base quadrata con asse orizzontale (parallelo alla LT, ruotato di 45°) e prisma esagonale verticale, con i centri coincidenti
+  const dq=mDims('prisma'),de=mDims('esagonale'),c=LAB_CT();
+  return{solid:'prisma',solB:'esagonale',
+         aAx:'x',aRot:45,aW:6/dq.s,aV:6/dq.s2,aH:14/dq.h,aX:c[0],aD:c[1],aZ:c[2],
+         bAx:'z',bRot:0,bW:3/de.s,bV:3/de.s,bH:11/de.h,bX:c[0],bD:c[1],bZ:c[2],
          labSel:'A',labPl:'po',labF:0.5,labAnim:false,labTrail:true,labCons:true};}
 const LAB_NL=52;   // lettere disponibili: A…Z, poi A1…Z1
 const labLet=i=>i<26?String.fromCharCode(65+i):String.fromCharCode(65+i-26)+'1';
@@ -3698,13 +3919,21 @@ function labAxM(ax,rot){   // i solidi di base hanno l'asse lungo z: si orienta 
   const m=new THREE.Matrix4().makeRotationZ(rot*D2R);
   const a=ax==='y'?new THREE.Matrix4().makeRotationX(-Math.PI/2):ax==='x'?new THREE.Matrix4().makeRotationY(Math.PI/2):new THREE.Matrix4();
   return a.multiply(m);}
-function labHalf(b){   // semiestensioni e centro del bounding box del corpo orientato e scalato
+const LAB_AXC={};
+function labAxC(key){   // centro del solido = punto a metà altezza sull'asse che passa per il centro della figura di base (nel riferimento di PREP, che è centrato sul riquadro d'ingombro)
+  if(LAB_AXC[key])return LAB_AXC[key];
+  const d=SOLIDS[key],logo=!d||/logo|^(mono|iso)/.test(key)||MKIND[key]==='logo';
+  let c=V(0,0,0);
+  if(!logo){const bb=new THREE.Box3().setFromPoints(d.v.map(a=>V(a[0]*1.25,a[1]*1.25,a[2]*1.25)));c=bb.getCenter(V(0,0,0)).negate();}
+  return LAB_AXC[key]=c;}
+function labHalf(b){   // centro (sull'asse, a metà altezza) ed estensioni del corpo orientato e scalato: lo = distanza dal centro al lato minimo, hi = al lato massimo, h = semiestensioni del riquadro
   const P=PREP[b.key],M=labAxM(b.ax,b.rot),mn=V(1e9,1e9,1e9),mx=V(-1e9,-1e9,-1e9);
   P.v.forEach(p=>{const q=labSz(p,b).applyMatrix4(M);mn.min(q);mx.max(q);});
-  return{h:mx.clone().sub(mn).multiplyScalar(0.5),c:mn.clone().add(mx).multiplyScalar(0.5)};}
-function labClampBody(b){   // il corpo resta dentro la regione di lavoro (e quindi nel primo diedro)
-  const H=labHalf(b).h,cl=(v,lo,hi)=>lo>hi?(lo+hi)/2:Math.min(hi,Math.max(lo,v));
-  return{x:cl(b.x,-LAB_R.x+H.x,LAB_R.x-H.x),d:cl(b.d,H.y,2*LAB_R.y-H.y),z:cl(b.z,H.z,2*LAB_R.z-H.z)};}
+  const c=labSz(labAxC(b.key),b).applyMatrix4(M);
+  return{h:mx.clone().sub(mn).multiplyScalar(0.5),c,lo:c.clone().sub(mn),hi:mx.clone().sub(c)};}
+function labClampBody(b){   // il corpo resta dentro la regione di lavoro (e quindi nel primo diedro); b.x,b.d,b.z = centro del solido
+  const f=labHalf(b),cl=(v,lo,hi)=>lo>hi?(lo+hi)/2:Math.min(hi,Math.max(lo,v));
+  return{x:cl(b.x,-LAB_R.x+f.lo.x,LAB_R.x-f.hi.x),d:cl(b.d,f.hi.y,2*LAB_R.y-f.lo.y),z:cl(b.z,f.lo.z,2*LAB_R.z-f.hi.z)};}
 function labClampAll(){
   labBodies().forEach((b,i)=>{const c=labClampBody(b),p=i?'b':'a';state[p+'X']=c.x;state[p+'D']=c.d;state[p+'Z']=c.z;});}
 function labKey(){const b=labBodies();return b.map(o=>[o.key,o.ax,o.rot,o.sx,o.sy,o.sz,o.x,o.d,o.z].join(',')).join('|');}
@@ -3712,7 +3941,7 @@ function labComposite(){
   const v=[],ff=[],sm=new Set(),pid=[],rayV=[],meta=[];
   labBodies().forEach((b,pi)=>{
     const P=PREP[b.key],M=labAxM(b.ax,b.rot),hf=labHalf(b),cp=labClampBody(b);
-    const pos=V(cp.x,-cp.d+LAB_R.y,cp.z-LAB_R.z).sub(hf.c);   // centro del bounding box in Monge (cp.x, -cp.d, cp.z), espresso nel solido composto
+    const pos=V(cp.x,-cp.d+LAB_R.y,cp.z-LAB_R.z).sub(hf.c);   // centro del solido in Monge (cp.x, -cp.d, cp.z), espresso nel solido composto
     const o=v.length,fo=ff.length;
     P.v.forEach(p=>v.push(labSz(p,b).applyMatrix4(M).add(pos)));
     P.faces.forEach((f,fi)=>{ff.push(f.idx.map(i=>i+o));if(P.smooth.has(fi))sm.add(ff.length-1);pid.push(pi);});
@@ -3819,14 +4048,15 @@ function labClipH(poly,fn){   // tiene la parte con fn(X) ≤ 0 (fn lineare)
   for(let i=0;i<n;i++){const j=(i+1)%n,a=poly[i],b=poly[j],sa=s[i],sb=s[j],ia=sa<=E,ib=sb<=E;
     if(ia)out.push(a);
     if(ia!==ib){const t=sa/(sa-sb);out.push({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t});}}
-  return out.length<3?[]:out;}
+  const o2=out.filter((p,i)=>{const q=out[(i+1)%out.length];return Math.abs(p.x-q.x)>1e-9||Math.abs(p.y-q.y)>1e-9;});   // niente vertici doppi: uno spigolo di lunghezza zero taglierebbe «tutto» e duplicherebbe il pezzo
+  return o2.length<3?[]:o2;}
 function labArea2(p){let a=0;for(let i=0;i<p.length;i++){const q=p[(i+1)%p.length];a+=p[i].x*q.y-q.x*p[i].y;}return a/2;}
 function labPieces(d){
   const sol=LAB.comp,v=sol.v,F=sol.faces,up=Math.abs(d.z)>0.9?V(1,0,0):V(0,0,1);
   const u=V(0,0,0).crossVectors(d,up).normalize(),w=V(0,0,0).crossVectors(d,u).normalize();
   const fr=[];F.forEach((f,fi)=>{if(f.n.dot(d)<-1e-6){
     let P=f.idx.map(i=>({x:v[i].dot(u),y:v[i].dot(w)}));if(labArea2(P)<0)P.reverse();
-    fr.push({f,P,part:f.part,nu:f.n.dot(u),nw:f.n.dot(w),nd:f.n.dot(d),c:f.n.dot(v[f.idx[0]])});}});
+    fr.push({f,fi,P,part:f.part,nu:f.n.dot(u),nw:f.n.dot(w),nd:f.n.dot(d),c:f.n.dot(v[f.idx[0]])});}});
   const tOf=(q,x,y)=>(q.c-x*q.nu-y*q.nw)/q.nd,out=[];
   fr.forEach(q=>{
     let pcs=[q.P];
@@ -3835,8 +4065,9 @@ function labPieces(d){
       for(let i=0;i<g.P.length&&O.length;i++){const a=g.P[i],b=g.P[(i+1)%g.P.length];O=labClipH(O,X=>-((b.x-a.x)*(X.y-a.y)-(b.y-a.y)*(X.x-a.x)));}
       if(O.length<3||Math.abs(labArea2(O))<1e-9)return;
       const dl=X=>tOf(g,X.x,X.y)-tOf(q,X.x,X.y),ds=O.map(dl);
-      if(ds.every(x=>Math.abs(x)<1e-7))return;   // complanari: resta la faccia che c'era
-      const R=labClipH(O,dl);if(R.length<3||Math.abs(labArea2(R))<1e-9)return;   // dove g sta davanti a q
+      const cop=ds.every(x=>Math.abs(x)<1e-6);   // facce complanari di solidi diversi: nessuna è «davanti»; vince sempre il primo solido, così le parti non si sovrappongono (niente sfarfallio di colori)
+      if(cop&&q.part<g.part)return;
+      const R=cop?O.slice():labClipH(O,dl);if(R.length<3||Math.abs(labArea2(R))<1e-9)return;   // dove g sta davanti a q
       if(labArea2(R)<0)R.reverse();
       const next=[];
       pcs.forEach(P=>{let rest=P;
@@ -3844,8 +4075,16 @@ function labPieces(d){
           const o=labClipH(rest,X=>-sin(X));if(o.length&&Math.abs(labArea2(o))>1e-9)next.push(o);
           rest=labClipH(rest,sin);}});
       pcs=next;});
-    pcs.forEach(P=>out.push({part:q.part,P:P.map(X=>u.clone().multiplyScalar(X.x).addScaledVector(w,X.y).addScaledVector(d,tOf(q,X.x,X.y)))}));});
+    pcs.forEach(P=>out.push({part:q.part,fi:q.fi,P:P.map(X=>u.clone().multiplyScalar(X.x).addScaledVector(w,X.y).addScaledVector(d,tOf(q,X.x,X.y)))}));});
   return out;}
+function labSplitMesh(sol,m,vn){   // il solido composito si disegna in due mesh (una per solido): sulle facce complanari dei due solidi vince il primo, senza sfarfallio di colori
+  const mk=part=>{const pos=[],nor=[],col=[];
+    sol.faces.forEach((f,fi)=>{if(f.part!==part||f.cut)return;const sm=sol.smooth.has(fi),c=labFaceCol(f);
+      for(let i=1;i<f.idx.length-1;i++)[f.idx[0],f.idx[i],f.idx[i+1]].forEach(j=>{const p=sol.v[j],n=sm?vn[j]:f.n;pos.push(p.x,p.y,p.z);nor.push(n.x,n.y,n.z);col.push(c.r,c.g,c.b);});});
+    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(nor,3));g.setAttribute('color',new THREE.Float32BufferAttribute(col,3));return g;};
+  const old=m.geometry;m.geometry=mk(0);old.dispose();
+  const m1=new THREE.Mesh(mk(1),m.material.clone());m1.renderOrder=m.renderOrder;m1.material.polygonOffset=true;m1.material.polygonOffsetFactor=2;m1.material.polygonOffsetUnits=2;m.material.polygonOffset=true;
+  solidGroup.add(m1);}
 const LAB_FLOC={pv:P=>V(P.x,-0.02,P.z),po:P=>V(P.x,P.y,0.02),pl:P=>V(-0.02,P.y,P.z)};   // come Q dei piani di Monge
 function labFillPieces(S,i,pa,ca){   // riempimento a colori delle immagini sui piani: solo le parti visibili, con il colore del loro solido
   const vw=S.views[i],vd=labViewData(S,vw.dir),loc=LAB_FLOC[vw.key];let k=0;
@@ -3929,7 +4168,7 @@ function labLayer(parent,poolN){
   L.nodes=dynPoints(40,0xffffff,15);L.nodes.material.map=labDotTex;L.nodes.material.transparent=true;L.nodes.material.alphaTest=0.4;L.nodes.material.depthTest=false;L.nodes.renderOrder=9;parent.add(L.nodes);
   L.trail=dynPoints(900,0xff9a7a,4);L.trail.material.depthTest=false;L.trail.renderOrder=8;parent.add(L.trail);
   return L;}
-for(let k=0;k<LAB_NL;k++){addLabel('xq'+k,'','#8f1d00',true);addLabel('xi'+k,'','#8f1d00',true);for(let vi=0;vi<3;vi++)addLabel('xp'+vi+'_'+k,'','#8f1d00',true);}
+for(let k=0;k<LAB_NL;k++){addLabel('xq'+k,'','#14161c',true);addLabel('xi'+k,'','#a3224f',true);for(let vi=0;vi<3;vi++)addLabel('xp'+vi+'_'+k,'','#a3224f',true);}
 const labLetterOff=(re)=>{for(const id in labels)if(re.test(id))labels[id].on=false;};
 function labLetterSet(id,text,pos,world,ox,oy){setLabel(id,pos,true,ox,oy,world);labels[id].el.textContent=text;labels[id].on=state.show.labels;}
 const LAB_3=labLayer(rig,520);
@@ -3938,7 +4177,7 @@ const LAB_I=labLayer(rig,520);   // immagine sul quadro (assonometria)
 const LAB_ALL=[LAB_3,LAB_P.pv,LAB_P.po,LAB_P.pl,LAB_I];
 function labLayerHide(Ly){
   Ly.pool.forEach(m=>{m.visible=false;});[Ly.hA,Ly.hB,Ly.hC,Ly.nodes,Ly.trail,Ly.verts].forEach(o=>{o.visible=false;});Ly.f.forEach(m=>{m.visible=false;});}
-function labHideAll(){LAB_ALL.forEach(labLayerHide);labLetterOff(/^x[qip]/);setLines(LAB_CL,[],true);LAB.shown=false;dirty=true;}
+function labHideAll(){LAB_ALL.forEach(labLayerHide);labels.xfmt.on=false;labels.xvt.on=false;labSelPts.forEach(p=>{p.visible=false;});labLetterOff(/^x[qip]/);setLines(LAB_CL,[],true);setLines(LAB_GL,[],true);LAB.shown=false;dirty=true;}
 function labPoolSet(pool,items){
   let k=0;for(const it of items){if(k>=pool.length)break;const m=pool[k++];m.material=it.mat;setSeg(m,it.a,it.b,it.r);}
   for(;k<pool.length;k++)pool[k].visible=false;}
@@ -3967,26 +4206,130 @@ function labGroup(lt,keyOf,sym){   // lettere con la stessa proiezione si scrivo
   const m=new Map();lt.forEach((l,i)=>{const k=keyOf(l);let g=m.get(k);if(!g){g={i,t:[]};m.set(k,g);}g.t.push(sym(l.ch));});
   return[...m.values()].map(g=>({l:lt[g.i],text:g.t.join('≡')}));}
 function labConsPts(sec){return[...(state.show.letters?labLetters().map(l=>l.P):[]),...(sec?sec.nodes:[])];}   // punti di cui si tracciano le linee di costruzione
-const LAB_CL=mkLines(420,new THREE.LineDashedMaterial({color:0x8f1d00,dashSize:0.16,gapSize:0.12,transparent:true,opacity:0.8}),mg);
+const LAB_GL=mkLines(480,new THREE.LineBasicMaterial({color:0x1f9d6b,transparent:true,opacity:0.8}),mg);   // generatrici: linee d'aiuto sui piani di proiezione
+const LAB_CL=mkLines(420,new THREE.LineBasicMaterial({color:0x8f1d00,transparent:true,opacity:0.5}),mg);
 function labCons3D(S,sec){   // piani aperti: proiettanti dal punto ai tre piani; piani ribaltati: linee di richiamo tra le immagini, che seguono i piani
   const cl=[],sh=state.show;
   if(state.labCons){const xL=S.ext.xL;
     labConsPts(sec).forEach(P=>{const W=labW(S,P);
       if(state.ang<=0.5){if(solidGroup.visible)cl.push([W,V(W.x,0,W.z)],[W,V(W.x,W.y,0)],[W,V(xL,W.y,W.z)]);}
       else if(sh.image){const a=MG.pv.grp.localToWorld(LAB_LOC.pv(W)),b=MG.po.grp.localToWorld(LAB_LOC.po(W)),c=MG.pl.grp.localToWorld(LAB_LOC.pl(W));cl.push([a,b],[a,c]);}});}
-  setLines(LAB_CL,cl,true);}
+  setLines(LAB_CL,cl,true);
+  const gl=[];if(state.labCons&&sh.image&&sh.letters)labGeneratrices().forEach(g=>['pv','po','pl'].forEach(k=>{
+    const a=MG[k].grp.localToWorld(LAB_LOC[k](labW(S,g.a))),b=MG[k].grp.localToWorld(LAB_LOC[k](labW(S,g.b)));gl.push([a,b]);}));
+  setLines(LAB_GL,gl.slice(0,240),true);}
+function labOut(S,lt,W){   // la lettera di un punto nello spazio sta poco fuori dal punto, lontano dal centro della curva (come i vertici in zypsilon)
+  const c=V(0,0,0);lt.forEach(l=>c.add(labW(S,l.P)));if(lt.length)c.multiplyScalar(1/lt.length);
+  const d=W.clone().sub(c);if(d.length()<1e-6)return W.clone();return W.clone().addScaledVector(d.normalize(),0.32);}
 function labMongeLetters(S){   // lettere dei punti: A nello spazio; A″ sul PV, A′ sul PO, A‴ sul PL
   const sh=state.show,lt=sh.letters?labLetters():[];labLetterOff(/^x[iqp]/);
   lt.forEach((l,k)=>{const W=labW(S,l.P);
-    if(solidGroup.visible)labLetterSet('xq'+k,LC(l.ch),W,true,9,-9);
+    if(solidGroup.visible)labLetterSet('xq'+k,LC(l.ch),labOut(S,lt,W),true,0,0);
   });
   if(sh.image)['pv','po','pl'].forEach((kk,vi)=>{
     labGroup(lt,l=>{const v=LAB_LOC[kk](labW(S,l.P));return[v.x,v.y,v.z].map(t=>Math.round(t*500)).join(',');},ch=>projSym(ch,vi)).forEach((g,k)=>
-      labLetterSet('xp'+vi+'_'+k,g.text,MG[kk].grp.localToWorld(LAB_LOC[kk](labW(S,g.l.P))),true,9,-9));});}
+      labLetterSet('xp'+vi+'_'+k,g.text,MG[kk].grp.localToWorld(LAB_LOC[kk](labW(S,g.l.P))),true,12,-2));});}
 function labAxoLetters(S){
   const sh=state.show,lt=sh.letters?labLetters():[];labLetterOff(/^x[iqp]/);
-  lt.forEach((l,k)=>{if(solidGroup.visible)labLetterSet('xq'+k,LC(l.ch),labW(S,l.P),true,9,-9);});
-  if(sh.image)labGroup(lt,l=>{const q=S.Q(labW(S,l.P));return Math.round(q.x*500)+','+Math.round(q.z*500);},ch=>LC(ch)).forEach((g,k)=>{const q=S.Q(labW(S,g.l.P));labLetterSet('xi'+k,g.text,V(q.x,-0.035,q.z),false,9,-9);});}
+  lt.forEach((l,k)=>{if(solidGroup.visible)labLetterSet('xq'+k,LC(l.ch),labOut(S,lt,labW(S,l.P)),true,0,0);});
+  if(sh.image)labGroup(lt,l=>{const q=S.Q(labW(S,l.P));return Math.round(q.x*500)+','+Math.round(q.z*500);},ch=>LC(ch)).forEach((g,k)=>{const q=S.Q(labW(S,g.l.P));labLetterSet('xi'+k,g.text,V(q.x,-0.035,q.z),false,12,-2);});}
+/* ---------------------------------------------------------------- tavola da disegno (A4 · A3 · A2, 1:1) e vertici cliccabili
+   Le misure sono in centimetri e la tavola è al vero: 1 cm = LAB_U unità di scena. La tavola sta nel piano del PV, appena dietro ai disegni,
+   e compare quando i piani si ribaltano; il disegno ribaltato (PV in alto a sinistra, PO sotto, PL a destra) è centrato nella squadratura. */
+addLabel('xfmt','','#5b6270',false);addLabel('xsv','','#5b6270',false);addLabel('xso','','#5b6270',false);addLabel('xsl','','#5b6270',false);addLabel('xvt','','#14161c',false);['xsv','xso','xsl'].forEach(k=>{labels[k].el.className='lbl sheetq';});labels.xvt.el.className='lbl vcard';
+const LAB_SH=(()=>{   // la tavola è fatta di tre pezzi, ciascuno attaccato al proprio piano (PV, PO, PL): si ribalta insieme ai piani e a 90° è il foglio piano
+  const all=[],out={all};
+  const mkm=(c,ro,par)=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(160*3),3));g.setDrawRange(0,0);
+    const m=new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:c,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}));m.frustumCulled=false;m.renderOrder=ro;m.visible=false;par.add(m);all.push(m);return g;};
+  ['pv','po','pl'].forEach(k=>{const par=MG[k].grp;out[k]={paper:mkm(0xffffff,1,par),edge:mkm(0x9aa0ae,2,par),frame:mkm(0x14161c,3,par)};});
+  return out;})();
+SHEET_READY=true;const SHEET_3D=false;
+// coordinate del foglio (x,z) → coordinate locali del piano k, con scostamento n lungo la normale (n<0: verso l'osservatore)
+const labShMap=(k,xL,n)=>k==='pv'?((x,z)=>[x,n,z]):k==='po'?((x,z)=>[x,z,-n]):((x,z)=>[n,xL-x,z]);
+function labQuadsP(g,list,k,xL,n){const a=g.attributes.position.array,I=1e6,Q={pv:[-I,0,xL,I],pl:[xL,0,I,I],po:[-I,-I,I,0]}[k],mp=labShMap(k,xL,n);let c=0;
+  list.forEach(r=>{const x0=Math.max(r[0],Q[0]),z0=Math.max(r[1],Q[1]),x1=Math.min(r[2],Q[2]),z1=Math.min(r[3],Q[3]);if(!(x0<x1-1e-9&&z0<z1-1e-9)||c+6>160)return;
+    [[x0,z0],[x1,z0],[x1,z1],[x0,z0],[x1,z1],[x0,z1]].forEach(([x,z])=>{const p=mp(x,z);a[c*3]=p[0];a[c*3+1]=p[1];a[c*3+2]=p[2];c++;});});
+  g.attributes.position.needsUpdate=true;g.setDrawRange(0,c);}
+const labFrameQ=(x0,z0,x1,z1,t)=>[[x0,z0,x1,z0+t],[x0,z1-t,x1,z1],[x0,z0,x0+t,z1],[x1-t,z0,x1,z1]];   // quattro strisce di spessore t lungo il rettangolo
+function sheetBoard(S){
+  if(!SHEET_READY){return;}
+  vtxSel(S);
+  const d=sheetDims(),on=SHEET_3D&&!!d&&!!S&&S.mg&&state.ang>0.5;   // la tavola nel 3D è disattivata: nello spazio 3D restano i piani colorati ribaltati, la tavola vive solo nello spazio foglio
+  LAB_SH.all.forEach(m=>{m.visible=on;});
+  [MG.pv,MG.po,MG.pl].forEach(P=>{P.mesh.visible=!on;P.outline.visible=!on;if(on)P.img.visible=false;});   // la tavola è disegno al tratto, come nello spazio foglio: niente campiture   // con la tavola, al posto dei piani colorati si vede il foglio (ribaltato con loro)
+  ['xfmt','xsv','xso','xsl'].forEach(k=>{if(!on)labels[k].on=false;});
+  if(!on)return;
+  ['PV','PO','PL'].forEach(id=>{if(labels[id])labels[id].on=false;});   // le sigle dei quadranti sostituiscono i nomi dei piani
+  const xL=S.ext.xL,W=d[0]*SH_MM,H=d[1]*SH_MM,ml=SH_MG.l*SH_MM,mr=SH_MG.r*SH_MM,mt=SH_MG.t*SH_MM,mb=SH_MG.b*SH_MM;
+  // la squadratura è divisa in quattro dagli assi dei piani: la linea di terra (orizzontale) e l'asse PL (verticale) si incontrano al centro
+  const pcx=xL-(ml-mr)/2,px0=pcx-W/2,px1=pcx+W/2,pcz=-(mb-mt)/2,pz0=pcz-H/2,pz1=pz0+H;
+  const fx0=px0+ml,fx1=px1-mr,fz0=pz0+mb,fz1=pz1-mt;
+  ['pv','po','pl'].forEach(k=>{const L=LAB_SH[k];
+    labQuadsP(L.paper,[[px0,pz0,px1,pz1]],k,xL,-0.012);
+    labQuadsP(L.edge,labFrameQ(px0,pz0,px1,pz1,0.3*SH_MM),k,xL,-0.013);
+    labQuadsP(L.frame,labFrameQ(fx0,fz0,fx1,fz1,0.7*SH_MM).concat([[fx0,-0.35*SH_MM,fx1,0.35*SH_MM],[xL-0.35*SH_MM,fz0,xL+0.35*SH_MM,fz1]]),k,xL,-0.016);});   // squadratura e assi
+  const wp=(k,x,z)=>{const p=labShMap(k,xL,-0.02)(x,z);return MG[k].grp.localToWorld(new THREE.Vector3(p[0],p[1],p[2]));};
+  const lb=labels.xfmt;setLabel('xfmt',wp('pv',px0,pz1),true,0,-10,true);
+  lb.el.textContent=state.sheet.k+' · '+d[0]+' × '+d[1]+' mm · 1:1';lb.el.style.color='#5b6270';
+  const g=2*10*SH_MM;   // sigla di ogni quadrante: PV in alto a sinistra, PL in alto a destra, PO in basso a sinistra
+  [['xsv','pln.pv','pv',fx0+g,fz1-g],['xsl','pln.pl','pl',xL+g,fz1-g],['xso','pln.po','po',fx0+g,fz0+g]].forEach(([id,t,k,x,z])=>{setLabel(id,wp(k,x,z),true,0,0,true);labels[id].el.textContent=tx(t);});}
+// vertici selezionabili nello spazio 3D (proiezioni ortogonali): nel lab i punti della curva di compenetrazione e i vertici dei due solidi a facce piane; in zypsilon i vertici del solido
+const vtxOn=S=>!!S&&!!S.mg&&(state.lab||state.mode==='monge');
+function vtxList(S){const out=[];
+  if(state.lab){const sol=LAB.comp;
+    labLetters().forEach(l=>out.push({id:'c'+l.ch,name:LC(l.ch),own:null,W:S=>labW(S,l.P)}));
+    labBodies().forEach((b,bi)=>{if(/^(cilindro|cono|sfera)$/.test(b.key))return;const m=sol.meta[bi];
+      for(let i=0;i<m.n;i++){const P=sol.v[m.o+i];out.push({id:'s'+bi+'_'+i,name:tx('lab.vtx')+' · '+(bi?'B':'A'),own:bi?'b':'a',W:S=>labW(S,P)});}});
+  }else if(!(SOLIDS[state.solid]&&SOLIDS[state.solid].round)){const L=lblSet();
+    solid.v.forEach((_,i)=>{const l=L.find(o=>o.ix===i);out.push({id:'m'+i,name:tx('lab.vtx')+' '+(l?l.ch:'#'+(i+1)),own:null,W:S=>S.W[i]});});}
+  return out;}
+function vtxPos(W,kind){return kind===0?W:MG[['pv','po','pl'][kind-1]].grp.localToWorld(LAB_LOC[['pv','po','pl'][kind-1]](W));}
+const labSelPts=(()=>{const mk=(size,op,col)=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(4*3),3));g.setDrawRange(0,0);
+  const p=new THREE.Points(g,new THREE.PointsMaterial({color:col,size,sizeAttenuation:false,depthTest:false,transparent:true,opacity:op}));p.frustumCulled=false;p.renderOrder=20;p.visible=false;mg.add(p);return p;};
+  return[mk(20,0.28,0xa3224f),mk(7,1,0xa3224f)];})();
+const vtxEl=(()=>{const el=labels.xvt.el;el.className='lbl vcard';
+  el.innerHTML='<div class="vt"></div>'+['pv','po','pl'].map(a=>'<label class="vr"><span class="n" data-a="'+a+'"></span><input type="number" step="0.1" inputmode="decimal" data-a="'+a+'" aria-label="'+a+'"><i>cm</i></label>').join('');
+  ['pointerdown','pointerup','click','wheel'].forEach(t=>el.addEventListener(t,e=>e.stopPropagation()));
+  el.querySelectorAll('input').forEach(inp=>{
+    inp.addEventListener('change',()=>{const v=parseFloat(inp.value);if(isFinite(v))vtxEdit(inp.dataset.a,v);else update();});
+    inp.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter')inp.blur();});});
+  return el;})();
+function vtxSel(S){   // vertice scelto: pallino sul punto nello spazio e sulle tre proiezioni, con le distanze dai tre piani (modificabili)
+  const v=state.labVs,lb=labels.xvt,c=(vtxOn(S)&&v)?vtxList(S).find(q=>q.id===v.id):null;
+  if(!c){lb.on=false;labSelPts.forEach(p=>{p.visible=false;});return;}
+  const W=c.W(S),sh=state.show,pts=[];
+  [0,1,2,3].forEach(k=>{if(k===0?solidGroup.visible:sh.image)pts.push(mg.worldToLocal(vtxPos(W,k)));});
+  labSelPts.forEach(p=>setPoints(p,pts));
+  vtxEl.querySelector('.vt').textContent=c.name;
+  const val={pv:-W.y/LAB_U,po:W.z/LAB_U,pl:(S.ext.xL-W.x)/LAB_U},nm={pv:'lab.vPV',po:'lab.vPO',pl:'lab.vPL'};
+  vtxEl.querySelectorAll('input').forEach(inp=>{if(document.activeElement!==inp){const x=val[inp.dataset.a];inp.value=(Math.abs(x)<0.005?0:x).toFixed(2);}});
+  vtxEl.querySelectorAll('.n').forEach(sp=>{sp.textContent=tx(nm[sp.dataset.a]);});
+  const kOk=v.k===0?solidGroup.visible:sh.image;
+  setLabel('xvt',vtxPos(W,kOk?v.k:(solidGroup.visible?0:1)),true,0,-12,true);lb.on=true;}
+function vtxEdit(ax,val){   // porta il vertice a distanza val (cm) dal piano scelto spostando il solido (nel lab: il solido a cui appartiene, o entrambi per i punti della curva)
+  const v=state.labVs,S0=lastS;if(!v||!vtxOn(S0))return;
+  const c0=vtxList(S0).find(q=>q.id===v.id);if(!c0)return;
+  const K=state.lab?(c0.own?{pv:[c0.own+'D'],po:[c0.own+'Z'],pl:[c0.own+'X']}:{pv:['aD','bD'],po:['aZ','bZ'],pl:['aX','bX']}):{pv:['d'],po:['mh'],pl:['dl']},ks=K[ax];
+  if(!state.lab&&state.dl==null)state.dl=S0.dlv;
+  const getS=()=>{refreshSolid();return compute();};
+  const dist=S=>{const c=vtxList(S).find(q=>q.id===v.id);if(!c)return NaN;const W=c.W(S);return(ax==='pv'?-W.y:ax==='po'?W.z:S.ext.xL-W.x)/LAB_U;};
+  const m0=dist(getS()),base=ks.map(k=>state[k]),dl=0.4;
+  ks.forEach((k,i)=>{state[k]=base[i]+dl;});const m1=dist(getS()),sl=(m1-m0)/dl;
+  if(!isFinite(sl)||Math.abs(sl)<1e-6){ks.forEach((k,i)=>{state[k]=base[i];});update();return;}
+  const st=(val-m0)/sl;ks.forEach((k,i)=>{state[k]=base[i]+st;});
+  if(state.lab){labAfter();state.labVs=v;update();}
+  else{ks.forEach(k=>{const sl_=SL.find(o=>o.id===k);if(sl_)state[k]=Math.min(sl_.max*(sl_.u||1),Math.max(sl_.min*(sl_.u||1),state[k]));});state.modified=true;syncUI();update();}}
+function vtxPick(e){
+  const S=lastS;if(!vtxOn(S))return;
+  const r=canvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top,sh=state.show;let best=null,bd=14*14;
+  vtxList(S).forEach(c=>{const W=c.W(S);[0,1,2,3].forEach(k=>{if(k===0?!solidGroup.visible:!sh.image)return;
+    const q=vtxPos(W,k).project(camera),x=(q.x+1)/2*r.width,y=(1-q.y)/2*r.height,d=(x-mx)*(x-mx)+(y-my)*(y-my);
+    if(d<bd){bd=d;best={id:c.id,k,name:c.name};}});});
+  const cur=state.labVs;state.labVs=best&&cur&&cur.id===best.id&&cur.k===best.k?null:best;
+  update();}
+(function(){let dn=null;
+  canvas.addEventListener('pointerdown',e=>{dn=e.button===0?{x:e.clientX,y:e.clientY}:null;});
+  canvas.addEventListener('pointerup',e=>{if(!dn)return;const m=Math.hypot(e.clientX-dn.x,e.clientY-dn.y);dn=null;if(m>5||ptrs.size>1)return;vtxPick(e);});})();
 function labMonge(S){   // chiamata da updateMonge
   const L=S.lab;if(!L)return;
   const sh=state.show,sec=L.sec;LAB.shown=true;labLayerHide(LAB_I);
@@ -4005,7 +4348,7 @@ function labAxo(S){     // chiamata da updateScene (assonometria)
   const vd=labViewData(S,S.rd);
   labLayerApply(LAB_I,labCollect(vd,sec,p=>{const q=S.Q(labW(S,p));return V(q.x,-0.035,q.z);},{edges:sh.image,hid:sh.image&&sh.hidden,r:0.03,rc:0.05,rs:0.03,letters:sh.image&&sh.letters}),sh.image);
   labLayerApply(LAB_3,labCollect(vd,sec,p=>labW(S,p),{edges:false,hid:false,allCurve:true,r:0.03,rc:0.055,rs:0.03,letters:sh.letters}),solidGroup.visible);
-  labAxoLetters(S);setLines(LAB_CL,[],true);
+  labAxoLetters(S);setLines(LAB_CL,[],true);setLines(LAB_GL,[],true);
   dirty=true;}
 
 /* ---------------------------------------------------------------- disegno 2D (foglio di Monge e immagine in assonometria) */
@@ -4013,39 +4356,82 @@ function labCanvas(ctx,vd,sec,proj,lk,sh,sym){
   ctx.save();ctx.lineCap='round';ctx.lineJoin='round';ctx.setLineDash([]);
   const path=P=>{ctx.beginPath();P.forEach((p,i)=>{const q=proj(p);i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]);});ctx.closePath();};
   if(sec){
-    if(sec.A){path(sec.A);ctx.fillStyle='rgba(224,138,0,.28)';ctx.fill();ctx.strokeStyle=LAB_CSS.secA;ctx.lineWidth=2.4*lk;ctx.stroke();}
-    if(sec.B){path(sec.B);ctx.fillStyle='rgba(26,115,232,.25)';ctx.fill();ctx.strokeStyle=LAB_CSS.secB;ctx.lineWidth=2.4*lk;ctx.stroke();}
+    if(sec.A){path(sec.A);ctx.fillStyle='rgba(224,138,0,.28)';ctx.fill();ctx.strokeStyle=LAB_CSS.secA;ctx.lineWidth=1.6*lk;ctx.stroke();}
+    if(sec.B){path(sec.B);ctx.fillStyle='rgba(26,115,232,.25)';ctx.fill();ctx.strokeStyle=LAB_CSS.secB;ctx.lineWidth=1.6*lk;ctx.stroke();}
     if(sec.common){path(sec.common);ctx.fillStyle='rgba(255,61,0,.22)';ctx.fill();}}
   const segs=(list,col,w,dash)=>{if(!list.length)return;ctx.strokeStyle=col;ctx.lineWidth=w;ctx.setLineDash(dash);ctx.beginPath();
     list.forEach(e=>{const a=proj(e.a),b=proj(e.b);ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);});ctx.stroke();};
   if(vd){
-    if(sh.hidden){[0,1].forEach(p=>segs(vd.edges.filter(e=>!e.vis&&e.p===p),p?LAB_CSS.B:LAB_CSS.A,1*lk,[4*lk,3*lk]));segs(vd.curve.filter(c=>!c.vis),LAB_CSS.curve,1.8*lk,[4*lk,3*lk]);}
-    [0,1].forEach(p=>segs(vd.edges.filter(e=>e.vis&&e.p===p),p?LAB_CSS.B:LAB_CSS.A,1.8*lk,[]));
-    segs(vd.curve.filter(c=>c.vis),LAB_CSS.curve,3.4*lk,[]);}
+    if(sh.hidden){[0,1].forEach(p=>segs(vd.edges.filter(e=>!e.vis&&e.p===p),p?LAB_CSS.B:LAB_CSS.A,0.7*lk,[4*lk,3*lk]));segs(vd.curve.filter(c=>!c.vis),LAB_CSS.curve,1.1*lk,[4*lk,3*lk]);}
+    [0,1].forEach(p=>segs(vd.edges.filter(e=>e.vis&&e.p===p),p?LAB_CSS.B:LAB_CSS.A,1.5*lk,[]));
+    segs(vd.curve.filter(c=>c.vis),LAB_CSS.curve,2.2*lk,[]);}
   ctx.setLineDash([]);
-  LAB.trail.forEach(P=>{const q=proj(P);ctx.fillStyle='rgba(255,122,84,.75)';ctx.beginPath();ctx.arc(q[0],q[1],1.7*lk,0,6.2832);ctx.fill();});
-  if(sec)sec.nodes.forEach((P,i)=>{const q=proj(P);ctx.beginPath();ctx.arc(q[0],q[1],4.6*lk,0,6.2832);ctx.fillStyle=LAB_CSS.curve;ctx.fill();ctx.lineWidth=1.8*lk;ctx.strokeStyle='#fff';ctx.stroke();
+  LAB.trail.forEach(P=>{const q=proj(P);ctx.fillStyle='rgba(255,122,84,.75)';ctx.beginPath();ctx.arc(q[0],q[1],1.4*lk,0,6.2832);ctx.fill();});
+  if(sec)sec.nodes.forEach((P,i)=>{const q=proj(P);ctx.beginPath();ctx.arc(q[0],q[1],3.4*lk,0,6.2832);ctx.fillStyle=LAB_CSS.curve;ctx.fill();ctx.lineWidth=1.2*lk;ctx.strokeStyle='#fff';ctx.stroke();
     ctx.font='600 '+(10.5*lk)+'px "IBM Plex Sans",sans-serif';ctx.lineWidth=3*lk;ctx.strokeStyle='#fff';ctx.strokeText(String(i+1),q[0]+6*lk,q[1]-5*lk);ctx.fillStyle='#8f1d00';ctx.fillText(String(i+1),q[0]+6*lk,q[1]-5*lk);});
-  if(sh.letters&&sym){ctx.font='600 '+(11*lk)+'px "IBM Plex Mono",monospace';ctx.lineWidth=3*lk;
-    const boxes=[],fs=11*lk,ov=(a,b)=>a.x<b.x+b.w&&b.x<a.x+a.w&&a.y<b.y+b.h&&b.y<a.y+a.h;
-    labGroup(labLetters(),l=>{const q=proj(l.P);return Math.round(q[0]/1.5)+','+Math.round(q[1]/1.5);},sym).forEach(g=>{const q=proj(g.l.P),t=g.text,tw=ctx.measureText(t).width;
-      ctx.beginPath();ctx.arc(q[0],q[1],2.6*lk,0,6.2832);ctx.fillStyle='#7a1500';ctx.fill();
-      let best=null;   // prima posizione libera attorno al punto (il testo non copre altre lettere)
-      for(const m of[1,1.9,2.9]){for(const [dx,dy] of [[6,13],[6,-5],[-6-tw/m,13],[-6-tw/m,-5],[-tw/2,-9],[-tw/2,19]]){
-        const x=q[0]+dx*lk*(dx>0?m:1),y=q[1]+dy*lk*(Math.abs(dy)>5?m:1),bx={x,y:y-fs,w:tw,h:fs*1.15};if(!boxes.some(o=>ov(o,bx))){best=bx;break;}}if(best)break;}
-      if(!best)best={x:q[0]+6*lk,y:q[1]+13*lk-fs,w:tw,h:fs*1.15};
-      boxes.push(best);ctx.strokeStyle='#fff';ctx.strokeText(t,best.x,best.y+fs);ctx.fillStyle='#8f1d00';ctx.fillText(t,best.x,best.y+fs);});}
+  if(sh.letters&&sym){   // lettere come in zypsilon: mono 600, bordeaux con alone bianco, pallino piccolo; ogni lettera prende il primo posto libero accanto al suo punto, dal lato verso l'esterno della figura
+    const big=lk>1.2,groups=labGroup(labLetters(),l=>{const q=proj(l.P);return Math.round(q[0]/1.5)+','+Math.round(q[1]/1.5);},sym);
+    const nG=groups.length,fs=big?13:(nG>22?8:nG>16?9:10),gap=big?8:5,cw=ctx.canvas.clientWidth||1e9,chh=ctx.canvas.clientHeight||1e9;
+    const ov=(a,b)=>a.x<b.x+b.w&&b.x<a.x+a.w&&a.y<b.y+b.h&&b.y<a.y+a.h,boxes=[];
+    let cx=0,cy=0,n=0;if(vd)vd.edges.forEach(e=>{[e.a,e.b].forEach(P=>{const q=proj(P);cx+=q[0];cy+=q[1];n++;});});
+    if(!n)groups.forEach(g=>{const q=proj(g.l.P);cx+=q[0];cy+=q[1];n++;});
+    if(n){cx/=n;cy/=n;}
+    ctx.font='600 '+fs+'px "IBM Plex Mono",monospace';ctx.textBaseline='alphabetic';ctx.lineJoin='round';ctx.lineWidth=3;
+    groups.forEach(g=>{const q=proj(g.l.P);boxes.push({x:q[0]-3,y:q[1]-3,w:6,h:6});});   // i punti non si coprono con le lettere
+    groups.forEach(g=>{const q=proj(g.l.P),px=q[0],py=q[1],tw=ctx.measureText(g.text).width,res=[];
+      [1,2.2,3.6,5.4,7.6].forEach(m=>{const d=gap*m;
+        res.push([px+d,py-d-fs],[px-d-tw,py-d-fs],[px+d,py+d],[px-d-tw,py+d],[px-tw/2,py-d-fs-1],[px-tw/2,py+d+1],[px+d+2,py-fs/2],[px-d-tw-2,py-fs/2]);});
+      const pref=(py<=cy+1e-6?0:2)+(px>=cx-1e-6?0:1),order=[res[pref],...res.filter((_,k)=>k!==pref)];
+      let best=null,bs=1e9;
+      for(const c of order){const bx={x:c[0],y:c[1],w:tw,h:fs};if(bx.x<2||bx.y<2||bx.x+bx.w>cw-2||bx.y+bx.h>chh-2)continue;const k=boxes.filter(o=>ov(bx,o)).length;if(k<bs){bs=k;best=bx;if(k===0)break;}}
+      if(!best)best={x:order[0][0],y:order[0][1],w:tw,h:fs};
+      boxes.push(best);
+      ctx.textAlign='left';ctx.strokeStyle='#fff';ctx.strokeText(g.text,best.x,best.y+fs*0.82);ctx.fillStyle='#a3224f';ctx.fillText(g.text,best.x,best.y+fs*0.82);
+      ctx.beginPath();ctx.arc(px,py,big?3.2:2.2,0,6.2832);ctx.fillStyle='#a3224f';ctx.fill();});}
   ctx.restore();}
+/* Rette generiche (generatrici) per i punti della curva che cadono sulla faccia laterale di un solido e non su uno spigolo.
+   Piramide: dal vertice, per il punto, fino al perimetro della base. Prisma: la parallela all'asse per il punto, da una base all'altra.
+   Nelle tre viste si disegna la stessa retta: le sue immagini permettono di trovare le proiezioni del punto. */
+function labGeneratrices(){
+  const B=labBase(),sol=LAB.comp,out=[],seen=new Set(),E=1e-3;
+  labBodies().forEach((b,bi)=>{
+    const pl=B.planes[bi],m=sol.meta[bi],pyr=/^pir_/.test(b.key);
+    let apex=null,bases=null;
+    if(pyr){apex=sol.v[m.o+m.n-1];const b0=sol.v[m.o],b1=sol.v[m.o+1],b2=sol.v[m.o+2],n=b1.clone().sub(b0).cross(b2.clone().sub(b0)).normalize();bases=[{n,d:n.dot(b0)}];}
+    else{   // prisma: coppia di facce parallele e opposte, con tutte le altre facce parallele al loro asse (se più coppie, quella lungo l'asse del corpo)
+      const ax=V(0,0,1).applyMatrix4(labAxM(b.ax,b.rot)),cand=[];
+      pl.forEach((p,i)=>pl.forEach((q,j)=>{if(j>i&&p.n.dot(q.n)<-1+1e-6&&pl.every(r=>Math.abs(r.n.dot(p.n))<1e-6||r===p||r===q))cand.push([p,q]);}));
+      if(!cand.length)return;
+      cand.sort((u,w)=>Math.abs(w[0].n.dot(ax))-Math.abs(u[0].n.dot(ax)));
+      bases=cand[0];}
+    labLetters().forEach(l=>{const P=l.P;
+      const sd=pl.map(q=>q.n.dot(P)-q.d);
+      if(Math.max(...sd)>E)return;                           // il punto non sta sulla superficie di questo solido
+      if(sd.filter(x=>Math.abs(x)<E).length!==1)return;      // su uno spigolo o sul vertice: non serve la retta generica
+      if(bases.some(q=>Math.abs(q.n.dot(P)-q.d)<E))return;   // sulla base
+      let a,ends;
+      if(pyr){const dir=P.clone().sub(apex),den=bases[0].n.dot(dir);if(Math.abs(den)<1e-9)return;
+        const Q=apex.clone().addScaledVector(dir,(bases[0].d-bases[0].n.dot(apex))/den);a=[apex,Q];ends=[Q];}
+      else{const u=bases[0].n,q=bases.map(r=>P.clone().addScaledVector(u,(r.d-r.n.dot(P))/(r.n.dot(u))));a=q;ends=q;}
+      const k=[bi,...ends.map(Q=>[Q.x,Q.y,Q.z].map(t=>Math.round(t*1e3)).join(','))].sort().join('|');if(seen.has(k))return;seen.add(k);
+      out.push({a:a[0],b:a[1],ends});});});
+  return out;}
 function labSheet(ctx,S,X,Y,lk,shPt){   // foglio di Monge: tre viste, più le linee di richiamo dei nodi
   const L=S.lab;if(!L)return;const sec=L.sec,sh=state.show;
   if(state.labCons&&sh.image){const pts=labConsPts(sec);   // linee di costruzione: dal punto sul PV in verticale al PO e in orizzontale al PL; dal PO il ribaltamento del PL (orizzontale, arco di centro O, verticale)
-    if(pts.length){ctx.save();ctx.strokeStyle='rgba(143,29,0,.5)';ctx.lineWidth=0.9*lk;ctx.setLineDash([3*lk,3*lk]);ctx.beginPath();const xL=S.ext.xL;
+    if(pts.length){ctx.save();ctx.strokeStyle='rgba(143,29,0,.4)';ctx.lineWidth=0.55*lk;ctx.setLineDash([]);ctx.beginPath();const xL=S.ext.xL;
       pts.forEach(P=>{const Wp=labW(S,P),a=shPt('pv',Wp),b=shPt('po',Wp),c=shPt('pl',Wp),d=-Wp.y;
         ctx.moveTo(X(a[0]),Y(a[1]));ctx.lineTo(X(b[0]),Y(b[1]));ctx.moveTo(X(a[0]),Y(a[1]));ctx.lineTo(X(c[0]),Y(c[1]));
         if(d>1e-4){ctx.moveTo(X(b[0]),Y(b[1]));ctx.lineTo(X(xL),Y(b[1]));
           for(let k=0;k<=14;k++){const t=-Math.PI/2+Math.PI/2*k/14;ctx.lineTo(X(xL+d*Math.cos(t)),Y(d*Math.sin(t)));}
           ctx.lineTo(X(c[0]),Y(c[1]));}});
       ctx.stroke();ctx.restore();}}
+  if(state.labCons&&sh.image&&sh.letters){const gs=labGeneratrices();   // generatrici dei punti che non stanno su uno spigolo: linea d'aiuto, sottile e di colore proprio (non è uno spigolo né un'intersezione)
+    if(gs.length){ctx.save();ctx.strokeStyle=LAB_CSS.gen;ctx.lineWidth=0.6*lk;ctx.setLineDash([]);ctx.lineCap='round';
+      ['pv','po','pl'].forEach(k=>{ctx.beginPath();gs.forEach(g=>{const a=shPt(k,labW(S,g.a)),q=shPt(k,labW(S,g.b));ctx.moveTo(X(a[0]),Y(a[1]));ctx.lineTo(X(q[0]),Y(q[1]));});ctx.stroke();});
+      ctx.setLineDash([]);ctx.fillStyle='#fff';
+      ['pv','po','pl'].forEach(k=>gs.forEach(g=>g.ends.forEach(Q=>{const q=shPt(k,labW(S,Q));ctx.beginPath();ctx.arc(X(q[0]),Y(q[1]),2.2*lk,0,6.2832);ctx.fill();ctx.stroke();})));
+      ctx.restore();}}
   ['pv','po','pl'].forEach((k,i)=>{const vd=labViewData(S,S.views[i].dir);
     labCanvas(ctx,vd,sec,p=>{const q=shPt(k,labW(S,p));return[X(q[0]),Y(q[1])];},lk,sh,ch=>projSym(ch,i));});}
 function labImage(ctx,S,X,Y,lk){
@@ -4057,14 +4443,14 @@ function labEnter(){
   if(state.lab)return;
   LAB.snap=JSON.parse(JSON.stringify(state));   // fotografia dello stato standard, ripristinata all'uscita
   Object.assign(state,labDef(),{lab:true,shadow:false,ms:false,cut:false,cutF:false,hidePl:false,hideRib:false,sel:null,shV:null,solo:false,rib:false,ribT:0,meas:false,measT:0,
-    solid:'cubo',solB:'esagonale',ang:0});
+    ang:0});
   state.show=Object.assign({},state.show,{letters:true,rays:false});
   angAnim=null;ribAnim=null;measAnim=null;LAB.trail.length=0;LAB.lastF=null;
   if(state.mode==='persp'){applyPreset('mg1',false);}   // le viste prospettiche non esistono nel lab
   else{refreshSolid(true);syncUI();update();}
   view.lock=null;goTo(viewFor('3d',lastS));setViewBtn('3d');}
 function labExit(){
-  if(!state.lab)return;
+  if(!state.lab)return;state.labVs=null;
   const s=LAB.snap;LAB.snap=null;state.lab=false;state.labAnim=false;
   if(s){Object.assign(state,s,{lab:false,labAnim:false});}
   LAB.trail.length=0;LAB.lastF=null;labHideAll();
@@ -4074,16 +4460,17 @@ function labExit(){
 function labClampDims(){   // le misure restano nei valori ammessi (2–15) anche cambiando solido
   labBodies().forEach((b,i)=>{const p=i?'b':'a',d=mDims(b.key),c=(f,u)=>Math.min(MEAS_MAX/u,Math.max(MEAS_MIN/u,f));
     state[p+'W']=c(state[p+'W'],d.s);state[p+'V']=d.kind==='box'?c(state[p+'V'],d.s2):state[p+'W'];state[p+'H']=MUNI(d.kind)?state[p+'W']:c(state[p+'H'],d.h);});}
-function labCenter(){   // porta il centro dei due solidi (ingombro complessivo) al centro dei piani di proiezione (PV: x,z · PO: x,y · PL: y,z), mantenendo le posizioni relative
-  const bs=labBodies().map(b=>({h:labHalf(b).h,c:labClampBody(b)}));
-  const lo=['x','d','z'].map(k=>Math.min(...bs.map(o=>o.c[k]-o.h[{x:'x',d:'y',z:'z'}[k]]))),hi=['x','d','z'].map(k=>Math.max(...bs.map(o=>o.c[k]+o.h[{x:'x',d:'y',z:'z'}[k]])));
-  const t=[(Math.min(-5,-LAB_R.x-1.5)+LAB_XL)/2,Math.max(6,2*LAB_R.y+1.5)/2,Math.max(7,2*LAB_R.z+1.5)/2],dl=[0,1,2].map(i=>t[i]-(lo[i]+hi[i])/2);
-  ['a','b'].forEach((p,i)=>{state[p+'X']=bs[i].c.x+dl[0];state[p+'D']=bs[i].c.d+dl[1];state[p+'Z']=bs[i].c.z+dl[2];});
+function labCenter(){   // porta i centri dei due solidi (metà altezza sull'asse della base) a coincidere nel centro dei piani di proiezione (PV: x,z · PO: x,y · PL: y,z), come nelle costruzioni classiche; orientamento e misure restano, e i solidi restano nella regione di lavoro
+  const fs=labBodies().map(b=>labHalf(b)),t=LAB_CT();
+  const rg=[[-LAB_R.x,LAB_R.x],[0,2*LAB_R.y],[0,2*LAB_R.z]];
+  const lim=f=>[[-LAB_R.x+f.lo.x,LAB_R.x-f.hi.x],[f.hi.y,2*LAB_R.y-f.lo.y],[f.lo.z,2*LAB_R.z-f.hi.z]];   // valori ammessi per il centro
+  const L=fs.map(lim),c=[0,1,2].map(i=>{const lo=Math.max(L[0][i][0],L[1][i][0]),hi=Math.min(L[0][i][1],L[1][i][1]);return lo>hi?(lo+hi)/2:Math.min(hi,Math.max(lo,t[i]));});
+  ['a','b'].forEach(p=>{state[p+'X']=c[0];state[p+'D']=c[1];state[p+'Z']=c[2];});
   labAfter();
   if(!view.lock){goTo(viewFor('3d',lastS));setViewBtn('3d');}}
 function labCutRange(){   // valori che il piano secante può assumere (nell'unità di misura), dal più basso al più alto
   const pi=labPlaneInfo(),f=s=>(state.labPl==='po'?s:state.labPl==='pv'?-s:LAB_XL-s)/LAB_U,a=f(pi.lo),b=f(pi.hi);return[Math.min(a,b),Math.max(a,b)];}
-function labAfter(){labClampDims();labClampAll();refreshSolid();syncUI();update();}
+function labAfter(){state.labVs=null;labClampDims();labClampAll();refreshSolid();syncUI();update();}
 function labAnimStep(now){
   if(LAB.t0===null){LAB.t0=now;return;}
   const dt=Math.min(0.05,(now-LAB.t0)/1000);LAB.t0=now;
@@ -4101,7 +4488,7 @@ const LABUI=(()=>{
     '<div id="lab-msrbox" style="margin:2px 0 14px"><div class="msr-row" id="lab-msr"><label class="msr-f"><span id="lm-l1"></span><input type="number" id="lm-w" step="0.1" inputmode="decimal"></label><label class="msr-f" id="lm-f3"><span id="lm-l3"></span><input type="number" id="lm-v" step="0.1" inputmode="decimal"></label><label class="msr-f" id="lm-f2"><span id="lm-l2"></span><input type="number" id="lm-z" step="0.1" inputmode="decimal"></label></div>'+
     '<p class="note" id="lm-note" style="margin:6px 0 0"></p></div>'+
     '<div id="lab-sl"></div>'+
-    '<div class="chips" style="margin:0 0 14px"><button type="button" class="chip" id="lab-ctr" data-i18n="lab.ctr"></button></div>'+
+    '<div class="chips" style="margin:0 0 14px"><button type="button" class="chip" id="lab-ctr" data-i18n="lab.ctr"></button><button type="button" class="chip" id="lab-lay" data-i18n="sh.lay"></button></div>'+
     '<label class="chk" style="display:flex;gap:8px;align-items:center;font-size:13px;margin:0 0 12px"><input type="checkbox" id="lab-cons"><span data-i18n="ck.cons"></span></label>'+
     '<div class="switches" style="margin-top:4px"><label class="switch"><input type="checkbox" id="lab-cut" role="switch"><span><b data-i18n="lab.cutT"></b><small data-i18n="lab.cutS"></small></span></label></div>'+
     '<div id="lab-cutbox" style="margin-top:12px"><div class="chips" id="lab-pl" style="margin-bottom:12px"></div><div id="lab-cutsl"></div>'+
@@ -4133,9 +4520,9 @@ const LABUI=(()=>{
     n.addEventListener('change',()=>{let v=parseFloat(n.value);if(!isFinite(v))v=o.get();v=Math.min(+r.max,Math.max(+r.min,v));o.set(v);n.classList.remove('bad');labAfter();});
     sliders.push({id,o,w,r,n});return w;};
   const bp=()=>pre();
-  mk($('lab-sl'),'dpl',{step:0.1,unit:'',get:()=>(LAB_XL-state[bp()+'X'])/LAB_U,set:v=>{state[bp()+'X']=LAB_XL-v*LAB_U;}});
-  mk($('lab-sl'),'dpv',{step:0.1,get:()=>state[bp()+'D']/LAB_U,set:v=>{state[bp()+'D']=v*LAB_U;}});
-  mk($('lab-sl'),'q',{step:0.1,get:()=>state[bp()+'Z']/LAB_U,set:v=>{state[bp()+'Z']=v*LAB_U;}});
+  mk($('lab-sl'),'dpl',{step:0.1,unit:'cm',get:()=>(LAB_XL-state[bp()+'X'])/LAB_U,set:v=>{state[bp()+'X']=LAB_XL-v*LAB_U;}});
+  mk($('lab-sl'),'dpv',{step:0.1,unit:'cm',get:()=>state[bp()+'D']/LAB_U,set:v=>{state[bp()+'D']=v*LAB_U;}});
+  mk($('lab-sl'),'q',{step:0.1,unit:'cm',get:()=>state[bp()+'Z']/LAB_U,set:v=>{state[bp()+'Z']=v*LAB_U;}});
   mk($('lab-sl'),'rot',{step:1,unit:'°',get:()=>state[bp()+'Rot'],set:v=>{state[bp()+'Rot']=v;}});
   // misure del solido (come il riquadro «Misure» dell'app standard): lato/lunghezza/diametro, larghezza, altezza
   const dimSet=(which,val)=>{const k=labBodies()[state.labSel==='B'?1:0].key,d=mDims(k),p=bp();
@@ -4148,21 +4535,84 @@ const LABUI=(()=>{
   // piano secante
   ['po','pv','pl'].forEach(k=>{const b=document.createElement('button');b.type='button';b.className='chip';b.dataset.pl=k;
     b.addEventListener('click',()=>{state.labPl=k;LAB.trail.length=0;LAB.lastF=null;syncUI();update();});$('lab-pl').appendChild(b);});
-  {const w=document.createElement('div');w.className='slider num';w.innerHTML='<label id="ll-cut" for="ls-cut"></label><output id="lo-cut"></output><span class="nm"><input type="number" id="ln-cut" step="0.1" inputmode="decimal"><i></i></span><input type="range" id="ls-cut" min="0" max="1000" step="1">';$('lab-cutsl').appendChild(w);
+  {const w=document.createElement('div');w.className='slider num';w.innerHTML='<label id="ll-cut" for="ls-cut"></label><output id="lo-cut"></output><span class="nm"><input type="number" id="ln-cut" step="0.1" inputmode="decimal"><i>cm</i></span><input type="range" id="ls-cut" min="0" max="1000" step="1">';$('lab-cutsl').appendChild(w);
     w.querySelector('input[type=range]').addEventListener('input',e=>{state.labF=+e.target.value/1000;syncUI();update();});
     const nc=w.querySelector('#ln-cut'),setPos=v=>{   // il valore digitato è la posizione del piano (stessa unità degli spostamenti): si converte nella frazione tra i due estremi dei solidi
       if(!LAB.comp)return false;const r=labCutRange();if(!(v>=r[0]-1e-9&&v<=r[1]+1e-9))return false;
       const pi=labPlaneInfo(),sc=v*LAB_U,s=state.labPl==='po'?sc:state.labPl==='pv'?-sc:LAB_XL-sc;state.labF=Math.min(1,Math.max(0,(s-pi.lo)/(pi.hi-pi.lo)));return true;};
     nc.addEventListener('input',()=>{const v=parseFloat(nc.value),ok=isFinite(v)&&setPos(v);nc.classList.toggle('bad',!ok);if(ok){LAB.lastF=null;syncUI();update();}});
     nc.addEventListener('change',()=>{let v=parseFloat(nc.value);const r=labCutRange();if(!isFinite(v))v=r[0];setPos(Math.min(r[1],Math.max(r[0],v)));nc.classList.remove('bad');syncUI();update();});}
-  $('lab-ctr').addEventListener('click',labCenter);
+  $('lab-ctr').addEventListener('click',labCenter);$('lab-lay').addEventListener('click',sheetLayout);
   $('lab-cons').addEventListener('change',e=>{state.labCons=e.target.checked;update();});
   $('lab-cut').addEventListener('change',e=>{state.cut=e.target.checked;if(!state.cut){LAB.trail.length=0;LAB.lastF=null;state.labAnim=false;}syncUI();update();});
   $('lab-trail').addEventListener('change',e=>{state.labTrail=e.target.checked;if(!state.labTrail){LAB.trail.length=0;}LAB.lastF=null;syncUI();update();});
   $('lab-clr').addEventListener('click',()=>{LAB.trail.length=0;LAB.lastF=null;update();});
   $('lab-anim').addEventListener('click',()=>{state.labAnim=!state.labAnim;if(state.labAnim&&!state.cut)state.cut=true;LAB.t0=null;syncUI();update();});
   return{sec,$,sliders,pre};})();
-function labSyncUI(){
+
+/* ---- tasto «Foglio»: sceglie il formato della tavola (A4 · A3 · A2, orizzontale o verticale); sta accanto ai tasti delle viste, in basso a sinistra */
+const LABFMT=(()=>{
+  const lc=document.getElementById('leftcol'),vw=document.getElementById('views');if(!lc||!vw)return null;
+  const row=document.createElement('div');row.id='lab-vrow';lc.insertBefore(row,vw);row.appendChild(vw);
+  const w=document.createElement('div');w.id='lab-fmt';
+  w.innerHTML='<button type="button" id="lab-fmt-b" aria-haspopup="true" aria-expanded="false" aria-pressed="false"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2.5" y="3.5" width="11" height="9" rx=".6"/><rect x="4.5" y="5.5" width="7" height="5" stroke-width="1"/></svg><span id="lab-fmt-t"></span></button>'+
+    '<div id="lab-fmt-m" hidden><div class="mt" data-i18n="lab.fmtT"></div></div>';
+  row.appendChild(w);
+  {const ly=document.createElement('button');ly.type='button';ly.id='sheet-lay';ly.setAttribute('data-i18n','sh.lay');ly.addEventListener('click',sheetLayout);row.appendChild(ly);}
+  const m=w.querySelector('#lab-fmt-m'),b=w.querySelector('#lab-fmt-b');
+  Object.keys(SHEET_FMT).forEach(k=>{const d=document.createElement('div');d.className='r';const a=SHEET_FMT[k];
+    d.innerHTML='<span class="k">'+k+' <i>'+a[0]+' × '+a[1]+' mm</i></span>';
+    [['h','▭','lab.fmtH'],['v','▯','lab.fmtV']].forEach(([o,g,t])=>{const c=document.createElement('button');c.type='button';c.className='chip';c.dataset.k=k;c.dataset.o=o;c.innerHTML='<span class="g">'+g+'</span> <span data-i18n="'+t+'"></span>';
+      c.addEventListener('click',()=>{state.sheet={k,o};m.hidden=true;b.setAttribute('aria-expanded','false');sheetSync();update();});d.appendChild(c);});
+    m.appendChild(d);});
+  const nn=document.createElement('button');nn.type='button';nn.className='chip';nn.dataset.none='1';nn.setAttribute('data-i18n','lab.fmtNo');
+  nn.addEventListener('click',()=>{state.sheet=null;m.hidden=true;b.setAttribute('aria-expanded','false');sheetSync();update();});
+  const nt=document.createElement('p');nt.className='note';nt.setAttribute('data-i18n','lab.fmtNote');m.appendChild(nn);m.appendChild(nt);
+  b.addEventListener('click',e=>{e.stopPropagation();m.hidden=!m.hidden;b.setAttribute('aria-expanded',String(!m.hidden));});
+  document.addEventListener('click',e=>{if(!w.contains(e.target)){m.hidden=true;b.setAttribute('aria-expanded','false');}});
+  return{w,m,b};})();
+function sheetSync(){
+  if(!state.sheet)['sheet-msg','sheet-msg-i'].forEach(id=>{const e=document.getElementById(id);if(e)e.hidden=true;});if(!LABFMT)return;const f=state.sheet;const ins=document.getElementById('inset'),d=sheetDims();if(ins){ins.classList.toggle('sheet',!!d);ins.classList.toggle('pt',!!d&&d[1]>d[0]);ins.style.setProperty('--r',d?d[0]/d[1]:1.4);}
+  {const lb=document.getElementById('sheet-lay');if(lb){lb.disabled=!f;lb.title=tx(f?'sh.layT':'sh.layNeed');}const lb2=document.getElementById('lab-lay');if(lb2){lb2.disabled=!f;lb2.title=tx(f?'sh.layT':'sh.layNeed');}}
+
+  document.getElementById('lab-fmt-t').textContent=f?f.k+(f.o==='h'?' ▭':' ▯'):tx('lab.fmt');
+  LABFMT.b.setAttribute('aria-pressed',String(!!f));
+  LABFMT.m.querySelectorAll('button[data-k]').forEach(c=>c.setAttribute('aria-pressed',String(!!f&&f.k===c.dataset.k&&f.o===c.dataset.o)));}
+
+/* ---------------------------------------------------------------- Impagina: dispone il disegno nel foglio scelto
+   Proiezioni ortogonali: il foglio è diviso in quattro dagli assi (linea di terra e asse PL); PV sta in alto a sinistra, PL in alto a destra, PO in basso a sinistra,
+   ciascuna vista al centro del suo quadrante. Assonometria e prospettiva: il foglio è il quadro e l'immagine va al centro della squadratura.
+   Si sposta il solido (distanza dal PV, quota, distanza dal PL; nel lab i due solidi insieme) misurando di quanto si sposta l'immagine, quindi vale per qualsiasi solido e orientamento. */
+function sheetLayoutPersp(){   // prospettiva: il solido e i parametri restano; si centrano nel foglio figura, linea di terra, linea d'orizzonte, punto di vista ribaltato e punti di fuga (se non entrano a 1:1, nella scala 1:n più grande che li contiene)
+  const d=sheetDims(),S=compute(),mm=SH_MM,m=SH_MG,FW=(d[0]-m.l-m.r)*mm,FH=(d[1]-m.b-m.t)*mm;
+  const bbox=up=>{const PX=perspExtras(S,up),pts=S.Qv.map(q=>[q.x,q.z]).concat(PX.pts);let a=1e9,b=-1e9,c=1e9,e=-1e9;pts.forEach(p=>{a=Math.min(a,p[0]);b=Math.max(b,p[0]);c=Math.min(c,p[1]);e=Math.max(e,p[1]);});return{a,b,c,e};};
+  let up=true,B=bbox(true);const B2=bbox(false);if(B2.e-B2.c<B.e-B.c-1e-6){up=false;B=B2;}
+  const n=1;   // nessuna scala automatica: se non entra, compare il messaggio con la riduzione consigliata o il formato più grande
+  state.sheet=Object.assign({},state.sheet,{pan:[(B.a+B.b)/2,(B.c+B.e)/2],n,up,sig:sheetSig(S)});
+  syncUI();update();}
+function sheetLayout(){
+  const d=sheetDims();if(!d)return;
+  if(!state.lab&&state.mode==='persp'){sheetLayoutPersp();return;}
+  const mgm=state.mode==='monge',lab=!!state.lab;
+  const keys=lab?{x:['aX','bX'],z:['aZ','bZ'],d:['aD','bD']}:mgm?{x:['dl'],z:['mh'],d:['d']}:{x:[],z:state.quadro==='H'&&state.mode==='obl'?['d']:['h'],d:[]};
+  if(!lab&&mgm&&state.dl==null)state.dl=(lastS||compute()).dlv;
+  const getS=()=>{refreshSolid();return compute();};
+  const bb=pts=>{let a0=1e9,a1=-1e9,b0=1e9,b1=-1e9;pts.forEach(p=>{a0=Math.min(a0,p[0]);a1=Math.max(a1,p[0]);b0=Math.min(b0,p[1]);b1=Math.max(b1,p[1]);});return[(a0+a1)/2,(b0+b1)/2];};
+  const meas=S=>{if(S.mg){const a=bb(S.views[0].sh),b=bb(S.views[1].sh);return{x:a[0],z:a[1],d:b[1]};}const c=bb(S.Qv.map(q=>[q.x,q.z]));return{x:c[0],z:c[1]};};
+  const mm=SH_MM,ml=SH_MG.l*mm,mr=SH_MG.r*mm,mt=SH_MG.t*mm,mb=SH_MG.b*mm,FW=d[0]*mm-ml-mr,FH=d[1]*mm-mt-mb;
+  const S0=getS();
+  // la distanza dal PV serve sia alla pianta (verticale) sia alla vista laterale (orizzontale): si sceglie il valore che lascia più margine a entrambe
+  const ext1=(pts,i)=>{let a=1e9,b=-1e9;pts.forEach(p=>{a=Math.min(a,p[i]);b=Math.max(b,p[i]);});return b-a;};
+  let yT=0;if(S0.mg){const wL=ext1(S0.views[2].sh,0),hO=ext1(S0.views[1].sh,1),lo=Math.max(wL,hO)/2,hi=Math.min(FW/2-wL/2,FH/2-hO/2);yT=-(lo+hi)/2;}
+  const tg=S0.mg?{x:S0.ext.xL-FW/4,z:FH/4,d:yT}:{x:(ml-mr)/2,z:(d[1]*mm-mb-mt)/2};
+  ['x','z','d'].forEach(q=>{const ks=keys[q];if(!ks.length||tg[q]===undefined)return;
+    const base=ks.map(k=>state[k]),m0=meas(getS())[q],dl=0.4;
+    ks.forEach((k,i)=>{state[k]=base[i]+dl;});const m1=meas(getS())[q],sl=(m1-m0)/dl;
+    if(Math.abs(sl)<1e-6){ks.forEach((k,i)=>{state[k]=base[i];});return;}
+    const st=(tg[q]-m0)/sl;ks.forEach((k,i)=>{state[k]=base[i]+st;});});
+  if(!lab){[].concat(keys.x,keys.z,keys.d).forEach(k=>{const sl=SL.find(o=>o.id===k);if(sl)state[k]=Math.min(sl.max*(sl.u||1),Math.max(sl.min*(sl.u||1),state[k]));});state.modified=true;}
+  if(lab){labAfter();}else{syncUI();update();}}
+function labSyncUI(){sheetSync();
   const on=state.lab,U=LABUI;
   document.body.classList.toggle('lab-on',on);
   const lab=document.getElementById('lab');if(lab)lab.checked=on;
@@ -4185,31 +4635,31 @@ function labSyncUI(){
     st.setProperty('--bg',A?(fl?'#f0b84a':'#f1e4c6'):(fl?'#5b94e6':'#cfdcf2'));st.setProperty('--bd',A?'#14161c':'#1f4fa8');st.setProperty('--fg',(!A&&fl)?'#fff':'#14161c');
     b.textContent=tx('lab.'+b.dataset.s)+' · '+tx('s.'+(b.dataset.s==='A'?state.solid:state.solB));b.setAttribute('aria-pressed',String(b.dataset.s===state.labSel));});
   {const A=state.labSel!=='B',st=U.sec.style;   // i comandi di posizione prendono il colore del solido selezionato
-   st.setProperty('--sel',A?'#f0b84a':'#5b94e6');st.setProperty('--selfg',A?'#14161c':'#0b1220');}
+   st.setProperty('--sel',A?(fl?'#f0b84a':'#f1e4c6'):(fl?'#5b94e6':'#cfdcf2'));st.setProperty('--selfg',(!A&&fl)?'#fff':'#14161c');}   // stesse tinte delle schede e della forma scelta (chiare, o piene con «Colore»)
   {const A=state.labSel!=='B',st=U.$('lab-pick').style;   // il tasto della forma scelta prende il colore del solido corrispondente
    st.setProperty('--bg',A?(fl?'#f0b84a':'#f1e4c6'):(fl?'#5b94e6':'#cfdcf2'));st.setProperty('--bd',A?'#14161c':'#1f4fa8');st.setProperty('--fg',(!A&&fl)?'#fff':'#14161c');}
   U.sec.querySelectorAll('#lab-pick .chip').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.id===B.key));b.title=tx('s.'+b.dataset.id);});
   U.sec.querySelectorAll('#lab-pick .srow').forEach(r=>{const t=tx(r.dataset.bk);r.title=t;r.firstChild.setAttribute('aria-label',t);});
   const axt={z:tx('lab.axV'),y:tx('lab.axH')+' ⟂ '+tx('pln.pv'),x:tx('lab.axH')+' ∥ '+tx('ltAbbrM')};
   U.sec.querySelectorAll('#lab-axis .chip').forEach(b=>{b.textContent=axt[b.dataset.ax];b.setAttribute('aria-pressed',String(b.dataset.ax===state[p+'Ax']));});
-  const H=labHalf(B).h,lbl={dpl:'lab.dpl',dpv:'lab.dpv',q:'lab.q',rot:'lab.rot'};
-  const rng={dpl:[LAB_XL-LAB_R.x+H.x,LAB_XL+LAB_R.x-H.x],dpv:[H.y,2*LAB_R.y-H.y],q:[H.z,2*LAB_R.z-H.z],rot:[-180,180]};
+  const HF=labHalf(B),lbl={dpl:'lab.dpl',dpv:'lab.dpv',q:'lab.q',rot:'lab.rot'};
+  const rng={dpl:[LAB_XL-LAB_R.x+HF.hi.x,LAB_XL+LAB_R.x-HF.lo.x],dpv:[HF.hi.y,2*LAB_R.y-HF.lo.y],q:[HF.lo.z,2*LAB_R.z-HF.hi.z],rot:[-180,180]};
   U.sliders.forEach(s=>{const r=s.r,n=s.n;let lo=rng[s.id][0],hi=rng[s.id][1];if(s.id==='dpl'||s.id==='dpv'||s.id==='q'){lo=Math.ceil(lo/LAB_U*10-1e-9)/10;hi=Math.floor(hi/LAB_U*10+1e-9)/10;}
     r.min=lo;r.max=Math.max(lo,hi);n.min=lo;n.max=Math.max(lo,hi);const v=s.o.get();r.value=v;if(document.activeElement!==n){n.value=+(+v).toFixed(2);n.classList.remove('bad');}
     document.getElementById('ll-'+s.id).textContent=tx(lbl[s.id]);});
   {const ch=U.$('lab-pick').querySelector('.chip[data-id="'+B.key+'"]'),rw=ch&&ch.closest('.srow'),bx=U.$('lab-msrbox');if(rw&&rw.nextSibling!==bx)rw.after(bx);}   // il riquadro sta sotto la riga del solido selezionato
   {const mr=mRange(B.key),box=mr.kind==='box',uni=MUNI(mr.kind),d=mDims(B.key),n1=v=>v.toLocaleString(LOC[lang],{minimumFractionDigits:0,maximumFractionDigits:1});
-   U.$('lm-l1').textContent=tx('ms.'+mr.kind);U.$('lm-l3').textContent=tx('ms.wid');U.$('lm-l2').textContent=tx('ms.h');
+   U.$('lm-l1').textContent=tx('ms.'+mr.kind)+' (cm)';U.$('lm-l3').textContent=tx('ms.wid')+' (cm)';U.$('lm-l2').textContent=tx('ms.h')+' (cm)';
    U.$('lm-f3').hidden=!box;U.$('lm-f2').hidden=uni;
    [['lm-w',d.s*state[p+'W']],['lm-v',d.s2*state[p+'V']],['lm-z',d.h*state[p+'H']]].forEach(([id,v])=>{const n=U.$(id);n.min=MEAS_MIN;n.max=MEAS_MAX;if(document.activeElement!==n){n.value=+v.toFixed(1);n.classList.remove('bad');}});
-   U.$('lm-note').textContent=tx('ms.rng')+(lang==='zh'?'':' ')+n1(MEAS_MIN)+'–'+n1(MEAS_MAX)+(lang==='zh'?'。':'.');}
+   U.$('lm-note').textContent=tx('ms.rng')+(lang==='zh'?'':' ')+n1(MEAS_MIN)+'–'+n1(MEAS_MAX)+' cm'+(lang==='zh'?'。':'.');}
   // piano secante
   U.$('lab-cons').checked=state.labCons;U.$('lab-cut').checked=state.cut;U.$('lab-cutbox').style.display=state.cut?'':'none';U.$('lab-trail').checked=state.labTrail;
   const pn={po:tx('lab.plH')+' ∥ '+tx('pln.po'),pv:tx('lab.plF')+' ∥ '+tx('pln.pv'),pl:tx('lab.plP')+' ∥ '+tx('pln.pl')};
   U.sec.querySelectorAll('#lab-pl .chip').forEach(b=>{b.textContent=pn[b.dataset.pl];b.setAttribute('aria-pressed',String(b.dataset.pl===state.labPl));});
   U.$('ls-cut').value=Math.round(state.labF*1000);
   if(LAB.comp&&state.cut){const pi=labPlaneInfo(),val=state.labPl==='po'?pi.s:state.labPl==='pv'?-pi.s:LAB_XL-pi.s;
-    document.getElementById('ll-cut').textContent=tx('lab.pos.'+state.labPl);document.getElementById('lo-cut').textContent=it(val/LAB_U,1);
+    document.getElementById('ll-cut').textContent=tx('lab.pos.'+state.labPl);document.getElementById('lo-cut').textContent=it(val/LAB_U,1)+' cm';
     const nc=document.getElementById('ln-cut'),r=labCutRange();nc.min=Math.ceil(r[0]*10)/10;nc.max=Math.floor(r[1]*10)/10;if(document.activeElement!==nc){nc.value=+(val/LAB_U).toFixed(1);nc.classList.remove('bad');}}
   const an=U.$('lab-anim');an.textContent=tx(state.labAnim?'lab.stop':'lab.anim');an.setAttribute('aria-pressed',String(!!state.labAnim));
   const sec=lastS&&lastS.lab&&lastS.lab.sec;
@@ -4230,7 +4680,7 @@ window.addEventListener('error',e=>{if(e.filename&&/google|gtag|gstatic/i.test(e
   try{ribAnim=null;measAnim=null;state.rib=false;state.ribT=0;state.meas=false;state.measT=0;state.solo=false;update();}catch(_){}
   dirty=true;showErr('err.msg');});
 window.addEventListener('unhandledrejection',()=>{});
-window.__app={LAB,labEnter,labExit,labBase,labSecs,labPlaneInfo,labPieces,quadroInfo(){return{QW,QT,phi:floorGrp.rotation.z,fx0:floor.position.x-floor.scale.x/2,fx1:floor.position.x+floor.scale.x/2,fy0:floor.position.y-floor.scale.y/2,fy1:floor.position.y+floor.scale.y/2};},get cones(){return cones;},get rig(){return rig;},sceneObj,applyScene,sceneLink,loadHashScene,b64u,RB,cutExtPoly,get cutExt(){return cutExtMesh;},mongeRab,measGeom,ribGeom,ribRot,ribExtent,ribView,get TR(){return TR;},get camera(){return camera;},state,update,setLang,get lang(){return lang;},takeShot,flatSheet,openPlanes,animateAng,applyPreset,goTo,viewFor,view,setLayout,get S(){return lastS;},get solid(){return solid;},get solidFull(){return solidFull;},get camera(){return camera;},get scene(){return scene;},get sf(){return shadowFront;},get qrect(){const b=quadroBottom(lastS.G);return{QW,QT,QB,b0:b[0],b1:b[1]};},get v3d(){return v3d;}};
+window.__app={MG,goTo,viewFor,get lastS(){return lastS;},labViewData,LAB,labEnter,labExit,labBase,labSecs,labPlaneInfo,labPieces,quadroInfo(){return{QW,QT,phi:floorGrp.rotation.z,fx0:floor.position.x-floor.scale.x/2,fx1:floor.position.x+floor.scale.x/2,fy0:floor.position.y-floor.scale.y/2,fy1:floor.position.y+floor.scale.y/2};},get cones(){return cones;},get rig(){return rig;},sceneObj,applyScene,sceneLink,loadHashScene,b64u,RB,cutExtPoly,get cutExt(){return cutExtMesh;},mongeRab,measGeom,ribGeom,ribRot,ribExtent,ribView,get TR(){return TR;},get camera(){return camera;},state,update,setLang,get lang(){return lang;},takeShot,flatSheet,openPlanes,animateAng,applyPreset,goTo,viewFor,view,setLayout,get S(){return lastS;},get solid(){return solid;},get solidFull(){return solidFull;},get camera(){return camera;},get scene(){return scene;},get sf(){return shadowFront;},get qrect(){const b=quadroBottom(lastS.G);return{QW,QT,QB,b0:b[0],b1:b[1]};},get v3d(){return v3d;}};
 })();
 </script>
 </body>

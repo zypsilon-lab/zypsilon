@@ -1,0 +1,10 @@
+# ZYpsilon · Projection lab
+
+> Free interactive 3D laboratory for descriptive geometry (geometria descrittiva): orthogonal projections (Monge), axonometry, perspective, shadows, sections with a cutting plane and interpenetration of two solids. Runs in the browser, nothing to install. Interface in Italian, English and Chinese. By Baires Raffaelli. Free for study, teaching and research (PolyForm Noncommercial 1.0.0).
+
+## Use
+- [Open the app](https://www.zypsilon.com/): choose a projection type, rotate the view, move the solid, cut it, lay the drawing out on an A4/A3/A2 sheet and download PNG or PDF.
+
+## Reference
+- [Source code and README](https://github.com/zypsilon-lab/zypsilon)
+- [Citable software record (DOI 10.5281/zenodo.24405119)](https://doi.org/10.5281/zenodo.24405119)

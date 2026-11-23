@@ -5,6 +5,9 @@
 ## Use
 - [Open the app](https://www.zypsilon.com/): choose a projection type, rotate the view, move the solid, cut it, lay the drawing out on an A4/A3/A2 sheet and download PNG or PDF.
 
+## Guides
+- [Italiano](https://www.zypsilon.com/it/) · [English](https://www.zypsilon.com/en/) · [中文](https://www.zypsilon.com/zh/): what the lab does, how to use it, FAQ.
+
 ## Reference
 - [Source code and README](https://github.com/zypsilon-lab/zypsilon)
 - [Citable software record (DOI 10.5281/zenodo.24405119)](https://doi.org/10.5281/zenodo.24405119)

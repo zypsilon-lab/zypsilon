@@ -1,7 +1,7 @@
 {
  "title": "ZYpsilon · Projection lab",
  "upload_type": "software",
- "version": "1.2.2",
+ "version": "1.2.3",
  "publication_date": "2026-11-23",
  "description": "<p>Free interactive 3D laboratory for descriptive geometry. It shows how orthogonal projections (Monge), axonometry, perspective, shadows and sections with a cutting plane are built, in the browser and with nothing to install. Version 1.2 added the <em>Intersection Lab</em>, a teaching mode for the interpenetration of two solids by the cutting-plane method. Version 1.2.2 adds the <em>drawing sheet</em> (A4, A3 or A2, in centimetres, 1:1) with a lay-out tool, PDF export with a link that reopens the drawing, and notation of points checked against textbooks in the three languages.</p><p>Interface in English, Italian and Chinese. Licence: PolyForm Noncommercial 1.0.0 &mdash; free for study, teaching and research; commercial use requires a separate written licence.</p>",
  "creators": [

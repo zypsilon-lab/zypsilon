@@ -5,7 +5,7 @@ type: software
 authors:
   - family-names: Raffaelli
     given-names: Baires
-version: 1.2.2
+version: 1.2.3
 date-released: 2026-11-23
 doi: 10.5281/zenodo.24405119
 license: PolyForm-Noncommercial-1.0.0

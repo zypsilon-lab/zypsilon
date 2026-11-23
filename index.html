@@ -6,6 +6,11 @@
 <title>ZYpsilon · Projection lab</title>
 <meta name="description" content="Free interactive 3D laboratory for descriptive geometry: orthogonal projections (Monge), axonometry, perspective, shadows, sections with a cutting plane and the interpenetration of two solids; drawing sheet A4 · A3 · A2 with PDF export. Italian, English, Chinese.">
 <link rel="canonical" href="https://www.zypsilon.com/">
+<link rel="alternate" hreflang="it" href="https://www.zypsilon.com/it/">
+<link rel="alternate" hreflang="en" href="https://www.zypsilon.com/en/">
+<link rel="alternate" hreflang="zh-Hans" href="https://www.zypsilon.com/zh/">
+<link rel="alternate" hreflang="x-default" href="https://www.zypsilon.com/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "ZYpsilon · Projection lab", "alternateName": ["ZYpsilon", "ZYpsilon · Laboratorio di proiezioni", "ZYpsilon · 投影实验室"], "url": "https://www.zypsilon.com/", "description": "Free interactive 3D laboratory for descriptive geometry: orthogonal projections (Monge), axonometry, perspective, shadows, sections with a cutting plane and the interpenetration of two solids; drawing sheet A4, A3, A2 with PDF export.", "applicationCategory": "EducationalApplication", "applicationSubCategory": "Descriptive geometry", "operatingSystem": "Any (web browser with WebGL)", "browserRequirements": "Requires JavaScript and WebGL", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "inLanguage": ["it", "en", "zh"], "audience": {"@type": "EducationalAudience", "educationalRole": "student"}, "teaches": ["Orthogonal projections (Monge)", "Axonometry", "Linear perspective", "Shadows", "Sections of solids", "Interpenetration of solids"], "keywords": "descriptive geometry, Monge, orthogonal projections, axonometry, perspective, shadows, sections, interpenetration of solids, geometria descrittiva, proiezioni ortogonali, assonometria, prospettiva", "license": "https://polyformproject.org/licenses/noncommercial/1.0.0/", "author": {"@type": "Person", "name": "Baires Raffaelli"}, "sameAs": ["https://github.com/zypsilon-lab/zypsilon", "https://doi.org/10.5281/zenodo.24405119"], "image": "https://www.zypsilon.com/assets/zypsilon-logo.png"}</script>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ZYpsilon">
 <meta property="og:title" content="ZYpsilon · Projection lab">
@@ -368,7 +373,7 @@ html[lang="zh-Hans"] .tagline{font-family:var(--font-ui);font-weight:500;font-si
 #stage.narrow #selbox.open::after{top:16px;transform:rotate(-135deg)}
 #stage.narrow #inset{right:8px;bottom:8px}
 #stage.narrow #inset:not(.mini){width:min(250px,calc(100% - 16px))}
-#stage.sw #layouts{left:8px;bottom:8px;transform:none}
+#stage.stw #layouts{left:8px;bottom:8px;transform:none}
 #stage.narrow #hint{display:none}
 #stage.narrow #dnudge{bottom:56px}
 
@@ -556,7 +561,7 @@ body.lab-on .lbl.m{font-size:11.5px}
       <h2 id="h-show" data-i18n="hShow">Mostra</h2>
       <div class="checks" id="checks"></div>
     </section>
-    <footer id="foot"><a class="resetbtn" id="donate" href="#" target="_blank" rel="noopener" hidden data-i18n="donate">♥ Sostieni il progetto</a><div class="frow"><a class="site" href="https://www.zypsilon.com" target="_blank" rel="noopener">www.zypsilon.com</a></div><div class="frow"><a class="site" href="https://github.com/zypsilon-lab/zypsilon" target="_blank" rel="noopener">github.com/zypsilon-lab/zypsilon</a></div><div class="frow"><a class="site" href="mailto:info@zypsilon.com">info@zypsilon.com</a></div><div class="frow"><button type="button" class="site" id="pol-link" data-i18n="polLink">Informazioni d'uso e privacy</button></div><div class="frow"><button type="button" class="site" id="ck-link" data-i18n="ckLink">Cookie e consenso</button></div><div id="legal"><span id="ver">ZYpsilon v1.2.2</span><span>© 2026 ZYpsilon</span><a class="site" href="https://polyformproject.org/licenses/noncommercial/1.0.0" target="_blank" rel="noopener">PolyForm Noncommercial 1.0.0</a></div></footer>
+    <footer id="foot"><a class="resetbtn" id="donate" href="#" target="_blank" rel="noopener" hidden data-i18n="donate">♥ Sostieni il progetto</a><div class="frow"><a class="site" href="https://www.zypsilon.com" target="_blank" rel="noopener">www.zypsilon.com</a></div><div class="frow"><a class="site" href="https://github.com/zypsilon-lab/zypsilon" target="_blank" rel="noopener">github.com/zypsilon-lab/zypsilon</a></div><div class="frow"><a class="site" href="mailto:info@zypsilon.com">info@zypsilon.com</a></div><div class="frow"><button type="button" class="site" id="pol-link" data-i18n="polLink">Informazioni d'uso e privacy</button></div><div class="frow"><button type="button" class="site" id="ck-link" data-i18n="ckLink">Cookie e consenso</button></div><div id="legal"><span id="ver">ZYpsilon v1.2.3</span><span>© 2026 ZYpsilon</span><a class="site" href="https://polyformproject.org/licenses/noncommercial/1.0.0" target="_blank" rel="noopener">PolyForm Noncommercial 1.0.0</a></div></footer>
   </aside>
   <div id="policy" role="dialog" aria-modal="true" aria-labelledby="pol-title" hidden>
   <div class="pol-bar"><button type="button" class="resetbtn" id="pol-back">← <span data-i18n="polBack">Torna al software</span></button><div id="pol-langs" role="group"></div></div>
@@ -1145,7 +1150,8 @@ const state={
   show:{rays:true,image:true,hidden:true,axes:true,vp:true,solid:true,labels:true,inset:true,hd:true,letters:true,traces:true,srays:true,cons:true}
 };
 
-const DEF=JSON.parse(JSON.stringify(state));   // stato iniziale: le scene salvate nei link contengono solo le differenze
+const DEF=JSON.parse(JSON.stringify(state));   /*1.2.3: l'app parte sulle proiezioni ortogonali «facce parallele ai piani»; DEF resta quello di prima, così i link già condivisi si aprono come prima*/
+Object.assign(state,{preset:'mg1',mode:'monge',psi:0,phi:0});   // stato iniziale: le scene salvate nei link contengono solo le differenze
 
 /* ----------------------------------------------------------------- solidi */
 const SOLIDS={
@@ -1406,7 +1412,7 @@ function cutNormal(){
   if(lockedCut()){const t=state.cutT*D2R,c=Math.cos(t),sn=Math.sin(t),o=state.cutO;
     const nw=o==='po'?V(-sn,c,0):o==='pv'?V(-sn,0,c):V(0,sn,c);   // traccia su PO/PV/PL con inclinazione t; sul foglio sale verso destra per t>0
     return nw.transformDirection(mongeRotM().invert());}
-  const I=state.cutI*D2R,R=state.cutR*D2R;return V(Math.sin(I)*Math.cos(R),Math.sin(I)*Math.sin(R),Math.cos(I)).normalize();
+  const I=state.cutI*D2R,R=state.cutR*D2R;return V(-Math.sin(I)*Math.cos(R),-Math.sin(I)*Math.sin(R),Math.cos(I)).normalize();   /*1.2.3: rotazione 0° = piano ortogonale a PV che sale da sinistra a destra*/
 }
 // verso dell'osservatore nelle proiezioni ortogonali (davanti a PV, sopra PO, un poco a sinistra): «avanti» = parte del solido verso l'osservatore, «dietro» = parte opposta.
 // Il solido tiene la parte con n·p ≤ d: in Monge si orienta la normale verso l'osservatore e si tiene la parte dietro (di default) o, scambiando n, quella davanti.
@@ -1583,7 +1589,7 @@ function cutBounds(refs,box){
   const mn=V(1e9,1e9,1e9),mx=V(-1e9,-1e9,-1e9),q=refs.find(r=>r.key==='q');
   refs.forEach(r=>r.poly.forEach(P=>{mn.min(P);mx.max(P);}));
   if(q){const a=V(1e9,1e9,1e9),b=V(-1e9,-1e9,-1e9);q.poly.forEach(P=>{a.min(P);b.max(P);});mn.x=a.x;mx.x=b.x;mn.z=a.z;mx.z=b.z;   // larghezza e altezza del quadro
-    if(mx.y-mn.y<1e-6){const dp=b.z-a.z;mn.y=-dp;mx.y=dp;}}   // nelle planimetriche il piano orizzontale non ha profondità: si usa l'altezza del quadro
+    if(mx.y-mn.y<1e-6){const dp=refs.depth||(b.z-a.z);mn.y=-dp;mx.y=dp;}}   // nelle planimetriche il piano orizzontale non ha profondità: si usa l'altezza del quadro
   ['x','y','z'].forEach(k=>{if(mx[k]-mn[k]<1e-6)return;const e=V(0,0,0);e[k]=1;hs.push({n:e,d:mn[k]});const f=V(0,0,0);f[k]=-1;hs.push({n:f,d:-mx[k]});});
   return hs;}
 function cutExtPoly(nr,cr,refs,box){
@@ -2270,6 +2276,7 @@ function computeExtras(S){
   const refs=refPlanes(S,ex.fl);ex.refs=refs;
   if(state.cut){
     const LP=state.lab?labPlaneW(S):null,cp=LP?null:cutPlane(solidFull),nr=LP?LP.n:cp.n.clone().transformDirection(S.R),pr=LP?LP.p:cp.n.clone().multiplyScalar(cp.d*S.sc).applyMatrix4(S.R).add(S.T),cr=nr.dot(pr);   /*LAB*/
+    if(S.QH&&!S.mg){let my=0;solidFull.v.forEach(q=>{const y=Math.abs(q.clone().multiplyScalar(S.sc).applyMatrix4(S.R).add(S.T).y);if(y>my)my=y;});refs.depth=my*1.25+0.3;}   /*1.2.3: con il quadro orizzontale il piano di taglio termina poco sopra il solido*/
     const hsB=S.mg?null:cutBounds(refs);
     refs.forEach(r=>{const ln=planeLine(nr,cr,r.n,r.n.dot(r.p0));if(!ln)return;const sg=S.mg?clipLinePoly(ln,r.poly,r.n):clipLineHS(ln,hsB);if(sg)ex.tr.push({key:r.key,a:sg[0],b:sg[1],off:r.off});});
     ex.cutPl={n:nr,c:cr};if(S.mg)mongeExt(S,ex,nr,cr);
@@ -2597,7 +2604,7 @@ function updateScene(S){
     quadroGeo.attributes.position.needsUpdate=true;quadroGeo.computeBoundingSphere();
     {const rbx=ribHOn(S)?ribExtent(S):null;setSeg(ltSeg,V(rbx?rbx.xmin:-QW,0,raw[0]),V(rbx?rbx.xmax:QW,0,raw[1]),0.045);}}
   const axo=state.mode==='ortho'||state.mode==='obl';
-  mg.visible=mgOn;groundObjs.forEach(o=>o.visible=!mgOn&&sh.hd);   /*LAB: il piano orizzontale si nasconde anche in prospettiva*/[quadro,quadroOutline,ltSeg].forEach(o=>o.visible=!mgOn);
+  mg.visible=mgOn;groundObjs.forEach(o=>o.visible=!mgOn&&sh.hd&&!(state.mode==='obl'&&state.quadro==='H'));   /*LAB: il piano orizzontale si nasconde anche in prospettiva; con il quadro orizzontale (planometrica, ribassata, militare) coincide con il quadro e scompare*/[quadro,quadroOutline].forEach(o=>o.visible=!mgOn);ltSeg.visible=!mgOn;
   if(mgOn){updateMonge(S);return;}
   lDotS.visible=false;lDotP.visible=false;
   labels.rsg.on=false;labels.rt0.on=false;labels.rt1.on=false;for(let k=0;k<16;k++){labels['rs'+k].on=false;labels['ls'+k].on=false;for(let vi=0;vi<3;vi++)labels['lp'+vi+'_'+k].on=false;}   // le lettere dei vertici esistono solo nelle proiezioni ortogonali
@@ -2894,7 +2901,7 @@ new ResizeObserver(()=>{if(typeof lastS!=='undefined'&&lastS)drawImage(insetCv,l
 (function(){
   const st=document.getElementById('stage'),ins=document.getElementById('inset'),tg=document.getElementById('inset-tg'),sb=document.getElementById('scenebar'),mb=document.getElementById('sc-more'),lc=document.getElementById('leftcol'),sw=document.getElementById('selwrap'),sbx=document.getElementById('selbox'),hint=document.getElementById('hint');
   let userMini=true;   // il riquadro dell'immagine parte ridotto
-  function fit(){st.classList.toggle('sw',st.clientWidth<760);const w=v3d.clientWidth,h=v3d.clientHeight;if(w<2||h<2)return;
+  function fit(){st.classList.toggle('stw',st.clientWidth<760);const w=v3d.clientWidth,h=v3d.clientHeight;if(w<2||h<2)return;
     const nar=w<880||h<430;st.classList.toggle('narrow',nar);
     if(!nar)sb.classList.remove('open');
     const mini=userMini===null?w<560:userMini;ins.classList.toggle('mini',mini);st.classList.toggle('ins-big',!mini);tg.setAttribute('aria-expanded',String(!mini));st.style.setProperty('--insh',ins.offsetHeight+'px');}
@@ -3407,7 +3414,7 @@ CHK.forEach(c=>{const l=document.createElement('label');
   l.innerHTML='<input type="checkbox" id="c-'+c[0]+'" '+(state.show[c[0]]?'checked':'')+'>'+sw+'<span id="t-'+c[0]+'"'+(['rays','image','inset'].indexOf(c[0])<0?' data-i18n="'+c[1]+'"':'')+'></span>';
   l.querySelector('input').addEventListener('change',e=>{state.show[c[0]]=e.target.checked;syncUI();update();});checksEl.appendChild(l);});
 
-document.getElementById('cut').addEventListener('change',e=>{state.cut=e.target.checked;syncUI();update();});
+document.getElementById('cut').addEventListener('change',e=>{state.cut=e.target.checked;if(state.cut)Object.assign(state,{cutO:'pv',cutT:30,cutI:30,cutR:0});   /*1.2.3: il piano di taglio compare inclinato di 30° su PO, ortogonale a PV, che sale da sinistra a destra*/syncUI();update();});
 const ckChips=document.getElementById('ck-chips');
 [['front','co.kf'],['back','co.kb']].forEach(k=>{const b=document.createElement('button');b.className='chip';b.type='button';b.dataset.k=k[0];b.dataset.i18n=k[1];b.setAttribute('aria-pressed','false');
   b.addEventListener('click',()=>{state.cutK=k[0];syncUI();update();});ckChips.appendChild(b);});
@@ -3477,7 +3484,7 @@ function sceneObj(full,lay){
     if(k==='show'){const d={};Object.keys(v).forEach(q=>{if(full||v[q]!==DEF.show[q])d[q]=v[q];});if(full||Object.keys(d).length)st.show=d;return;}
     if(full||JSON.stringify(v)!==JSON.stringify(DEF[k]))st[k]=typeof v==='number'?r4(v):v;});
   const c=anim?anim.to:view,pb=viewsEl.querySelector('button[data-v][aria-pressed="true"]');
-  return {app:'zypsilon',v:1,lang,lay:lay||stage.dataset.layout,sheet:state.sheet?JSON.parse(JSON.stringify(state.sheet)):undefined,st,
+  return {app:'zypsilon',v:2,lang,lay:lay||stage.dataset.layout,sheet:state.sheet?JSON.parse(JSON.stringify(state.sheet)):undefined,st,
     cam:{t:[c.target.x,c.target.y,c.target.z].map(r4),r:r4(c.r),th:r4(c.theta),ph:r4(c.phi),fov:r4(c.fov),lock:view.lock||null,vb:pb?pb.dataset.v:null}};
 }
 function applyScene(o,opt){
@@ -3493,7 +3500,8 @@ function applyScene(o,opt){
     else if(d===null){if(v===null||(typeof v==='number'&&isFinite(v)&&Math.abs(v)<1e4))n[k]=v;}
     else if(typeof d==='string'){if(typeof v==='string'&&(SC_ENUM[k]?SC_ENUM[k].indexOf(v)>=0:true))n[k]=v;}
   });
-  if(n.solid==='casetta')n.solid='logo';   // scene salvate con la vecchia casetta
+  if(n.solid==='casetta')n.solid='logo';
+  if(!(o.v>=2)&&n.cutI!==0){let r=n.cutR+180;if(r>180)r-=360;n.cutR=r;}   /*scene salvate prima della 1.2.3: la rotazione del piano di taglio libero partiva da 180°*/   // scene salvate con la vecchia casetta
   if(!FAM[n.mode]||!SOLIDS[n.solid]||!SOLIDS[n.solB]||n.solB==='logo'||(n.lab&&(n.mode==='persp'||n.solid==='logo')))return false;   /*LAB*/
   if(!PRESETS.some(x=>x.id===n.preset))n.preset=DEF.preset;
   if(!n.adv){if(SOLIDS[n.solid].adv)n.solid='cubo';const cp=PRESETS.find(x=>x.id===n.preset);if(cp&&cp.adv)n.preset=cp.fb;}
@@ -3731,7 +3739,7 @@ function syncUI(){
   document.getElementById('sec-obl').style.display=(state.mode==='obl'&&state.adv)?'':'none';
   document.getElementById('sec-per').style.display=(state.mode==='persp'&&state.adv)?'':'none';
   const vpRow=document.getElementById('c-vp').closest('label');vpRow.style.display=(state.mode==='persp'&&!state.shadow)?'':'none';
-  document.getElementById('c-hd').closest('label').style.display=(state.mode==='ortho'||state.mode==='obl'||state.mode==='persp')?'':'none';
+  document.getElementById('c-hd').closest('label').style.display=((state.mode==='ortho'||state.mode==='obl'||state.mode==='persp')&&!(state.mode==='obl'&&state.quadro==='H'))?'':'none';
   document.getElementById('c-letters').closest('label').style.display=state.mode==='monge'?'':'none';
   document.getElementById('c-cons').closest('label').style.display=(state.mode!=='monge'&&SOLIDS[state.solid].round)?'':'none';
   document.getElementById('colbtn').hidden=state.mode!=='monge';

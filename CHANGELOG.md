@@ -2,6 +2,17 @@
 
 All notable changes to ZYpsilon. Dates are release dates. · [Italiano](#italiano) · [中文](#中文)
 
+## 1.2.3 — 2026-11-23
+
+### Added
+- **Search engines and AI assistants**: Italian, English and Chinese landing pages (`/it/`, `/en/`, `/zh/`), `sitemap.xml`, `robots.txt`, `llms.txt`, language alternates (hreflang) and structured data (JSON-LD) on the home page.
+
+### Changed
+- **The app now opens on orthogonal projections, "Faces parallel to the planes"** (it used to open on accidental perspective). Links and scenes saved earlier open exactly as before.
+- **Cutting plane**: when switched on it appears tilted 30° to the horizontal plane, perpendicular to the vertical plane and rising from left to right as seen from the picture plane. In the free cutting plane (axonometry, perspective) rotation 0° now means exactly this position; scenes saved before 1.2.3 are converted automatically.
+- **Horizontal picture plane**: the cutting plane now ends just above the solid instead of extending far beyond it; the black ground line is drawn on the lower edge of the picture plane.
+- **Horizontal picture plane**: in the oblique axonometries where the picture plane lies on the horizontal plane (planometric, lowered planometric, military) the horizontal plane (floor and grid) coincides with the picture plane and is no longer drawn; the *Horizontal plane* checkbox is hidden in these views.
+
 ## 1.2.2 — 2026-11-23
 
 ### Added
@@ -58,6 +69,8 @@ First public release: Monge projections, orthogonal and oblique axonometry, pers
 ---
 
 ## Italiano
+**1.2.3** — L'app si apre sulle proiezioni ortogonali «facce parallele ai piani» (i link e le scene salvate si aprono come prima); **piano di taglio**: compare inclinato di 30° rispetto a PO, ortogonale a PV e crescente da sinistra a destra (nel piano libero, rotazione 0° = questa posizione; le scene salvate prima vengono convertite), e nelle assonometrie con quadro orizzontale termina appena sopra il solido; **quadro orizzontale** (planometrica, planometrica ribassata, militare): il piano orizzontale coincide con il quadro e non viene disegnato, la linea di terra è sul bordo basso del quadro; pagine di presentazione in italiano, inglese e cinese, sitemap, `llms.txt` e dati strutturati per i motori di ricerca.
+
 **1.2.2** — Nuovo **foglio da disegno** in tutte le modalità (tasto *Foglio*: A4, A3 o A2, orizzontale o verticale; misure in centimetri, disegno in scala 1:1, squadratura visibile quando si ribaltano i piani), con **Impagina** accanto al formato; il disegno non viene mai ridotto o ingrandito in automatico: un breve avviso compare solo se qualcosa non entra e scompare quando è tutto dentro; limiti delle misure tarati su A3. Barra fissa al centro in basso con **Scarica** (PNG o **PDF** nel formato del foglio, con marchio e sito cliccabili che riaprono proprio quel disegno) e **Link**; le scene conservano il foglio. Clic su un vertice per leggerne e modificarne le distanze da PV, PO e PL. Nel laboratorio: centro del solido a metà altezza sull'asse della base, *Centra* fa coincidere i due centri, scena iniziale con prisma a base quadrata (asse orizzontale) e prisma esagonale verticale, retta generica per i punti sulle facce, un solo giallo e un solo azzurro, **colori dei due solidi corretti** (niente più sovrapposizioni e sfarfallii nelle immagini sui piani e nella vista 3D). Nomenclatura verificata nelle tre lingue (it: A, A′ PO, A″ PV, A‴ PL, (A) ribaltato; en e zh: A nello spazio, a, a′, a″ nelle proiezioni; in cinese i punti sono lettere latine); lingua iniziale = lingua del browser; dopo il rifiuto del consenso l'app resta utilizzabile; sezione dei solidi composti con tutti i pezzi in vera forma; linee di richiamo sottili e chiare, contorni più marcati; testi (README, pagina Licenze/uso/privacy, descrizione) aggiornati.
 
 **1.2.1** — Avvio sempre in inglese, riquadro dell'immagine chiuso, cubo come solido iniziale (anche nel lab, con A cubo e B prisma esagonale); in cinese punti e piani senza lettere latine (甲乙丙…, 正立面/水平面/侧立面).
@@ -65,6 +78,8 @@ First public release: Monge projections, orthogonal and oblique axonometry, pers
 **1.2.0** — Nuovo *Laboratorio di compenetrazione* (due solidi, piano secante scorrevole e animabile, punti della curva in Monge e assonometria); *retta di fuga dei raggi luminosi* tratteggiata; nelle ombre si disegnano solo i raggi dei vertici che delimitano il contorno; lettere del lab che si toccano si spostano da sole e sono un po' più piccole; revisione linguistica in italiano, inglese e cinese; funzionamento offline di `index.html`; README in inglese, italiano e cinese.
 
 ## 中文
+**1.2.3** — 应用默认以正投影“各面平行于投影面”打开（旧链接和已保存的场景照常打开）；**截平面**：开启时与水平投影面成30°、垂直于正立面并自左向右升高（自由平面中旋转0°即此位置，旧场景自动转换），在画面水平的轴测图中止于立体上方；**水平画面**（平面轴测、降低平面轴测、军事轴测）：水平面与画面重合，不再绘制，地平线位于画面下缘；新增意大利语、英语和中文介绍页、站点地图、`llms.txt` 和结构化数据，便于搜索引擎收录。
+
 **1.2.2** — 新增**图纸**，适用于所有模式（“图纸”按钮：A4、A3 或 A2，横向或纵向；尺寸以厘米计，图样按 1:1；折倒投影面时显示图框），并在幅面按钮旁增加**排版**；图样绝不会自动缩放：只有放不下时才出现简短提示，全部落入图框后即消失；尺寸范围按 A3 标定。底部居中的固定工具条含**下载**（PNG 或按图纸幅面的 **PDF**，其中的标志和网址可点击并重新打开该幅图）和**链接**；场景会保留所选图纸。点击顶点可读取并修改它到 PV、PO、PL 的距离。实验室：立体的中心位于底面轴线的半高处，*居中*使两个中心重合，初始场景为轴线水平的正四棱柱与竖直的正六棱柱，相贯线上落在表面的点带有母线，立体甲/乙各用统一的黄色与蓝色，并**修正了两个立体的颜色**（投影面图像和三维视图中不再重叠、闪烁）。三种语言的符号规范已核对（意大利语：A、A′ 水平、A″ 正立、A‴ 侧立、(A) 折倒；英语和中文：空间点用大写，投影用 a、a′、a″；中文的点使用拉丁字母）；初始语言跟随浏览器；拒绝同意后应用仍可使用；复合立体的剖切显示所有截断块的实形；作图线更细更浅，轮廓线更粗；文本（README、许可/使用/隐私页面、页面描述）已更新。
 
 **1.2.1** — 应用始终以英语打开；图像小窗默认收起；初始立体为立方体（相贯实验室中立体甲为立方体、立体乙为六棱柱）；中文界面中的点和投影面不再使用拉丁字母（甲乙丙……，正立面/水平面/侧立面）。
